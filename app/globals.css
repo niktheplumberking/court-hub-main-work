@@ -265,3 +265,85 @@ html.lenis body {
   -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.22);
 }
 
+/* ================================================================== */
+/* Simplified homepage (components/home/simplified) — CSS-only motion */
+
+/* Hero headline entrance: pure CSS so the server-rendered hero animates
+   without shipping any JS for it. */
+@keyframes ch-hero-in {
+  from { opacity: 0; transform: translateY(26px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+.ch-hero-in { animation: ch-hero-in 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Hero scroll cue (lime dot bobbing inside a pill outline). */
+@keyframes ch-cue {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%      { transform: translateY(12px); opacity: 0.3; }
+}
+.ch-cue-dot { animation: ch-cue 1.8s ease-in-out infinite; }
+
+/* IntersectionObserver reveal — Reveal.tsx adds .in on first intersection. */
+.ch-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.ch-reveal.in { opacity: 1; transform: none; }
+
+/* Brand ribbon speed knob for the shared .ch-marquee loop. Slowed — never
+   stopped — under OS reduce-motion (same brand-loop rule as .ch-marquee:
+   see the comment above @keyframes ch-marquee-x). */
+.ch-ribbon-track { --marquee-duration: 32s; }
+.ch-ribbon:hover .ch-ribbon-track { animation-play-state: paused; }
+
+/* Service-card icon tile. The inline SVGs are copied verbatim from the
+   approved demo and keep its stroke classes: .st (ink 1.6 stroke),
+   .st2 (same at 32% opacity), .ac (lime accent that flips to blue on
+   card hover). Do not swap these for an icon library. */
+.ch-svc-icon {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #faf8f4 0%, var(--color-sand) 100%);
+  border: 1px solid rgba(14, 14, 12, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 20px rgba(14, 14, 12, 0.06);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.ch-svc-icon svg { width: 32px; height: 32px; overflow: visible; }
+.ch-svc-icon .st  { stroke: var(--color-ink); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ch-svc-icon .st2 { stroke: var(--color-ink); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0.32; }
+.ch-svc-icon .ac  { fill: var(--color-lime); stroke: var(--color-ink); stroke-width: 1.3; transition: fill 0.25s; }
+/* Blue→lime gradient ring that fades in on hover (mask-composite ring trick). */
+.ch-svc-icon::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(145deg, rgba(30, 90, 232, 0.35), rgba(200, 255, 61, 0.45));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.ch-svc:hover .ch-svc-icon {
+  transform: translateY(-3px) rotate(-3deg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 14px 28px rgba(14, 14, 12, 0.12);
+}
+.ch-svc:hover .ch-svc-icon::after { opacity: 1; }
+.ch-svc:hover .ch-svc-icon .ac { fill: var(--color-court-blue); }
+
+/* Focus visibility on the simplified home: blue on sand/white surfaces,
+   lime on dark (ink) surfaces. */
+.ch-home :focus-visible { outline: 2.5px solid var(--color-court-blue); outline-offset: 3px; border-radius: 6px; }
+.ch-on-dark :focus-visible { outline-color: var(--color-lime); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ch-hero-in { animation: none; }
+  .ch-cue { display: none; }
+  .ch-reveal { opacity: 1; transform: none; transition: none; }
+  .ch-ribbon-track { --marquee-duration: 120s; } /* slowed, intentionally never stopped */
+}
+

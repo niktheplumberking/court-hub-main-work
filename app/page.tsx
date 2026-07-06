@@ -1,19 +1,18 @@
-import HomeClient from '@/components/home/HomeClient';
+import SimplifiedHome from '@/components/home/simplified/SimplifiedHome';
 import { supabasePublic } from '@/lib/supabase/public';
 import type { Product } from '@/lib/types';
 
 export const revalidate = 60;
 
 /**
- * Fetches the six newest active products for the homepage shop teaser.
+ * Fetches the eight newest active products for the homepage top-sellers rail.
  * Uses the cookie-less supabasePublic() client so the route stays static
  * and `revalidate = 60` (ISR) actually applies — supabaseServer()'s
  * `await cookies()` would force the page fully dynamic. Wrapped in
  * try/catch so a missing DB (local dev without Supabase env) degrades to
- * the ShopSection's built-in display-only fallback cards instead of
- * crashing the homepage.
+ * the rail's placeholder-catalog fallback instead of crashing the homepage.
  */
-async function getTeaserProducts(): Promise<Product[]> {
+async function getTopSellerProducts(): Promise<Product[]> {
   try {
     const supabase = supabasePublic();
     const { data } = await supabase
@@ -21,15 +20,15 @@ async function getTeaserProducts(): Promise<Product[]> {
       .select('*, categories(*)')
       .eq('status', 'active')
       .order('created_at', { ascending: false })
-      .limit(6);
+      .limit(8);
     return (data as Product[] | null) ?? [];
   } catch (e) {
-    console.error('[home] teaser products fetch failed', e);
+    console.error('[home] top sellers fetch failed', e);
     return [];
   }
 }
 
 export default async function HomePage() {
-  const products = await getTeaserProducts();
-  return <HomeClient products={products} />;
+  const products = await getTopSellerProducts();
+  return <SimplifiedHome products={products} />;
 }
