@@ -3,11 +3,14 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 
 /**
- * The in-frame hero navbar that lives INSIDE each swipe page's glass-frame hero
- * (the "Mockup Integrated Sub-Header/Navbar Row" from the original design):
+ * THE site top navbar (one of the only two nav versions, with the left rail):
  * COURT HUB logo · About Us / Construct Your Court / Shop / Contact Us · Book a Court.
- * It scrolls away with the hero (it's part of the fixed hero), and the global
- * left rail fades in once the blanket covers the hero. Routes are the Next ones.
+ * Two placements:
+ *  • default — lives INSIDE a page's glass-frame hero (home + the swipe pages)
+ *    and scrolls away with it; the global left rail takes over past the hero.
+ *  • fixedBar — viewport-fixed bar for pages WITHOUT a hero (Shop): same row,
+ *    no frame, visible at all times.
+ * `active` omitted = no link highlighted (home).
  */
 type ActiveKey = 'about' | 'construct' | 'shop' | 'contact';
 
@@ -18,7 +21,13 @@ const LINKS: { label: string; href: string; key: ActiveKey }[] = [
   { label: 'Contact Us', href: '/contact', key: 'contact' },
 ];
 
-export default function HeroFrameNav({ active }: { active: ActiveKey }) {
+export default function HeroFrameNav({
+  active,
+  fixedBar = false,
+}: {
+  active?: ActiveKey;
+  fixedBar?: boolean;
+}) {
   return (
     <motion.div
       // initial=false → renders visible immediately (no dependence on the enter tween
@@ -28,7 +37,11 @@ export default function HeroFrameNav({ active }: { active: ActiveKey }) {
       // Hidden on mobile — the global top bar (hamburger + logo) covers nav there, and
       // the hero's own bottom CTAs cover "Book a Court"; this removes the duplicate logo
       // and frees vertical space so the hero fits the phone viewport.
-      className="relative z-30 w-full hidden md:flex items-center justify-between border-b border-white/15 pb-4 md:pb-6"
+      className={
+        fixedBar
+          ? 'fixed top-0 left-0 right-0 z-50 hidden md:flex items-center justify-between px-6 lg:px-10 py-4 bg-ink/85 backdrop-blur-md border-b border-white/10'
+          : 'relative z-30 w-full hidden md:flex items-center justify-between border-b border-white/15 pb-4 md:pb-6'
+      }
     >
       {/* Logo */}
       <Link

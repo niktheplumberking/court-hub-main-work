@@ -10,6 +10,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
+import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import type { Product } from '@/components/shop/placeholder-products';
@@ -77,6 +78,10 @@ export default function ShopClient() {
 
   return (
     <div className="bg-ink min-h-screen text-white selection:bg-lime/30">
+      {/* No hero on Shop — the site navbar sits fixed at the top, always visible
+          (desktop; mobile keeps the global top bar from <Header />). */}
+      <HeroFrameNav active="shop" fixedBar />
+
       {/* Dynamic Toast Feedback */}
       <AnimatePresence>
         {toastMessage && (

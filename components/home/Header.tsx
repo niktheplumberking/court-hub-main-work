@@ -9,19 +9,14 @@ import { PAGE_ORDER } from '@/components/swipe/pageOrder';
 
 const MotionLink = motion.create(Link);
 
-// Site navigation — ONE navbar, real routes. Home is included now that the 4
-// swipe pages render the navbar (the swipe group can't reach home by swiping).
+// The sideways rail + mobile menu links — canonical order per the site spec.
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Construction', href: '/construct-your-court' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Construct Your Court', href: '/construct-your-court' },
   { label: 'Shop', href: '/shop' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact Us', href: '/contact' },
 ];
-
-// Bible #1 underline reveal: scaleX 0→1 from the left on enter, collapses toward the right on exit.
-const UNDERLINE_REVEAL =
-  'after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-lime/50 after:origin-right after:scale-x-0 after:transition-transform after:duration-[350ms] after:ease-[cubic-bezier(0.65,0,0.35,1)] hover:after:origin-left hover:after:scale-x-100';
 
 // Vertical-writing-mode adaptation of the same reveal for the sidebar links.
 const UNDERLINE_REVEAL_VERTICAL =
@@ -35,6 +30,9 @@ export default function Header() {
   // transition; other utility pages keep the horizontal bar.
   const isSwipePage =
     (PAGE_ORDER as readonly string[]).includes(pathname) || pathname.startsWith('/shop');
+  // Shop listing has NO hero — it gets the always-visible fixed top navbar
+  // (HeroFrameNav fixedBar, rendered by ShopClient) instead of the left rail.
+  const isShopListing = pathname === '/shop';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolledPastHero, setHasScrolledPastHero] = useState(false);
   const [scrolled, setScrolled] = useState(false); // glass bg on subpages
@@ -46,7 +44,7 @@ export default function Header() {
   // over their hero the global top bar is suppressed (home shows it; swipe pages show
   // their own in-frame HeroFrameNav instead).
   const isProductPage = pathname.startsWith('/shop/');
-  const railActive = isProductPage || hasScrolledPastHero;
+  const railActive = isProductPage || (hasScrolledPastHero && !isShopListing);
 
   // Scroll lock when mobile menu is open
   useEffect(() => {
@@ -63,9 +61,10 @@ export default function Header() {
   // 1. Scroll check for layout switch (Hero -> Sidebar)
   useEffect(() => {
     const handleScroll = () => {
-      // Swipe heroes are exactly one viewport tall — spawn the rail only once the
-      // hero is 100% out of view (full innerHeight), not a hair early. Home keeps its.
-      const heroThreshold = isHome ? window.innerHeight * 3 - 60 : window.innerHeight;
+      // Every hero (home included, now that home uses the same framed hero) is
+      // exactly one viewport tall — spawn the rail only once the hero is 100%
+      // out of view (full innerHeight), not a hair early.
+      const heroThreshold = window.innerHeight;
       setHasScrolledPastHero((isHome || isSwipePage) && window.scrollY >= heroThreshold);
       setScrolled(window.scrollY > 24);
       // top scroll-progress rail (transform-only, cheap)
@@ -119,77 +118,11 @@ export default function Header() {
         <div ref={progressRef} className="h-full w-full origin-left scale-x-0 bg-lime shadow-[0_0_10px_rgba(200,255,61,0.55)] transition-opacity duration-300 opacity-0" />
       </div>
 
-      {/* 1. DESKTOP NAV WRAPPERS (Transitions with AnimatePresence) */}
+      {/* 1. DESKTOP SIDEWAYS RAIL (slides in once the hero is out of view).
+          Over a hero, nav is the in-frame HeroFrameNav — no global bar here. */}
       <div className="hidden md:block">
         <AnimatePresence mode="wait">
-          {(!railActive && isHome) ? (
-            <motion.header
-              key="desktop-horizontal"
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -50, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className={`fixed top-0 left-0 right-0 z-50 px-12 md:px-16 pointer-events-auto transition-all duration-300 ${!isHome && scrolled ? 'py-4 md:py-5 bg-ink/85 backdrop-blur-md border-b border-white/10' : 'py-6 md:py-10'}`}
-            >
-              <nav className="mx-auto flex items-center justify-between">
-                {/* Links */}
-                <div className="flex items-center gap-7 lg:gap-9">
-                  {NAV_LINKS.map((item) => {
-                    const isActive = pathname === item.href;
-                    return (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className={`text-[15px] transition-all duration-300 tracking-tight relative py-1.5 ${
-                          isActive
-                            ? 'text-lime font-semibold'
-                            : `text-white/80 hover:text-white ${UNDERLINE_REVEAL}`
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-
-                {/* Center Logo */}
-                <div className="absolute left-1/2 -translate-x-1/2">
-                  <Link href="/" className="font-sans text-[22px] md:text-[26px] tracking-wide text-white flex items-center select-none hover:text-lime transition-colors">
-                    <span className="font-bold uppercase tracking-wide">COURT</span>
-                    <span className="font-bold uppercase ml-2 tracking-wide text-lime">HUB</span>
-                  </Link>
-                </div>
-
-                {/* Right Actions */}
-                <div className="flex items-center gap-6">
-                  {/* Shopping Cart Icon — opens the global live drawer */}
-                  <button
-                    onClick={openDrawer}
-                    aria-label={`Open cart${count > 0 ? ` (${count} item${count === 1 ? '' : 's'})` : ''}`}
-                    className="text-white/80 hover:text-lime transition-all duration-300 relative mr-2 hover:scale-110 cursor-pointer"
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    {count > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-lime text-ink text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-[0_0_6px_rgba(200,255,61,0.4)]">
-                        {count}
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Primary CTA — court construction is the conversion path (no bookings) */}
-                  <MotionLink
-                    href="/construct-your-court"
-                    whileHover={{ scale: 1.02, boxShadow: "0 0 15px rgba(255,255,255,0.15)" }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-2 py-2.5 px-6 border border-white/20 text-white text-[14px] font-medium rounded-full hover:bg-white hover:text-ink transition-all duration-300"
-                  >
-                    <span>Build Your Court</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </MotionLink>
-                </div>
-              </nav>
-            </motion.header>
-          ) : railActive ? (
+          {railActive ? (
             <motion.aside
               key="desktop-vertical"
               // Same smooth slide-in on every page (home's exact effect): glide in
@@ -206,15 +139,16 @@ export default function Header() {
                 <span className="font-bold text-lime">H</span>
               </Link>
 
-              {/* Vertical Links (Rotated via CSS writing-mode) */}
-              <div className="flex flex-col gap-8 items-center">
+              {/* Vertical Links (Rotated via CSS writing-mode). Tighter gap/size
+                  than before — "Construct Your Court" must fit 768px-tall screens. */}
+              <div className="flex flex-col gap-6 items-center">
                 {NAV_LINKS.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
                       key={item.label}
                       href={item.href}
-                      className={`text-[13px] font-bold tracking-widest uppercase transition-all duration-300 [writing-mode:vertical-lr] rotate-180 relative py-1.5 ${
+                      className={`text-[12px] font-bold tracking-[0.14em] uppercase transition-all duration-300 [writing-mode:vertical-lr] rotate-180 relative py-1 ${
                         isActive
                           ? 'text-lime font-black scale-105'
                           : `text-white/60 hover:text-white ${UNDERLINE_REVEAL_VERTICAL}`
