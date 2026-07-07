@@ -98,7 +98,7 @@ Configuration Details:
     // preloadedImages, so this branch never runs there. Uses the prop frameCount
     // so a standalone mount stays consistent with whatever set it's pointed at.
     let active = true;
-    const folderPath = '/construction-frames';
+    const folderPath = '/construction-frames-hd';
     let loadedCount = 0;
     const images: HTMLImageElement[] = [];
 

@@ -19,8 +19,8 @@ const FRAME_SMOOTHING = 0.5;
 // critical for mobile: decoding 150 desktop frames (~2.2GB of bitmap memory)
 // crashes iOS Safari ("a problem repeatedly occurred"). The mobile set is
 // ~177MB decoded — well within budget.
-const DESKTOP_FRAMES = { folder: '/construction-frames', count: 150 };
-const MOBILE_FRAMES = { folder: '/construction-frames-mobile', count: 90 };
+const DESKTOP_FRAMES = { folder: '/construction-frames-hd', count: 90 };
+const MOBILE_FRAMES = { folder: '/construction-frames-mobile-hd', count: 90 };
 
 // Desktop reverse-scroll timeline phase weights (proportioned across SCROLL_LENGTH;
 // at +=490% each unit ≈ one viewport height of scroll):

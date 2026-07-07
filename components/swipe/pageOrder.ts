@@ -1,7 +1,7 @@
-// The horizontal swipe group: About → Construct → Shop → Contact (loops).
-// Home is intentionally NOT here — it stays a separate cinematic route.
+// The horizontal swipe cycle: Home → About → Construct → Shop → Contact (loops).
 // Product detail (/shop/[slug]) is a drill-down, not part of the swipe sequence.
 export const PAGE_ORDER = [
+  '/',
   '/about',
   '/construct-your-court',
   '/shop',

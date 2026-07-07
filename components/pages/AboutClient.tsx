@@ -14,6 +14,8 @@ import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
+import SwipeChevrons from '@/components/swipe/SwipeChevrons';
+import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 
 const MotionLink = motion.create(Link);
 
@@ -53,6 +55,7 @@ const TOPICS = [
 ];
 
 export default function AboutClient() {
+  const heroCovered = useHeroCovered();
   const { add, openDrawer } = useCart();
   const racketBestSellers = PRODUCTS.filter(p => p.category === 'rackets').slice(0, 5);
   const bestSellers = racketBestSellers.length >= 5 ? racketBestSellers : PRODUCTS.slice(0, 5);
@@ -150,7 +153,10 @@ export default function AboutClient() {
       <main className="">
 
         {/* ================= SECTION 1: RECREATED "COURT HUB" MOCK-UP HERO ================= */}
-        <div className="fixed top-0 left-0 w-full h-[100dvh] md:h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] z-0 pointer-events-auto">
+        {/* Exactly viewport-height (no min-h): a fixed hero taller than the
+            viewport can never be scrolled, so its frame bottom would be cut off
+            on laptops. `invisible` once covered stops paint/composite cost. */}
+        <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
           <section className="relative h-full w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
@@ -159,7 +165,7 @@ export default function AboutClient() {
             className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
           >
             <img
-              src="/assets/images/hero_padel_night_view_1779713624496.png"
+              src="/assets/images/tournament_crowd_night_1779707031611.png"
               alt=""
               aria-hidden
               className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
@@ -172,32 +178,12 @@ export default function AboutClient() {
           <div className="w-full h-full max-w-[1720px] mx-auto relative z-10 flex flex-col">
             {/* The Outer Frame simulating the premium mockup panel - thin polished rounded border exactly like reference */}
             <div
-              className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 backdrop-blur-[1.5px] flex flex-col justify-between p-3 pb-10 sm:p-8 md:p-10 lg:p-12"
+              className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 flex flex-col justify-between p-3 pb-10 sm:p-8 md:p-10 lg:p-12"
             >
 
-              {/* Left Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/contact"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Previous Page"
-              >
-                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </MotionLink>
-
-              {/* Right Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/construct-your-court"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Next Page"
-              >
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-0.5 transition-transform" />
-              </MotionLink>
+              {/* Prev/next page arrows — shared swipe-cycle chevrons (they arm
+                  the horizontal slide transition) */}
+              <SwipeChevrons />
 
               {/* 2. In-frame hero navbar (the design's integrated sub-header row) */}
               <HeroFrameNav active="about" />
@@ -335,10 +321,11 @@ export default function AboutClient() {
         </div>
 
         {/* Spacer to allow scrolling past the fixed background hero */}
-        <div className="relative w-full h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] pointer-events-none z-0" />
+        <div className="relative w-full h-screen pointer-events-none z-0" />
 
         {/* ================= BLANKET OVERLAY CONTENT ================= */}
-        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)]">
+        {/* md:pl-24 clears the fixed sideways rail (w-24) that accompanies all post-hero content */}
+        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)] md:pl-24">
 
         {/* ================= SECTION 2: COMPANY STORY (Premium Sand/#EDE8E1 Theme / Editorial Feel) ================= */}
         <section className="min-h-screen flex flex-col justify-center py-20 sm:py-28 md:py-36 px-6 md:px-12 lg:px-16 xl:px-20 bg-sand text-ink relative overflow-hidden">

@@ -97,7 +97,7 @@ export default function ProductClient() {
 
   if (!product) {
     return (
-      <div className="bg-sand min-h-screen text-ink flex flex-col items-center justify-center p-6 text-center font-sans">
+      <div className="bg-sand min-h-screen text-ink flex flex-col items-center justify-center p-6 text-center font-sans md:pl-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,7 +181,8 @@ export default function ProductClient() {
   const remainingName = nameParts.slice(1).join(' ') || '';
 
   return (
-    <div className="bg-sand min-h-screen text-ink selection:bg-lime/30 font-sans relative overflow-x-hidden">
+    // md:pl-24 clears the always-on sideways rail on product pages
+    <div className="bg-sand min-h-screen text-ink selection:bg-lime/30 font-sans relative overflow-x-hidden md:pl-24">
 
       {/* Dynamic Toast Feedback */}
       <AnimatePresence>

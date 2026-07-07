@@ -10,11 +10,11 @@ import { motion } from 'motion/react';
  *    and scrolls away with it; the global left rail takes over past the hero.
  *  • fixedBar — viewport-fixed bar for pages WITHOUT a hero (Shop): same row,
  *    no frame, visible at all times.
- * `active` omitted = no link highlighted (home).
  */
-type ActiveKey = 'about' | 'construct' | 'shop' | 'contact';
+type ActiveKey = 'home' | 'about' | 'construct' | 'shop' | 'contact';
 
 const LINKS: { label: string; href: string; key: ActiveKey }[] = [
+  { label: 'Home', href: '/', key: 'home' },
   { label: 'About Us', href: '/about', key: 'about' },
   { label: 'Construct Your Court', href: '/construct-your-court', key: 'construct' },
   { label: 'Shop', href: '/shop', key: 'shop' },

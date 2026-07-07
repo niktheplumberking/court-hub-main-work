@@ -57,6 +57,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
           <h4 className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">Menu</h4>
           <nav className="flex flex-col gap-3 md:gap-4">
             {[
+              { label: 'Home', href: '/' },
               { label: 'About Us', href: '/about' },
               { label: 'Construct Your Court', href: '/construct-your-court' },
               { label: 'Shop', href: '/shop' },

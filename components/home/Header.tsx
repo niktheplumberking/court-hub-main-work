@@ -9,7 +9,8 @@ import { PAGE_ORDER } from '@/components/swipe/pageOrder';
 
 const MotionLink = motion.create(Link);
 
-// The sideways rail + mobile menu links — canonical order per the site spec.
+// Canonical nav order per the site spec. The sideways rail drops Home (the
+// C/H logo badge is the way home); the mobile menu keeps the full list.
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
@@ -17,6 +18,7 @@ const NAV_LINKS = [
   { label: 'Shop', href: '/shop' },
   { label: 'Contact Us', href: '/contact' },
 ];
+const RAIL_LINKS = NAV_LINKS.filter((l) => l.href !== '/');
 
 // Vertical-writing-mode adaptation of the same reveal for the sidebar links.
 const UNDERLINE_REVEAL_VERTICAL =
@@ -131,7 +133,7 @@ export default function Header() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 left-0 bottom-0 w-24 bg-[#0E0E0C] backdrop-blur-xl border-r border-white/10 flex flex-col justify-between py-12 items-center z-50 shadow-[5px_0_30px_rgba(0,0,0,0.5)]"
+              className="fixed top-0 left-0 bottom-0 w-24 bg-[#0E0E0C] border-r border-white/10 flex flex-col justify-between py-12 items-center z-50 shadow-[5px_0_30px_rgba(0,0,0,0.5)]"
             >
               {/* Vertical Logo Badge */}
               <Link href="/" className="font-sans text-lg tracking-wider text-white flex flex-col items-center select-none hover:text-lime transition-colors">
@@ -142,7 +144,7 @@ export default function Header() {
               {/* Vertical Links (Rotated via CSS writing-mode). Tighter gap/size
                   than before — "Construct Your Court" must fit 768px-tall screens. */}
               <div className="flex flex-col gap-6 items-center">
-                {NAV_LINKS.map((item) => {
+                {RAIL_LINKS.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
@@ -168,22 +170,9 @@ export default function Header() {
                 })}
               </div>
 
-              {/* Bottom Actions */}
+              {/* Bottom Actions — cart deliberately absent: the floating bag
+                  widget (bottom-right) is the single cart entry point. */}
               <div className="flex flex-col gap-8 items-center">
-                {/* Shopping Cart Icon — opens the global live drawer */}
-                <button
-                  onClick={openDrawer}
-                  aria-label={`Open cart${count > 0 ? ` (${count} item${count === 1 ? '' : 's'})` : ''}`}
-                  className="text-white/60 hover:text-lime transition-all duration-300 relative hover:scale-110 cursor-pointer"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  {count > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 bg-lime text-ink text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-[0_0_6px_rgba(200,255,61,0.4)]">
-                      {count}
-                    </span>
-                  )}
-                </button>
-
                 {/* Compact CTA — court construction */}
                 <MotionLink
                   href="/construct-your-court"

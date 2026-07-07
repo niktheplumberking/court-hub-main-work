@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
+import SwipeChevrons from '@/components/swipe/SwipeChevrons';
+import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import ConstructBuildAnimation from '@/components/home/ConstructBuildAnimation';
 
@@ -247,6 +249,7 @@ function MoveEarthRow({ item }: { item: MoveEarthItem; key?: any }) {
 }
 
 export default function ConstructClient() {
+  const heroCovered = useHeroCovered();
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
   // Configurator States
   const [selectedModel, setSelectedModel] = useState<string>('panoramic');
@@ -365,7 +368,9 @@ export default function ConstructClient() {
       <main className="">
 
         {/* ================= SECTION 1: RECREATED "COURT HUB" MOCK-UP HERO ================= */}
-        <div className="fixed top-0 left-0 w-full h-[100dvh] md:h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] z-0 pointer-events-auto">
+        {/* Exactly viewport-height (no min-h) so the frame bottom is never cut
+            off; `invisible` once covered stops paint/composite cost. */}
+        <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
           <section className="relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
@@ -387,32 +392,12 @@ export default function ConstructClient() {
           <div className="w-full h-full max-w-[1720px] mx-auto relative z-10 flex flex-col">
             {/* The Outer Frame simulating the premium mockup panel - thin polished rounded border exactly like reference */}
             <div
-              className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 backdrop-blur-[1.5px] flex flex-col justify-between p-4 pb-10 sm:p-8 md:p-10 lg:p-12"
+              className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 flex flex-col justify-between p-4 pb-10 sm:p-8 md:p-10 lg:p-12"
             >
 
-              {/* Left Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/about"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Previous Page"
-              >
-                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </MotionLink>
-
-              {/* Right Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/shop"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Next Page"
-              >
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-0.5 transition-transform" />
-              </MotionLink>
+              {/* Prev/next page arrows — shared swipe-cycle chevrons (they arm
+                  the horizontal slide transition) */}
+              <SwipeChevrons />
 
               {/* In-frame hero navbar (the design's integrated sub-header row) */}
               <HeroFrameNav active="construct" />
@@ -535,10 +520,11 @@ export default function ConstructClient() {
         </div>
 
         {/* Spacer to allow scrolling past the fixed background hero */}
-        <div className="relative w-full h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] pointer-events-none z-0" />
+        <div className="relative w-full h-screen pointer-events-none z-0" />
 
         {/* ================= BLANKET OVERLAY CONTENT ================= */}
-        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)]">
+        {/* md:pl-24 clears the fixed sideways rail (w-24) over all post-hero content */}
+        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)] md:pl-24">
 
 
 
@@ -592,7 +578,10 @@ export default function ConstructClient() {
         <ConstructBuildAnimation />
 
         {/* ================= SECTION 6: INQUIRY FLOW (Guided multi-step pipeline configurator) ================= */}
-        <section id="configurator" className="py-20 md:py-24 lg:py-0 lg:h-screen lg:min-h-[750px] lg:max-h-[920px] bg-ink px-6 md:px-8 relative text-white flex flex-col justify-center overflow-hidden">
+        {/* Natural height with generous padding — the old lg:h-screen + max-h
+            clipped the top badge on shorter laptops (content taller than the
+            hard cap). min-h keeps it filling a viewport when it fits. */}
+        <section id="configurator" className="py-20 md:py-24 lg:py-16 lg:min-h-screen bg-ink px-6 md:px-8 relative text-white flex flex-col justify-center overflow-hidden">
 
           <div className="max-w-7xl w-full mx-auto space-y-8 lg:space-y-4 relative z-10">
 
