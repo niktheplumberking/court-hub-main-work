@@ -17,6 +17,9 @@ interface ConstructionSectionProps {
   formRef?: React.RefObject<HTMLDivElement | null>;
   /** Number of frames in the active sequence (mobile uses 90, desktop 150). */
   frameCount?: number;
+  /** Hide the built-in Configure-Your-Court WhatsApp form (e.g. when embedding
+   *  this purely as a build-animation elsewhere, with a separate configurator). */
+  hideForm?: boolean;
 }
 
 export default function ConstructionSection({
@@ -26,7 +29,8 @@ export default function ConstructionSection({
   isDesktop = false,
   canvasRef: externalCanvasRef,
   formRef: externalFormRef,
-  frameCount = 150
+  frameCount = 150,
+  hideForm = false
 }: ConstructionSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const internalCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -200,12 +204,15 @@ Configuration Details:
         }
       }, 0);
 
-      // Form fade-in animation during the final reserve phase
-      tl.fromTo(formRef.current,
-        { opacity: 0, y: 60, pointerEvents: 'none' },
-        { opacity: 1, y: 0, pointerEvents: 'auto', duration: 1.0, ease: 'power2.out' },
-        3.2
-      );
+      // Form fade-in animation during the final reserve phase (skipped when the
+      // form is hidden — e.g. when this is embedded purely as a build animation).
+      if (!hideForm) {
+        tl.fromTo(formRef.current,
+          { opacity: 0, y: 60, pointerEvents: 'none' },
+          { opacity: 1, y: 0, pointerEvents: 'auto', duration: 1.0, ease: 'power2.out' },
+          3.2
+        );
+      }
 
       // Final reserve phase for visual completion
       tl.to({}, { duration: 1.5 }, 3.0);
@@ -213,7 +220,7 @@ Configuration Details:
     }, containerRef);
 
     return () => ctx.revert();
-  }, [isLoaded, isDesktop, preloadedImages, frameCount]);
+  }, [isLoaded, isDesktop, preloadedImages, frameCount, hideForm]);
 
   return (
     <div className="relative w-full h-full">
@@ -241,7 +248,7 @@ Configuration Details:
           {/* WhatsApp Request Panel Overlay (Appears on the right side once court finishes building) */}
           <div
             ref={formRef}
-            className="absolute top-[46vh] bottom-2 left-4 right-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:left-auto md:right-16 lg:right-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto"
+            className={`${hideForm ? 'hidden ' : ''}absolute top-[46vh] bottom-2 left-4 right-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:left-auto md:right-16 lg:right-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto`}
           >
             {/* System telemetry header - Hidden on mobile to save space */}
             <div className="hidden md:flex items-center justify-between border-b border-white/5 pb-2 md:pb-3">

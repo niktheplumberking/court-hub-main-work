@@ -8,20 +8,13 @@ import {
   SlidersHorizontal,
   ShoppingBag,
   CheckCircle,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
-import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import type { Product } from '@/components/shop/placeholder-products';
 
-const MotionLink = motion.create(Link);
-
 export default function ShopClient() {
-  const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
   const { add, count, openDrawer } = useCart();
   const [activeBrand, setActiveBrand] = useState<'ALL' | 'STEALTH' | 'HEAD' | 'Wilson'>('ALL');
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'rackets' | 'used' | 'accessories'>('ALL');
@@ -122,179 +115,14 @@ export default function ShopClient() {
 
       <main className="">
 
-        {/* ================= SECTION 1: RECREATED "COURT HUB" MOCK-UP HERO ================= */}
-        <div className="fixed top-0 left-0 w-full h-[100dvh] md:h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] z-0 pointer-events-auto">
-          <section className="relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
-
-          {/* Edge-to-Edge full screen background cinematic video / image fallback */}
-          <motion.div
-            style={{ x: parallaxX, y: parallaxY }}
-            className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
-          >
-            <img
-              src="/assets/images/court_action_landscape_1779705580138.png"
-              alt=""
-              aria-hidden
-              className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
-              referrerPolicy="no-referrer" fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-transparent to-ink/90" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,90,232,0.2)_0%,transparent_80%)]" />
-          </motion.div>
-
-          <div className="w-full h-full max-w-[1720px] mx-auto relative z-10 flex flex-col">
-            {/* The Outer Frame simulating the premium mockup panel - thin polished rounded border exactly like reference */}
-            <div
-              className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 backdrop-blur-[1.5px] flex flex-col justify-between p-4 pb-10 sm:p-8 md:p-10 lg:p-12"
-            >
-
-              {/* Left Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/construct-your-court"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Previous Page"
-              >
-                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </MotionLink>
-
-              {/* Right Floating Swipe Chevron - Confined inside white borders */}
-              <MotionLink
-                href="/contact"
-                whileHover={{ scale: 1.15, backgroundColor: "#C8FF3D", color: "#0E0E0C" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 md:w-11 md:h-11 rounded-full border border-white/25 bg-black/50 text-white flex items-center justify-center backdrop-blur-md transition-shadow shadow-[0_4px_24px_rgba(0,0,0,0.6)] group shrink-0"
-                aria-label="Next Page"
-              >
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-0.5 transition-transform" />
-              </MotionLink>
-
-              {/* In-frame hero navbar (the design's integrated sub-header row) */}
-              <HeroFrameNav active="shop" />
-
-              {/* 3. Centered Title Blocks: "EQUIPMENT", "PRO SHELF" with organic, breath-like floating motions */}
-              <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 z-10 select-none pointer-events-none">
-                {/* Mobile-only levitation wrapper (CSS .ch-levitate floats the whole title
-                    on <768px, static on desktop). Kept separate from the inner Framer
-                    transforms so the CSS float and Framer animations never conflict. */}
-                <div className="ch-levitate w-full flex flex-col items-center justify-center">
-                  {/* Text Row 1 */}
-                  <motion.div
-                    animate={{ y: [0, -6, 0], x: [0, 1.5, 0] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                    className="w-full flex justify-center"
-                  >
-                    <motion.h1
-                      initial={{ y: -35, opacity: 0, scale: 0.98 }}
-                      animate={{ y: 0, opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                      className="font-display font-black text-white text-center text-5xl sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
-                    >
-                      EQUIPMENT
-                    </motion.h1>
-                  </motion.div>
-
-                  {/* Text Row 2 */}
-                  <motion.div
-                    animate={{ y: [0, 6, 0], x: [0, -1.5, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-                    className="w-full flex justify-center mt-1 sm:mt-2"
-                  >
-                    <motion.h1
-                      initial={{ y: 35, opacity: 0, scale: 0.98 }}
-                      animate={{ y: 0, opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-                      className="font-display font-black text-white text-center text-5xl sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
-                    >
-                      PRO SHELF
-                    </motion.h1>
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* 4. Glass Framed Bottom Row: Actions + Communities rating badge */}
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                className="relative z-30 w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 border-t border-white/10 pt-4 mt-auto"
-              >
-
-                {/* Left Bottom Block - Piles */}
-                <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
-                  <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
-                    Authorized drops from Stealth, HEAD, and official custom-pressurized tournament kits. Filter products and build your match tier setup below.
-                  </p>
-                  <div className="flex flex-wrap items-center gap-4">
-                    {/* Pulsating Attention CTA Button wrapper */}
-                    <div className="relative inline-flex group">
-                      {/* Dynamic Sonar Shockwave */}
-                      <motion.span
-                        animate={{
-                          scale: [1, 1.35, 1],
-                          opacity: [0.45, 0, 0.45]
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        className="absolute inset-0 bg-[#C8FF3D] rounded-full blur-md -z-10"
-                      />
-                      <motion.div
-                        animate={{
-                          rotate: [0, 1.2, -1.2, 0.8, -0.8, 0],
-                          scale: [1, 1.025, 0.985, 1.025, 1]
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          repeatDelay: 3.5,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <a
-                          href="#catalog"
-                          className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
-                        >
-                          Browse Shelf
-                        </a>
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Bottom Block - Spec details mimicking about stats */}
-                <div className="max-w-xs space-y-2 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
-                  <span className="font-mono text-[10px] text-lime uppercase tracking-widest font-black py-1 px-2.5 bg-lime/10 border border-lime/20 rounded">
-                    STEALTH PRO DROP
-                  </span>
-                  <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-right">
-                    OFFICIAL TOUR DROPS
-                  </p>
-                  <p className="text-white/60 text-[11px] font-mono lg:text-right">High response carbon weave cores.</p>
-                </div>
-
-              </motion.div>
-
-            </div>
-          </div>
-        </section>
-        </div>
-
-        {/* Spacer to allow scrolling past the fixed background hero */}
-        <div className="relative w-full h-screen min-h-[620px] sm:min-h-[720px] md:min-h-[820px] pointer-events-none z-0" />
-
         {/* ================= BLANKET OVERLAY CONTENT ================= */}
         <div ref={blanketRef} className="relative z-10 bg-sand text-ink shadow-[0_-24px_50px_rgba(0,0,0,0.15)] border-t border-sand-2">
           {/* Fine spacing grid pattern for balanced quadrants and elegant reduced opacity (0.04) */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,13,24,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,13,24,0.035)_1px,transparent_1px)] bg-[size:5.0rem_5.0rem] pointer-events-none" />
 
-          {/* Catalog container */}
-          <div id="catalog" className="max-w-7xl mx-auto py-16 sm:py-20 px-6 md:px-8 space-y-12 sm:space-y-16 relative z-10">
+          {/* Catalog container — extra top padding clears the fixed site header now
+              that the hero (which used to provide that offset) is gone. */}
+          <div id="catalog" className="max-w-7xl mx-auto pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 md:px-8 space-y-12 sm:space-y-16 relative z-10">
 
             {/* Collection Header Block aligned with reference image layout */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-8 border-b border-ink/10">
