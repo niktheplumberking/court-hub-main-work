@@ -13,13 +13,14 @@ import AboutTeaser from './AboutTeaser';
  * as the swipe pages (HomeHero) but IN-FLOW — home scrolls normally, no
  * blanket-over-hero effect. Lives inside the (swipe) route group, so the
  * global <Header /> (mobile bar + sideways rail) comes from the layout.
- * Content below the hero is padded left on md+ so the rail never covers it.
+ * The sideways rail floats OVER content as a translucent overlay — no
+ * reserved lane (the visible left stripe read as a layout bug to the client).
  */
 export default function SimplifiedHome({ products }: { products: Product[] }) {
   return (
     <div className="ch-home min-h-screen bg-ink text-ink">
       <HomeHero />
-      <div className="relative overflow-x-clip bg-sand md:pl-24">
+      <div className="relative overflow-x-clip bg-sand">
         <BrandRibbon />
         <NumbersStrip />
         <ServicesGrid />

@@ -11,7 +11,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <HeroFrameNav fixedBar />
+      <HeroFrameNav active="tournaments" fixedBar />
       <TournamentAdmin />
     </>
   );

@@ -11,13 +11,14 @@ import { motion } from 'motion/react';
  *  • fixedBar — viewport-fixed bar for pages WITHOUT a hero (Shop): same row,
  *    no frame, visible at all times.
  */
-type ActiveKey = 'home' | 'about' | 'construct' | 'shop' | 'contact';
+type ActiveKey = 'home' | 'about' | 'construct' | 'shop' | 'tournaments' | 'contact';
 
 const LINKS: { label: string; href: string; key: ActiveKey }[] = [
   { label: 'Home', href: '/', key: 'home' },
   { label: 'About Us', href: '/about', key: 'about' },
   { label: 'Construct Your Court', href: '/construct-your-court', key: 'construct' },
   { label: 'Shop', href: '/shop', key: 'shop' },
+  { label: 'Tournaments', href: '/tournaments', key: 'tournaments' },
   { label: 'Contact Us', href: '/contact', key: 'contact' },
 ];
 
@@ -54,8 +55,10 @@ export default function HeroFrameNav({
         <span className="font-sans font-bold text-lime text-lg md:text-xl uppercase ml-1.5">HUB</span>
       </Link>
 
-      {/* Internal links — the four core pages */}
-      <div className="hidden lg:flex items-center gap-8 xl:gap-10 text-[11px] font-mono uppercase tracking-[0.22em] text-white/80">
+      {/* Internal links — six entries now. At lg (1024) the framed-hero row is
+          only ~840px wide, so run smaller/tighter there (plus px-3 so the row
+          NEVER touches the logo/CTA even at exact fit) and relax at xl. */}
+      <div className="hidden lg:flex items-center gap-4 xl:gap-8 px-3 text-[10px] xl:text-[11px] font-mono uppercase tracking-[0.14em] xl:tracking-[0.16em] text-white/80">
         {LINKS.map((l) =>
           l.key === active ? (
             <Link key={l.key} href={l.href} className="text-lime font-bold border-b border-lime/30 pb-0.5">

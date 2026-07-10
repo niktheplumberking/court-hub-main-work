@@ -316,8 +316,7 @@ export default function AboutClient() {
         <div className="relative w-full h-screen pointer-events-none z-0" />
 
         {/* ================= BLANKET OVERLAY CONTENT ================= */}
-        {/* md:pl-24 clears the fixed sideways rail (w-24) that accompanies all post-hero content */}
-        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)] md:pl-24">
+        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)]">
 
         {/* ================= SECTION 2: COMPANY STORY (Premium Sand/#EDE8E1 Theme / Editorial Feel) ================= */}
         <section className="min-h-screen flex flex-col justify-center py-20 sm:py-28 md:py-36 px-6 md:px-12 lg:px-16 xl:px-20 bg-sand text-ink relative overflow-hidden">

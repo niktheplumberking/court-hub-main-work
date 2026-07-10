@@ -22,6 +22,7 @@ const RAIL_LINKS = [
   { label: 'About Us', href: '/about' },
   { label: 'Construct Your Court', href: '/construct-your-court' },
   { label: 'Shop', href: '/shop' },
+  { label: 'Tournaments', href: '/tournaments' },
   { label: 'Contact Us', href: '/contact' },
 ];
 
@@ -143,7 +144,9 @@ export default function Header() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 left-0 bottom-0 w-24 bg-[#0E0E0C] border-r border-white/10 flex flex-col justify-between py-12 items-center z-50 shadow-[5px_0_30px_rgba(0,0,0,0.5)]"
+              // Translucent glass OVERLAY — floats over content with no border and
+              // no opaque column, so there is no visible "navbar lane" on any section.
+              className="fixed top-0 left-0 bottom-0 w-24 bg-ink/60 backdrop-blur-md flex flex-col justify-between py-8 items-center z-50"
             >
               {/* Vertical Logo Badge */}
               <Link href="/" className="font-sans text-lg tracking-wider text-white flex flex-col items-center select-none hover:text-lime transition-colors">
@@ -151,16 +154,16 @@ export default function Header() {
                 <span className="font-bold text-lime">H</span>
               </Link>
 
-              {/* Vertical Links (Rotated via CSS writing-mode). Tighter gap/size
-                  than before — "Construct Your Court" must fit 768px-tall screens. */}
-              <div className="flex flex-col gap-6 items-center">
+              {/* Vertical Links (Rotated via CSS writing-mode). Tight gap/size —
+                  FIVE labels incl. "Construct Your Court" must fit 768px-tall screens. */}
+              <div className="flex flex-col gap-4 items-center">
                 {RAIL_LINKS.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
                       key={item.label}
                       href={item.href}
-                      className={`text-[12px] font-bold tracking-[0.14em] uppercase transition-all duration-300 [writing-mode:vertical-lr] rotate-180 relative py-1 ${
+                      className={`text-[11px] font-bold tracking-[0.12em] uppercase transition-all duration-300 [writing-mode:vertical-lr] rotate-180 relative py-1 ${
                         isActive
                           ? 'text-lime font-black scale-105'
                           : `text-white/60 hover:text-white ${UNDERLINE_REVEAL_VERTICAL}`

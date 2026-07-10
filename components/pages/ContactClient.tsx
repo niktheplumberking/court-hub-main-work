@@ -246,8 +246,7 @@ export default function ContactClient() {
         <div className="relative w-full h-screen pointer-events-none z-0" />
 
         {/* ================= BLANKET OVERLAY CONTENT ================= */}
-        {/* md:pl-24 clears the fixed sideways rail (w-24) over all post-hero content */}
-        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)] md:pl-24">
+        <div className="relative z-10 bg-ink shadow-[0_-24px_50px_rgba(0,0,0,0.6)]">
 
         {/* ================= SECTION 2: DYNAMIC ROUTING & WHATSAPP INTEGRATION (Court Blue Backdrop) ================= */}
         <section id="selection" className="py-20 bg-court-blue text-white px-6 md:px-8 relative overflow-hidden">

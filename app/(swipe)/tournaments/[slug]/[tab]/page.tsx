@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   if (!(VALID_TABS as readonly string[]).includes(tab)) notFound();
   return (
     <>
-      <HeroFrameNav fixedBar />
+      <HeroFrameNav active="tournaments" fixedBar />
       <TournamentDetail slug={slug} tab={tab as DetailTab} />
     </>
   );

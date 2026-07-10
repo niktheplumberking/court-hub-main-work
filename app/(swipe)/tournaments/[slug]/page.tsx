@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // Bare route renders the default Overview tab (main project's fixed navbar).
   return (
     <>
-      <HeroFrameNav fixedBar />
+      <HeroFrameNav active="tournaments" fixedBar />
       <TournamentDetail slug={slug} tab="overview" />
     </>
   );

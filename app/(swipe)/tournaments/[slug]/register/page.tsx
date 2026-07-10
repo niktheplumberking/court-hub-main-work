@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (t && t.status !== 'open') redirect(`/tournaments/${slug}`);
   return (
     <>
-      <HeroFrameNav fixedBar />
+      <HeroFrameNav active="tournaments" fixedBar />
       <BookingFlow slug={slug} />
     </>
   );
