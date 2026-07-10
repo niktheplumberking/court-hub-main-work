@@ -9,16 +9,21 @@ import { PAGE_ORDER } from '@/components/swipe/pageOrder';
 
 const MotionLink = motion.create(Link);
 
-// Canonical nav order per the site spec. The sideways rail drops Home (the
-// C/H logo badge is the way home); the mobile menu keeps the full list.
-const NAV_LINKS = [
+// Burger (mobile) menu — exact order per the client spec.
+const MOBILE_LINKS = [
   { label: 'Home', href: '/' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Construct Your Court', href: '/construct-your-court' },
+  { label: 'Tournaments', href: '/tournaments' },
+  { label: 'Contact Us', href: '/contact' },
+];
+// Sideways rail — its own spec: no Home (the C/H logo badge is the way home).
+const RAIL_LINKS = [
   { label: 'About Us', href: '/about' },
   { label: 'Construct Your Court', href: '/construct-your-court' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact Us', href: '/contact' },
 ];
-const RAIL_LINKS = NAV_LINKS.filter((l) => l.href !== '/');
 
 // Vertical-writing-mode adaptation of the same reveal for the sidebar links.
 const UNDERLINE_REVEAL_VERTICAL =
@@ -32,9 +37,14 @@ export default function Header() {
   // transition; other utility pages keep the horizontal bar.
   const isSwipePage =
     (PAGE_ORDER as readonly string[]).includes(pathname) || pathname.startsWith('/shop');
-  // Shop listing has NO hero — it gets the always-visible fixed top navbar
-  // (HeroFrameNav fixedBar, rendered by ShopClient) instead of the left rail.
-  const isShopListing = pathname === '/shop';
+  // Pages WITHOUT a hero (Shop listing, Tournaments, Leaderboard) show the
+  // always-visible fixed top navbar (HeroFrameNav fixedBar, rendered by the
+  // page itself) instead of the left rail.
+  const isFixedBarPage =
+    pathname === '/shop' ||
+    pathname === '/tournaments' ||
+    pathname.startsWith('/tournaments/') ||
+    pathname === '/leaderboards';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolledPastHero, setHasScrolledPastHero] = useState(false);
   const [scrolled, setScrolled] = useState(false); // glass bg on subpages
@@ -46,7 +56,7 @@ export default function Header() {
   // over their hero the global top bar is suppressed (home shows it; swipe pages show
   // their own in-frame HeroFrameNav instead).
   const isProductPage = pathname.startsWith('/shop/');
-  const railActive = isProductPage || (hasScrolledPastHero && !isShopListing);
+  const railActive = isProductPage || (hasScrolledPastHero && !isFixedBarPage);
 
   // Scroll lock when mobile menu is open
   useEffect(() => {
@@ -236,7 +246,7 @@ export default function Header() {
               className="fixed inset-0 z-40 bg-black pt-28 pb-10 px-8 overflow-y-auto flex flex-col justify-between"
             >
               <div className="flex flex-col gap-6">
-                {NAV_LINKS.map((item) => {
+                {MOBILE_LINKS.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { CartProvider } from '@/lib/cart-context';
+import { TournamentStoreProvider } from '@/lib/tournaments/store';
 import CartDrawer from '@/components/cart/CartDrawer';
 import MotionProvider from '@/components/shared/MotionProvider';
 import Cursor from '@/components/shared/Cursor';
@@ -50,9 +51,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NavigationFlag />
         <MotionProvider>
           <CartProvider>
-            {children}
-            {/* Global live cart: floating bag button + slide-in drawer, on every page. */}
-            <CartDrawer />
+            {/* Tournaments session store lives at the root (like the cart) so
+                bookings, admin-created tournaments and points edits survive
+                client navigations — inside the (swipe) layout it would remount
+                (and reset) on every route change. */}
+            <TournamentStoreProvider>
+              {children}
+              {/* Global live cart: floating bag button + slide-in drawer, on every page. */}
+              <CartDrawer />
+            </TournamentStoreProvider>
           </CartProvider>
         </MotionProvider>
         {/* Cursor lives in the layout (NOT template.tsx) so it persists across

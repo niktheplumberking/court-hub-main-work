@@ -9,10 +9,7 @@ const TRACK = [...BRANDS, ...BRANDS];
 
 export default function BrandRibbon() {
   return (
-    <div
-      aria-label="Brands we carry"
-      className="ch-ribbon relative overflow-hidden bg-ink py-[26px] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
-    >
+    <div aria-label="Brands we carry" className="ch-ribbon relative overflow-hidden bg-ink py-[26px]">
       <div className="ch-marquee ch-ribbon-track flex w-max items-center gap-[72px] whitespace-nowrap">
         {TRACK.map((brand, i) => (
           <Fragment key={`${brand}-${i}`}>
@@ -23,6 +20,10 @@ export default function BrandRibbon() {
           </Fragment>
         ))}
       </div>
+      {/* Edge fades blend to the strip's own ink — NOT a mask (a mask punched
+          through to the sand page background and read as white smears). */}
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-ink to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-ink to-transparent" />
     </div>
   );
 }

@@ -47,12 +47,8 @@ export default function HomeHero() {
 
           {/* Centered title with the breath-like float */}
           <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 z-10 select-none pointer-events-none">
-            <div className="ch-levitate w-full flex flex-col items-center justify-center">
-              <motion.div
-                animate={{ y: [0, -6, 0], x: [0, 1.5, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-full flex justify-center"
-              >
+            <div className="w-full flex flex-col items-center justify-center">
+              <motion.div className="w-full flex justify-center">
                 <motion.h1
                   initial={{ y: -35, opacity: 0, scale: 0.98 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -63,11 +59,7 @@ export default function HomeHero() {
                 </motion.h1>
               </motion.div>
 
-              <motion.div
-                animate={{ y: [0, 6, 0], x: [0, -1.5, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-                className="w-full flex justify-center mt-1 sm:mt-2"
-              >
+              <motion.div className="w-full flex justify-center mt-1 sm:mt-2">
                 <motion.h1
                   initial={{ y: 35, opacity: 0, scale: 0.98 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}

@@ -190,13 +190,9 @@ export default function AboutClient() {
 
               {/* 3. Centered Title Blocks: "EXPERIENCE PADEL", "ELEVATED" with organic, breath-like floating motions */}
               <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 z-10 select-none pointer-events-none">
-                <div className="ch-levitate w-full flex flex-col items-center justify-center">
+                <div className="w-full flex flex-col items-center justify-center">
                 {/* Text Row 1 */}
-                <motion.div
-                  animate={{ y: [0, -6, 0], x: [0, 1.5, 0] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-full flex justify-center"
-                >
+                <motion.div className="w-full flex justify-center">
                   <motion.h1
                     initial={{ y: -35, opacity: 0, scale: 0.98 }}
                     animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -208,11 +204,7 @@ export default function AboutClient() {
                 </motion.div>
 
                 {/* Text Row 2 */}
-                <motion.div
-                  animate={{ y: [0, 6, 0], x: [0, -1.5, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-                  className="w-full flex justify-center mt-1 sm:mt-2"
-                >
+                <motion.div className="w-full flex justify-center mt-1 sm:mt-2">
                   <motion.h1
                     initial={{ y: 35, opacity: 0, scale: 0.98 }}
                     animate={{ y: 0, opacity: 1, scale: 1 }}

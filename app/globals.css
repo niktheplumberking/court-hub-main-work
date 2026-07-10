@@ -347,3 +347,15 @@ html.lenis body {
   .ch-ribbon-track { --marquee-duration: 120s; } /* slowed, intentionally never stopped */
 }
 
+/* ── Tournaments feature (ported from the atif version) ─────────────────── */
+@keyframes ch-blink { 50% { opacity: 0.35; } }
+.ch-blink { animation: ch-blink 1.2s infinite; }
+
+@keyframes ch-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.ch-fadein { animation: ch-fadein 0.4s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ch-blink { animation: none; }
+  .ch-fadein { animation: none; }
+}
+
