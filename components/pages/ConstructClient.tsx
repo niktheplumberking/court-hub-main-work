@@ -232,10 +232,10 @@ function MoveEarthRow({ item }: { item: MoveEarthItem; key?: any }) {
           className="pt-4"
         >
           <a
-            href="#configurator"
+            href="#construction"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('configurator')?.scrollIntoView({ behavior: 'smooth' });
+              document.getElementById('construction')?.scrollIntoView({ behavior: 'smooth' });
             }}
             className="inline-flex items-center gap-3 font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-ink hover:text-court-blue pb-1.5 border-b-2 border-ink/10 hover:border-court-blue transition-colors group"
           >
@@ -363,7 +363,7 @@ export default function ConstructClient() {
   }, [activeModelObj, selectedTurf, selectedColor, selectedGlass, clientLocation, clientName, comments]);
 
   return (
-    <div className="bg-ink min-h-screen text-white selection:bg-lime/30 font-sans">
+    <div className="ch-has-rail bg-ink min-h-screen text-white selection:bg-lime/30 font-sans">
 
       <main className="">
 
@@ -371,7 +371,7 @@ export default function ConstructClient() {
         {/* Exactly viewport-height (no min-h) so the frame bottom is never cut
             off; `invisible` once covered stops paint/composite cost. */}
         <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
-          <section className="relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
+          <section className="ch-rail-exempt relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
           <motion.div
@@ -476,7 +476,7 @@ export default function ConstructClient() {
                         }}
                       >
                         <a
-                          href="#configurator"
+                          href="#construction"
                           className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
                         >
                           Bespoke Designer
@@ -539,7 +539,7 @@ export default function ConstructClient() {
               {COURT_TYPES.map((t, i) => (
                 <a
                   key={t.name}
-                  href="#configurator"
+                  href="#construction"
                   className="group relative flex flex-col justify-between min-h-[240px] rounded-[24px] border border-white/10 bg-ink-2 p-6 overflow-hidden transition-all duration-300 hover:border-lime/50 hover:-translate-y-1"
                 >
                   <div className="absolute top-0 right-0 w-24 h-24 bg-lime/5 blur-2xl rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -569,10 +569,11 @@ export default function ConstructClient() {
         <ConstructBuildAnimation />
 
         {/* ================= SECTION 6: INQUIRY FLOW (Guided multi-step pipeline configurator) ================= */}
-        {/* Natural height with generous padding — the old lg:h-screen + max-h
-            clipped the top badge on shorter laptops (content taller than the
-            hard cap). min-h keeps it filling a viewport when it fits. */}
-        <section id="configurator" className="py-20 md:py-24 lg:py-16 lg:min-h-screen bg-ink px-6 md:px-8 relative text-white flex flex-col justify-center overflow-hidden">
+        {/* HIDDEN per client (July 2026) — configurator kept in code, not shown.
+            All former #configurator anchors now point to #construction (the
+            build animation + its quote form). Restore by removing the inline
+            display style below. */}
+        <section id="configurator" style={{ display: 'none' }} aria-hidden className="py-20 md:py-24 lg:py-16 lg:min-h-screen bg-ink px-6 md:px-8 relative text-white flex flex-col justify-center overflow-hidden">
 
           <div className="max-w-7xl w-full mx-auto space-y-8 lg:space-y-4 relative z-10">
 

@@ -18,7 +18,7 @@ import AboutTeaser from './AboutTeaser';
  */
 export default function SimplifiedHome({ products }: { products: Product[] }) {
   return (
-    <div className="ch-home min-h-screen bg-ink text-ink">
+    <div className="ch-home ch-has-rail min-h-screen bg-ink text-ink">
       <HomeHero />
       <div className="relative overflow-x-clip bg-sand">
         <BrandRibbon />

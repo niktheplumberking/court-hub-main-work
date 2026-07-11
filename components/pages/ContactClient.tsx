@@ -101,7 +101,7 @@ export default function ContactClient() {
   };
 
   return (
-    <div className="bg-ink min-h-screen text-white selection:bg-lime/30 font-sans">
+    <div className="ch-has-rail bg-ink min-h-screen text-white selection:bg-lime/30 font-sans">
 
       <main className="">
 
@@ -109,7 +109,7 @@ export default function ContactClient() {
         {/* Exactly viewport-height (no min-h) so the frame bottom is never cut
             off; `invisible` once covered stops paint/composite cost. */}
         <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
-          <section className="relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
+          <section className="ch-rail-exempt relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
           <motion.div

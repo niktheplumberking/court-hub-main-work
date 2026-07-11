@@ -148,7 +148,7 @@ export default function AboutClient() {
   const yStep3 = 40 * (1 - opacityStep3);
 
   return (
-    <div className="bg-ink min-h-screen text-white selection:bg-lime/30 font-sans antialiased">
+    <div className="ch-has-rail bg-ink min-h-screen text-white selection:bg-lime/30 font-sans antialiased">
 
       <main className="">
 
@@ -157,7 +157,7 @@ export default function AboutClient() {
             viewport can never be scrolled, so its frame bottom would be cut off
             on laptops. `invisible` once covered stops paint/composite cost. */}
         <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
-          <section className="relative h-full w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
+          <section className="ch-rail-exempt relative h-full w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
           <motion.div

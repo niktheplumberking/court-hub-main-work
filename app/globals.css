@@ -19,6 +19,7 @@
   --color-green: #07C66A;
   --color-sand: #EDE8E1;
   --color-sand-2: #D8D2C8;
+  --color-sand-card: #F5F2EC; /* card surface on sand — used by the tournaments feature */
   --color-fire: #E84525;
 }
 
@@ -357,5 +358,20 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .ch-blink { animation: none; }
   .ch-fadein { animation: none; }
+}
+
+/* ── Sideways-rail clearance ────────────────────────────────────────────────
+   On pages that show the left rail (.ch-has-rail roots), shift every
+   background-carrying section's CONTENT clear of the fixed w-24 rail — but
+   only in the viewport band where centered max-width containers would
+   otherwise slide under it. The padding lives on the element that paints its
+   own background, so backgrounds stay full-bleed: the rail overlays pure
+   background, never text or boxes, and there is no visible reserved lane.
+   From 1520px up the natural centering margins already clear the rail.
+   Heroes opt out via .ch-rail-exempt (the rail never shows over a hero). */
+@media (min-width: 768px) and (max-width: 1519.98px) {
+  .ch-has-rail :where(section, footer):not(.ch-rail-exempt) {
+    padding-left: 6.75rem; /* 96px rail + breathing room */
+  }
 }
 
