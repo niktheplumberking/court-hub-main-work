@@ -78,7 +78,9 @@ export default function ContactClient({ content }: { content: ContentMap }) {
 
   // Construct direct WhatsApp deep link with custom encoded pre-filled text
   const whatsappUrl = useMemo(() => {
-    const phoneNo = content['contact.dispatch.whatsapp_phone']; // official GCC service line
+    // Official GCC service line. Normalized to bare digits: the WhatsApp API
+    // rejects '+'/spaces, and the client will plausibly type "+971 50 123 4567".
+    const phoneNo = (content['contact.dispatch.whatsapp_phone'] || '').replace(/\D/g, '');
     const nameSection = inquirerName ? `• Inquirer Name: ${inquirerName}\n` : '';
     const remarkSection = customSnippet ? `• Client Remarks: ${customSnippet}\n` : '';
     const divisionSection = `• Routed Division: ${activeRoute.title}\n• Handled By: ${activeRoute.recipientDesk}\n`;

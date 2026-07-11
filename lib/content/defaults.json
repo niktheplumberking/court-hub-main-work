@@ -218,7 +218,7 @@
   "home.construct.heading": {
     "page": "home",
     "label": "Construct Panel · Heading",
-    "type": "text",
+    "type": "richtext",
     "value": "Construct\nYour Court"
   },
   "home.construct.paragraph": {
@@ -284,7 +284,7 @@
   "home.about_teaser.badge_caption": {
     "page": "home",
     "label": "About Teaser · Image badge stat caption",
-    "type": "text",
+    "type": "richtext",
     "value": "Arenas built\nacross the GCC"
   },
   "home.about_teaser.eyebrow": {
@@ -296,7 +296,7 @@
   "home.about_teaser.heading": {
     "page": "home",
     "label": "About Teaser · Heading",
-    "type": "text",
+    "type": "richtext",
     "value": "Crafted for\nthe Obsessed"
   },
   "home.about_teaser.paragraph": {

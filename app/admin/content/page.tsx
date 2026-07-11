@@ -66,7 +66,10 @@ export default async function AdminContent() {
                   label={field.label}
                   type={field.type}
                   value={overrides.get(key) ?? field.value}
-                  overridden={overrides.has(key)}
+                  // "edited" = actually differs from the shipped default (the
+                  // seed inserts every default as a row, so row-existence alone
+                  // would flag all 227 fields).
+                  overridden={overrides.has(key) && overrides.get(key) !== field.value}
                 />
               ))}
             </div>

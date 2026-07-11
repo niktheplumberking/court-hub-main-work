@@ -77,7 +77,10 @@ export default function ContentFieldEditor({
           )}
         </p>
         {overridden && (
-          <form action={resetAction}>
+          <form action={resetAction} className="flex items-center gap-3">
+            {/* Reset feedback lives here so a later reset can't show a stale
+                "Saved" from the save form (and vice versa). */}
+            <Status state={resetState} />
             <input type="hidden" name="key" value={fieldKey} />
             <ResetButton />
           </form>
@@ -120,7 +123,7 @@ export default function ContentFieldEditor({
 
         <div className="flex items-center gap-4">
           <SubmitButton label={type === 'image' ? 'Upload & Save' : 'Save'} />
-          <Status state={saveState.status !== 'idle' ? saveState : resetState} />
+          <Status state={saveState} />
         </div>
       </form>
     </div>

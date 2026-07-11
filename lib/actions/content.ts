@@ -4,13 +4,21 @@ import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { CONTENT_DEFAULTS, type ContentPage } from '@/lib/content/get';
 
-// Same auth gate as lib/actions/products.ts — middleware protects /admin,
-// this protects the actions themselves; the site_content RLS policies
-// (admins table) additionally protect the raw REST surface.
+// Stricter than lib/actions/products.ts: content writes bypass RLS via the
+// service-role client, so the admins ALLOW-LIST must be enforced here in the
+// action itself — being authenticated is not enough (matters the moment any
+// non-admin account exists, e.g. future customer logins). Requires the user
+// to be enrolled in the `admins` table (see the site_content migration).
 async function requireAdmin() {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
+  const { data, error } = await supabaseAdmin()
+    .from('admins')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error || !data) throw new Error('Unauthorized — account is not enrolled in the admins list.');
   return user;
 }
 
@@ -28,7 +36,16 @@ const PAGE_PATHS: Record<ContentPage, string> = {
 const MAX_TEXT = 500;
 const MAX_RICHTEXT = 5000;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
-const IMAGE_EXTS = new Set(['jpg', 'jpeg', 'png', 'webp']);
+// Extension → the contentType we STORE (never trust the client's MIME: a
+// "photo.png" declared as image/svg+xml would otherwise be served as
+// scriptable SVG from the public bucket).
+const IMAGE_TYPES: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+};
+const ALLOWED_MIME = new Set(Object.values(IMAGE_TYPES));
 
 export interface ContentActionState {
   status: 'idle' | 'saved' | 'reset' | 'error';
@@ -58,13 +75,14 @@ export async function saveContentField(
         return { status: 'error', message: 'Image too large (max 8MB).' };
       }
       const ext = (file.name.split('.').pop() || '').toLowerCase();
-      if (!IMAGE_EXTS.has(ext) || !file.type.startsWith('image/')) {
+      const storedType = IMAGE_TYPES[ext];
+      if (!storedType || !ALLOWED_MIME.has(file.type)) {
         return { status: 'error', message: 'Use a jpg, png or webp image.' };
       }
       const admin = supabaseAdmin();
       const path = `site-content/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error } = await admin.storage.from('products').upload(path, file, {
-        contentType: file.type,
+        contentType: storedType, // derived from the extension, never the client MIME
         upsert: false,
       });
       if (error) return { status: 'error', message: `Upload failed: ${error.message}` };

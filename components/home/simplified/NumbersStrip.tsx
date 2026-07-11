@@ -15,7 +15,10 @@ import type { ContentMap } from '@/lib/content/get';
 function parseStat(raw: string): { to: number; decimals: number; unit: string } | null {
   const m = raw.match(/^(\d[\d,]*(?:\.\d+)?)(.*)$/);
   if (!m) return null;
-  const numeric = m[1].replace(/,/g, '');
+  // Strip only thousands-style commas — a decimal-comma entry like "2,1x"
+  // keeps its comma and renders statically instead of silently becoming 21.
+  const numeric = m[1].replace(/,(?=\d{3}(\D|$))/g, '');
+  if (numeric.includes(',')) return null;
   const to = Number(numeric);
   if (!Number.isFinite(to)) return null;
   const decimals = numeric.includes('.') ? numeric.split('.')[1].length : 0;

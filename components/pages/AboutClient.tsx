@@ -28,9 +28,13 @@ const MotionLink = motion.create(Link);
 function StatCounter({ raw }: { raw: string }) {
   const m = /^([\d,]+(?:\.\d+)?)(.*)$/.exec(raw);
   if (!m) return <>{raw}</>;
-  const value = parseFloat(m[1].replace(/,/g, ''));
+  // Thousands-style commas only — "2,1x" (decimal comma) renders statically
+  // instead of silently becoming 21.
+  const numeric = m[1].replace(/,(?=\d{3}(\D|$))/g, '');
+  if (numeric.includes(',')) return <>{raw}</>;
+  const value = parseFloat(numeric);
   if (Number.isNaN(value)) return <>{raw}</>;
-  const decimals = m[1].includes('.') ? m[1].split('.')[1].length : 0;
+  const decimals = numeric.includes('.') ? numeric.split('.')[1].length : 0;
   return <AnimatedCounter value={value} decimals={decimals} suffix={m[2]} />;
 }
 
