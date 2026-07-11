@@ -9,7 +9,7 @@ export default function OrderStatusSelect({ id, status }: { id: string; status: 
       defaultValue={status}
       disabled={pending}
       onChange={(e) => start(() => updateOrderStatus(id, e.target.value))}
-      className="bg-ink border border-white/10 rounded-full px-4 py-2 text-white text-sm outline-none focus:border-lime"
+      className="adm-input w-auto! rounded-full! px-4! py-2! text-sm cursor-pointer disabled:opacity-50"
     >
       <option value="paid">Paid</option>
       <option value="fulfilled">Fulfilled</option>

@@ -17,12 +17,21 @@ export default async function AdminProducts() {
     .from('products').select('*, categories(name)').order('created_at', { ascending: false });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display font-bold text-2xl text-white">Products <span className="text-white/30 text-base font-sans font-normal">({products?.length ?? 0})</span></h1>
-        <Link href="/admin/products/new" className="px-5 py-2.5 rounded-full bg-lime text-ink font-bold text-sm">+ ADD PRODUCT</Link>
+    <div className="adm-grid-bg space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-4 adm-fade-up">
+        <div className="space-y-2">
+          <p className="adm-eyebrow">/// INVENTORY DECK</p>
+          <h1 className="font-display font-black uppercase italic text-3xl md:text-4xl text-white tracking-tight">
+            YOUR <span className="text-lime">ARSENAL</span>
+          </h1>
+          <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white/50 border border-white/10 rounded-full px-3 py-1 bg-white/[.03]">
+            <span className="adm-live-dot" />
+            {products?.length ?? 0} PRODUCTS
+          </span>
+        </div>
+        <Link href="/admin/products/new" className="adm-pulse px-6 py-3 rounded-full bg-lime text-ink font-bold text-sm hover:brightness-110 transition">+ ADD PRODUCT</Link>
       </div>
-      <div className="bg-ink-2 rounded-[20px] border border-white/5 overflow-hidden">
+      <div className="adm-card overflow-hidden adm-fade-up" style={{ '--adm-delay': '0.06s' } as React.CSSProperties}>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-white/30 text-xs uppercase tracking-wider border-b border-white/5">
@@ -36,21 +45,21 @@ export default async function AdminProducts() {
           </thead>
           <tbody>
             {(products as (Product & { categories: { name: string } })[] | null)?.map((p) => (
-              <tr key={p.id} className="border-b border-white/5 last:border-0 hover:bg-white/[0.02]">
+              <tr key={p.id} className="border-b border-white/5 last:border-0 hover:bg-white/[.04] transition-colors">
                 <td className="px-5 py-3">
                   <Link href={`/admin/products/${p.id}`} className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 rounded-lg bg-ink overflow-hidden shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-ink border border-white/10 overflow-hidden shrink-0">
                       {p.images?.[0] && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
                       )}
                     </div>
-                    <span className="text-white group-hover:text-lime line-clamp-1">{p.title}</span>
+                    <span className="text-white group-hover:text-lime transition-colors line-clamp-1">{p.title}</span>
                   </Link>
                 </td>
                 <td className="px-5 py-3 text-white/50 hidden md:table-cell">{p.categories?.name}</td>
-                <td className="px-5 py-3 text-white/80">{formatAED(p.price_aed)}</td>
-                <td className="px-5 py-3 text-white/50 hidden md:table-cell">{p.is_unique ? (p.quantity > 0 ? '1 (unique)' : '—') : p.quantity}</td>
+                <td className="px-5 py-3 text-white font-semibold">{formatAED(p.price_aed)}</td>
+                <td className="px-5 py-3 text-white/50 font-mono text-xs hidden md:table-cell">{p.is_unique ? (p.quantity > 0 ? '1 (unique)' : '—') : p.quantity}</td>
                 <td className="px-5 py-3">
                   <span className={`px-3 py-1 rounded-full text-[11px] font-semibold uppercase ${statusColors[p.status]}`}>{p.status}</span>
                 </td>

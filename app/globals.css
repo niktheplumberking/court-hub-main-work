@@ -360,6 +360,85 @@ html.lenis body {
   .ch-fadein { animation: none; }
 }
 
+/* ── Admin console design language (adm-*) ──────────────────────────────────
+   Shared by every /admin surface. Loops are CSS-driven (they must keep
+   running under OS reduce-motion, matching the site's brand loops); one-shot
+   entrances collapse to instant under reduce-motion. */
+
+/* Court-blueprint backdrop: faint grid + service-box lines + lime corner glow. */
+.adm-grid-bg {
+  position: relative;
+  isolation: isolate;
+}
+.adm-grid-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(200, 255, 61, 0.07), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(30, 90, 232, 0.06), transparent 60%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+}
+
+.adm-eyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(200, 255, 61, 0.75);
+}
+
+.adm-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.adm-card:hover {
+  border-color: rgba(200, 255, 61, 0.28);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(200, 255, 61, 0.06);
+}
+.adm-card-lift:hover { transform: translateY(-3px); }
+
+.adm-input, .adm-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.adm-input:focus, .adm-textarea:focus {
+  outline: none;
+  border-color: rgba(200, 255, 61, 0.55);
+  box-shadow: 0 0 0 3px rgba(200, 255, 61, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Primary action pulse — soft lime sonar, CSS loop (runs under reduce-motion
+   like the site's Book-a-Court pulse). */
+@keyframes adm-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(200, 255, 61, 0.35); } 55% { box-shadow: 0 0 0 9px rgba(200, 255, 61, 0); } }
+.adm-pulse { animation: adm-pulse 2.6s ease-in-out infinite; }
+
+/* One-shot entrance for cards/sections (staggered via --adm-delay). */
+@keyframes adm-fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.adm-fade-up { animation: adm-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--adm-delay, 0s); }
+
+/* Live-status dot (deployment/edited indicators). */
+@keyframes adm-blink { 50% { opacity: 0.35; } }
+.adm-live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--color-lime); box-shadow: 0 0 10px rgba(200, 255, 61, 0.7); animation: adm-blink 1.4s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-fade-up { animation: none; }
+  .adm-card-lift:hover { transform: none; }
+}
+
 /* ── Sideways-rail clearance ────────────────────────────────────────────────
    On pages that show the left rail (.ch-has-rail roots), shift every
    background-carrying section's CONTENT clear of the fixed w-24 rail — but

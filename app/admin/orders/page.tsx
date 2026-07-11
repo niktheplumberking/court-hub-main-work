@@ -10,26 +10,45 @@ export default async function AdminOrders() {
   const { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
 
   return (
-    <div className="space-y-6">
-      <h1 className="font-display font-bold text-2xl text-white">Orders <span className="text-white/30 text-base font-sans font-normal">({orders?.length ?? 0})</span></h1>
+    <div className="adm-grid-bg space-y-8">
+      <div className="space-y-2 adm-fade-up">
+        <p className="adm-eyebrow">/// COMMAND DECK</p>
+        <h1 className="font-display font-black uppercase italic text-3xl md:text-4xl text-white tracking-tight">
+          ORDER <span className="text-lime">FLOW</span>
+        </h1>
+        <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white/50 border border-white/10 rounded-full px-3 py-1 bg-white/[.03]">
+          <span className="adm-live-dot" />
+          {orders?.length ?? 0} ORDERS
+        </span>
+      </div>
       <div className="space-y-3">
-        {(orders as Order[] | null)?.map((o) => (
-          <div key={o.id} className="bg-ink-2 rounded-[20px] border border-white/5 p-5 flex flex-col md:flex-row md:items-center gap-4">
+        {(orders as Order[] | null)?.map((o, idx) => (
+          <div
+            key={o.id}
+            className="adm-card adm-card-lift adm-fade-up p-5 flex flex-col md:flex-row md:items-center gap-4"
+            style={{ '--adm-delay': `${Math.min(idx, 8) * 0.05 + 0.06}s` } as React.CSSProperties}
+          >
             <div className="flex-1 min-w-0">
-              <p className="text-white font-medium">{o.customer_name ?? 'Customer'} <span className="text-white/30 text-sm">· {o.customer_email}</span></p>
+              <p className="text-white font-medium">
+                {o.customer_name ?? 'Customer'} <span className="text-white/30 text-sm">· {o.customer_email}</span>
+              </p>
               <p className="text-white/50 text-sm mt-1">
                 {o.items.map((i) => `${i.title} ×${i.qty}`).join(' · ')}
               </p>
-              <p className="text-white/30 text-xs mt-1">{new Date(o.created_at).toLocaleString('en-AE')} {o.customer_phone ? `· ${o.customer_phone}` : ''}</p>
+              <p className="text-white/35 font-mono text-xs mt-2">
+                <span className="text-lime/60">#</span>{o.id.slice(0, 8).toUpperCase()} · {new Date(o.created_at).toLocaleString('en-AE')} {o.customer_phone ? `· ${o.customer_phone}` : ''}
+              </p>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-lime font-display font-bold">{formatAED(o.amount_aed)}</span>
+              <span className="text-white font-display font-bold text-lg">{formatAED(o.amount_aed)}</span>
               <OrderStatusSelect id={o.id} status={o.status} />
             </div>
           </div>
         ))}
         {(!orders || orders.length === 0) && (
-          <p className="text-white/30 py-16 text-center bg-ink-2 rounded-[20px] border border-white/5">No orders yet — they&apos;ll appear here the moment Stripe confirms a payment.</p>
+          <p className="adm-card adm-fade-up text-white/30 py-16 text-center" style={{ '--adm-delay': '0.06s' } as React.CSSProperties}>
+            No orders yet — they&apos;ll appear here the moment Stripe confirms a payment.
+          </p>
         )}
       </div>
     </div>
