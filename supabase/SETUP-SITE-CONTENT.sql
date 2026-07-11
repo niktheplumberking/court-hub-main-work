@@ -1,0 +1,339 @@
+-- ============================================================================
+--  COURT HUB — ONE-SHOT SITE-CONTENT SETUP
+--  Paste this WHOLE file into the Supabase SQL Editor and press RUN once.
+--  Safe to re-run. It does three things:
+--    1. Creates the site_content + admins tables with their security rules.
+--    2. Enrolls every EXISTING login account as an admin.
+--       (Fine today — only you have accounts. Do NOT re-run this file after
+--       customer logins exist; enroll future admins individually instead.)
+--    3. Seeds all 227 text/image fields with the site's current copy.
+-- ============================================================================
+
+-- ============================================================================
+-- Site Content — client-editable copy for the marketing pages
+-- Run in the Supabase SQL editor (or psql against a self-hosted instance).
+-- Idempotent: safe to re-run.
+-- ============================================================================
+
+-- 1) Admins allow-list. Being AUTHENTICATED is no longer enough to write
+--    content — the user must be enrolled here. (Server actions also verify
+--    auth via requireAdmin(); this RLS layer protects the direct REST API.)
+create table if not exists admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  email      text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table admins enable row level security;
+
+-- SECURITY DEFINER so policies can consult the admins table without RLS
+-- recursion (a policy on admins that selects from admins would loop).
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  select exists (select 1 from admins where user_id = auth.uid());
+$$;
+
+drop policy if exists "admins read admins" on admins;
+create policy "admins read admins" on admins
+  for select using (public.is_admin());
+
+-- ── ENROLL THE CLIENT (run once, replace the email) ─────────────────────────
+-- insert into admins (user_id, email)
+--   select id, email from auth.users where email = 'client@example.com'
+--   on conflict (user_id) do nothing;
+
+-- 2) The content table itself. `value` is jsonb holding a JSON string for
+--    text/richtext fields and a public URL / path string for image fields.
+create table if not exists site_content (
+  key        text primary key,
+  value      jsonb not null,
+  page       text not null,
+  label      text not null,
+  type       text not null check (type in ('text', 'richtext', 'image')),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists site_content_page_idx on site_content (page);
+
+alter table site_content enable row level security;
+
+drop policy if exists "public read site content" on site_content;
+create policy "public read site content" on site_content
+  for select using (true);
+
+drop policy if exists "admins insert site content" on site_content;
+create policy "admins insert site content" on site_content
+  for insert with check (public.is_admin());
+
+drop policy if exists "admins update site content" on site_content;
+create policy "admins update site content" on site_content
+  for update using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "admins delete site content" on site_content;
+create policy "admins delete site content" on site_content
+  for delete using (public.is_admin());
+
+-- 3) Keep updated_at honest.
+create or replace function public.site_content_touch()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+drop trigger if exists site_content_touch on site_content;
+create trigger site_content_touch
+  before update on site_content
+  for each row execute function public.site_content_touch();
+
+-- ── 2) Enroll every existing account as an admin ────────────────────────────
+insert into admins (user_id, email)
+  select id, email from auth.users
+  on conflict (user_id) do nothing;
+
+-- ============================================================================
+-- Site Content SEED — AUTO-GENERATED from lib/content/defaults.json.
+-- Do not edit by hand; regenerate with: node scripts/generate-content-seed.mjs
+--
+-- Re-runnable: existing rows keep their (possibly client-edited) VALUE and
+-- only refresh page/label/type metadata.
+-- ============================================================================
+
+insert into site_content (key, value, page, label, type) values
+  ('home.hero.bg_image', '"/assets/images/hero_padel_night_view_1779713624496.png"'::jsonb, 'home', 'Hero · Background image', 'image'),
+  ('home.hero.title_line1', '"EXPERIENCE PADEL"'::jsonb, 'home', 'Hero · Title line 1', 'text'),
+  ('home.hero.title_line2', '"ELEVATED"'::jsonb, 'home', 'Hero · Title line 2', 'text'),
+  ('home.hero.paragraph', '"Premium padel courts engineered for the GCC, plus a curated shop of elite rackets and gear — all in one place."'::jsonb, 'home', 'Hero · Paragraph', 'richtext'),
+  ('home.hero.cta_primary', '"Construct Your Court"'::jsonb, 'home', 'Hero · Primary CTA label', 'text'),
+  ('home.hero.cta_secondary', '"Shop Now"'::jsonb, 'home', 'Hero · Secondary CTA label', 'text'),
+  ('home.hero.community_blurb', '"We''re committed to creating a premium play experience with a friendly, inclusive community for every member."'::jsonb, 'home', 'Hero · Community blurb', 'richtext'),
+  ('home.numbers.heading', '"Court Hub in numbers"'::jsonb, 'home', 'Numbers Strip · Heading', 'text'),
+  ('home.numbers.intro', '"From Al Quoz to the wider GCC — engineered courts and a growing community of players."'::jsonb, 'home', 'Numbers Strip · Intro', 'richtext'),
+  ('home.numbers.stat1.value', '"180+"'::jsonb, 'home', 'Numbers Strip · Stat 1 value', 'text'),
+  ('home.numbers.stat1.caption', '"Pre-Calibrated Arenas"'::jsonb, 'home', 'Numbers Strip · Stat 1 caption', 'text'),
+  ('home.numbers.stat2.value', '"5,000+"'::jsonb, 'home', 'Numbers Strip · Stat 2 value', 'text'),
+  ('home.numbers.stat2.caption', '"Active Players in Our Community"'::jsonb, 'home', 'Numbers Strip · Stat 2 caption', 'text'),
+  ('home.numbers.stat3.value', '"2.1x"'::jsonb, 'home', 'Numbers Strip · Stat 3 value', 'text'),
+  ('home.numbers.stat3.caption', '"Vibration Dampening"'::jsonb, 'home', 'Numbers Strip · Stat 3 caption', 'text'),
+  ('home.numbers.stat4.value', '"10yr"'::jsonb, 'home', 'Numbers Strip · Stat 4 value', 'text'),
+  ('home.numbers.stat4.caption', '"Rust & Structure Warranty"'::jsonb, 'home', 'Numbers Strip · Stat 4 caption', 'text'),
+  ('home.services.eyebrow', '"What we do"'::jsonb, 'home', 'Services · Eyebrow', 'text'),
+  ('home.services.heading', '"Our Services"'::jsonb, 'home', 'Services · Heading', 'text'),
+  ('home.services.card1.title', '"Shop"'::jsonb, 'home', 'Services · Card 1 (Shop) title', 'text'),
+  ('home.services.card1.desc', '"Elite rackets, balls and gear — curated drops from Stealth, HEAD, Wilson and more, priced in AED."'::jsonb, 'home', 'Services · Card 1 (Shop) description', 'richtext'),
+  ('home.services.card1.cta', '"Shop now →"'::jsonb, 'home', 'Services · Card 1 (Shop) CTA label', 'text'),
+  ('home.services.card1.icon', '"/assets/icons/svc-shop.webp"'::jsonb, 'home', 'Services · Card 1 (Shop) icon image', 'image'),
+  ('home.services.card2.title', '"Court Construction"'::jsonb, 'home', 'Services · Card 2 (Court Construction) title', 'text'),
+  ('home.services.card2.desc', '"Turnkey padel arenas built for desert heat — Spanish glass, galvanized frames, 145km/h wind rating."'::jsonb, 'home', 'Services · Card 2 (Court Construction) description', 'richtext'),
+  ('home.services.card2.cta', '"Build yours →"'::jsonb, 'home', 'Services · Card 2 (Court Construction) CTA label', 'text'),
+  ('home.services.card2.icon', '"/assets/icons/svc-construction.webp"'::jsonb, 'home', 'Services · Card 2 (Court Construction) icon image', 'image'),
+  ('home.services.card3.title', '"Tournaments"'::jsonb, 'home', 'Services · Card 3 (Tournaments) title', 'text'),
+  ('home.services.card3.desc', '"Sanctioned P25–P250 events across the UAE — live groups, brackets and the season leaderboard."'::jsonb, 'home', 'Services · Card 3 (Tournaments) description', 'richtext'),
+  ('home.services.card3.cta', '"See the draw →"'::jsonb, 'home', 'Services · Card 3 (Tournaments) CTA label', 'text'),
+  ('home.services.card3.icon', '"/assets/icons/svc-tournaments.webp"'::jsonb, 'home', 'Services · Card 3 (Tournaments) icon image', 'image'),
+  ('home.top_sellers.eyebrow', '"Best sellers"'::jsonb, 'home', 'Top Sellers · Eyebrow', 'text'),
+  ('home.top_sellers.heading', '"Shop Top Sellers"'::jsonb, 'home', 'Top Sellers · Heading', 'text'),
+  ('home.top_sellers.cta', '"Shop All Products"'::jsonb, 'home', 'Top Sellers · CTA label', 'text'),
+  ('home.construct.image', '"/assets/images/dubai_court_night_construction_1779706759259.png"'::jsonb, 'home', 'Construct Panel · Feature image', 'image'),
+  ('home.construct.eyebrow', '"Turnkey construction"'::jsonb, 'home', 'Construct Panel · Eyebrow', 'text'),
+  ('home.construct.heading', '"Construct\nYour Court"'::jsonb, 'home', 'Construct Panel · Heading', 'richtext'),
+  ('home.construct.paragraph', '"Pick a model, get an instant quote on WhatsApp. Engineered for extreme heat, coastal salinity and 145km/h winds — installed anywhere in the GCC."'::jsonb, 'home', 'Construct Panel · Paragraph', 'richtext'),
+  ('home.construct.type1.name', '"Classic"'::jsonb, 'home', 'Construct Panel · Court type 1 name', 'text'),
+  ('home.construct.type1.desc', '"The proven standard"'::jsonb, 'home', 'Construct Panel · Court type 1 description', 'text'),
+  ('home.construct.type2.name', '"Panoramic"'::jsonb, 'home', 'Construct Panel · Court type 2 name', 'text'),
+  ('home.construct.type2.desc', '"Frameless glass views"'::jsonb, 'home', 'Construct Panel · Court type 2 description', 'text'),
+  ('home.construct.type3.name', '"Super Pro"'::jsonb, 'home', 'Construct Panel · Court type 3 name', 'text'),
+  ('home.construct.type3.desc', '"Tournament grade"'::jsonb, 'home', 'Construct Panel · Court type 3 description', 'text'),
+  ('home.construct.cta', '"Configure & Get Quote"'::jsonb, 'home', 'Construct Panel · CTA label', 'text'),
+  ('home.about_teaser.image', '"/assets/images/court_action_landscape_1779705580138.png"'::jsonb, 'home', 'About Teaser · Feature image', 'image'),
+  ('home.about_teaser.badge_value', '"180+"'::jsonb, 'home', 'About Teaser · Image badge stat value', 'text'),
+  ('home.about_teaser.badge_caption', '"Arenas built\nacross the GCC"'::jsonb, 'home', 'About Teaser · Image badge stat caption', 'richtext'),
+  ('home.about_teaser.eyebrow', '"Who we are"'::jsonb, 'home', 'About Teaser · Eyebrow', 'text'),
+  ('home.about_teaser.heading', '"Crafted for\nthe Obsessed"'::jsonb, 'home', 'About Teaser · Heading', 'richtext'),
+  ('home.about_teaser.paragraph', '"Born in Al Quoz, Dubai — we fuse Spanish structural glass with aerospace-grade metal alloys to build courts that ignore high winds, and curate rackets that protect your game. Architectural integrity meets player stamina."'::jsonb, 'home', 'About Teaser · Paragraph', 'richtext'),
+  ('home.about_teaser.cta', '"Read Our Full Story"'::jsonb, 'home', 'About Teaser · CTA label', 'text'),
+  ('about.hero.title_line1', '"EXPERIENCE PADEL"'::jsonb, 'about', 'Hero · Title line 1', 'text'),
+  ('about.hero.title_line2', '"ELEVATED"'::jsonb, 'about', 'Hero · Title line 2', 'text'),
+  ('about.hero.paragraph', '"Experience state-of-the-art courts, curated wellness zones, and a social atmosphere built around play."'::jsonb, 'about', 'Hero · Bottom-left paragraph', 'richtext'),
+  ('about.hero.cta_primary', '"Become a Member"'::jsonb, 'about', 'Hero · Primary CTA label', 'text'),
+  ('about.hero.cta_secondary', '"Book a Court"'::jsonb, 'about', 'Hero · Secondary CTA label', 'text'),
+  ('about.hero.community_blurb', '"We''re committed to creating a premium play experience with a friendly, inclusive community for every member."'::jsonb, 'about', 'Hero · Community blurb', 'richtext'),
+  ('about.hero.bg_image', '"/assets/images/tournament_crowd_night_1779707031611.png"'::jsonb, 'about', 'Hero · Background image', 'image'),
+  ('about.story.eyebrow', '"Our Story"'::jsonb, 'about', 'Story · Eyebrow badge', 'text'),
+  ('about.story.headline_part1', '"METALLURGY"'::jsonb, 'about', 'Story · Headline part 1', 'text'),
+  ('about.story.headline_part2', '"MEETS"'::jsonb, 'about', 'Story · Headline part 2 (blue highlight)', 'text'),
+  ('about.story.headline_part3', '"SPORT SCIENCE"'::jsonb, 'about', 'Story · Headline part 3 (lime underlined)', 'text'),
+  ('about.story.image', '"/assets/images/padel_racket_set_lifestyle_1779706056285.png"'::jsonb, 'about', 'Story · Feature image', 'image'),
+  ('about.story.image_badge', '"DEVELOPMENT LAB"'::jsonb, 'about', 'Story · Image badge', 'text'),
+  ('about.story.image_caption', '"Synthesizing high-density composites for extreme athletic output."'::jsonb, 'about', 'Story · Image caption', 'text'),
+  ('about.story.paragraph1', '"Court Hub was not conceived in a corporate boardroom. It was forged in a specialized marine metalwork foundry in Al Quoz, Dubai. Our engineers observed that typical imported courts were structural templates—vulnerable to extreme GCC desert heat, coastal salinity, and deafening playground sound repercussions."'::jsonb, 'about', 'Story · Paragraph 1', 'richtext'),
+  ('about.story.paragraph2', '"We set out to re-engineer court diagnostics. Fusing Spanish glass technologies with aerospace structural metal alloy formulations, we designed playing frames that ignore high winds and custom rackets that preserve muscles. Today, we craft sports spaces where architectural integrity meets ultimate player stamina."'::jsonb, 'about', 'Story · Paragraph 2', 'richtext'),
+  ('about.story.stat1_value', '"180+"'::jsonb, 'about', 'Story · Stat 1 value', 'text'),
+  ('about.story.stat1_caption', '"Pre-Calibrated Arenas"'::jsonb, 'about', 'Story · Stat 1 caption', 'text'),
+  ('about.story.stat2_value', '"18%"'::jsonb, 'about', 'Story · Stat 2 value', 'text'),
+  ('about.story.stat2_caption', '"Larger Sweetspot"'::jsonb, 'about', 'Story · Stat 2 caption', 'text'),
+  ('about.story.stat3_value', '"2.1x"'::jsonb, 'about', 'Story · Stat 3 value', 'text'),
+  ('about.story.stat3_caption', '"Vibration Dampening"'::jsonb, 'about', 'Story · Stat 3 caption', 'text'),
+  ('about.blueprint.eyebrow', '"Our Mission & Vision"'::jsonb, 'about', 'Blueprint · Eyebrow badge', 'text'),
+  ('about.blueprint.headline_line1', '"Pioneering the Future of"'::jsonb, 'about', 'Blueprint · Headline line 1', 'text'),
+  ('about.blueprint.headline_highlight', '"Court Design"'::jsonb, 'about', 'Blueprint · Headline highlight (lime)', 'text'),
+  ('about.blueprint.card_kicker', '"/// Active Layer Analysis"'::jsonb, 'about', 'Blueprint · Image card kicker', 'text'),
+  ('about.topic1.title', '"Our Mission: Empowering Champions"'::jsonb, 'about', 'Topic 1 · Title', 'text'),
+  ('about.topic1.desc', '"To construct world-class, structurally silent padel arenas across the GCC that inspire community bonding, peak wellness, and elite athletic performance."'::jsonb, 'about', 'Topic 1 · Description', 'richtext'),
+  ('about.topic1.seo_text', '"We apply strict aerospace tolerance specifications to every padel court model we manufacture in Al Quoz, Dubai. Fusing Spanish structural tempered glass with custom vibration dampener mechanisms, we deliver uncompromised court performance engineered for extreme desert heat."'::jsonb, 'about', 'Topic 1 · SEO text', 'richtext'),
+  ('about.topic1.badge', '"OUR MISSION"'::jsonb, 'about', 'Topic 1 · Badge', 'text'),
+  ('about.topic1.image', '"/assets/images/dubai_court_night_construction_1779706759259.png"'::jsonb, 'about', 'Topic 1 · Image', 'image'),
+  ('about.topic2.title', '"Our Vision: Smarter Connected Spaces"'::jsonb, 'about', 'Topic 2 · Title', 'text'),
+  ('about.topic2.desc', '"To build the world''s most innovative sports complexes by merging bio-tracking sensors, automated 4K match capture, and eco-friendly structural designs."'::jsonb, 'about', 'Topic 2 · Description', 'richtext'),
+  ('about.topic2.seo_text', '"Padel courts are evolving from simple playing grounds into highly integrated wellness sanctuaries. By designing pre-wired camera systems and smart gameplay diagnostics, we convert typical physical matches into full-fledged digital training libraries."'::jsonb, 'about', 'Topic 2 · SEO text', 'richtext'),
+  ('about.topic2.badge', '"BRAND VISION"'::jsonb, 'about', 'Topic 2 · Badge', 'text'),
+  ('about.topic2.image', '"/assets/images/hero_court_background_1779705118750.png"'::jsonb, 'about', 'Topic 2 · Image', 'image'),
+  ('about.topic3.title', '"Core Pillar: Structural Acoustics"'::jsonb, 'about', 'Topic 3 · Title', 'text'),
+  ('about.topic3.desc', '"Eliminating urban noise reverberation by implementing specialized high-density neoprene gaskets that absorb high-frequency glass vibrations."'::jsonb, 'about', 'Topic 3 · Description', 'richtext'),
+  ('about.topic3.seo_text', '"High-frequency noise pollution is a major friction point in premium residential neighborhoods. Our patented double-layered glass dampening cores actively absorb glass vibrations, reducing structural noise by 14.2 decibels without altering optimal ball bounce physics."'::jsonb, 'about', 'Topic 3 · SEO text', 'richtext'),
+  ('about.topic3.badge', '"ACOUSTIC PILLAR"'::jsonb, 'about', 'Topic 3 · Badge', 'text'),
+  ('about.topic3.image', '"/assets/images/premium_padel_racket_black_lime_1779706021226.png"'::jsonb, 'about', 'Topic 3 · Image', 'image'),
+  ('about.topic4.title', '"Core Pillar: Elite Climatic Shield"'::jsonb, 'about', 'Topic 4 · Title', 'text'),
+  ('about.topic4.desc', '"Forging heavy-duty hot-zinc galvanized metal frames and powder-coated barriers engineered to resist sandstorms, beach salinity, and extreme heat."'::jsonb, 'about', 'Topic 4 · Description', 'richtext'),
+  ('about.topic4.seo_text', '"Vicious humidity and coastal salinity normally lead to structural rust and turf peeling within months. Court Hub frames undergo multi-layered fusion thermal powder coating, guaranteeing over ten years of rust longevity and supreme wind speed resistance above 145km/h."'::jsonb, 'about', 'Topic 4 · SEO text', 'richtext'),
+  ('about.topic4.badge', '"LONGEVITY PILLAR"'::jsonb, 'about', 'Topic 4 · Badge', 'text'),
+  ('about.topic4.image', '"/assets/images/faq_padel_detail_1779708774500.png"'::jsonb, 'about', 'Topic 4 · Image', 'image'),
+  ('about.positioning.founded_label', '"Founded at:"'::jsonb, 'about', 'Positioning · Founded label', 'text'),
+  ('about.positioning.founded_year', '"2024"'::jsonb, 'about', 'Positioning · Founded year', 'text'),
+  ('about.positioning.eyebrow', '"About Court Hub"'::jsonb, 'about', 'Positioning · Eyebrow badge', 'text'),
+  ('about.positioning.headline_part1', '"ENGINEERING"'::jsonb, 'about', 'Positioning · Headline part 1', 'text'),
+  ('about.positioning.headline_part2', '"THE"'::jsonb, 'about', 'Positioning · Headline part 2 (blue highlight)', 'text'),
+  ('about.positioning.headline_part3', '"FUTURE OF PLAY"'::jsonb, 'about', 'Positioning · Headline part 3 (lime underlined)', 'text'),
+  ('about.positioning.paragraph1', '"Court Hub was engineered from a deep-seated obsession with high-fidelity materials and the scientific belief that architecture can redefine elite sports communities."'::jsonb, 'about', 'Positioning · Intro paragraph', 'richtext'),
+  ('about.positioning.portrait_image', '"/assets/images/player_portrait_1779705596398.png"'::jsonb, 'about', 'Positioning · Portrait image', 'image'),
+  ('about.positioning.portrait_badge', '"STRIKE GEOMETRY"'::jsonb, 'about', 'Positioning · Portrait badge', 'text'),
+  ('about.positioning.portrait_caption', '"Refining accurate rebound angles."'::jsonb, 'about', 'Positioning · Portrait caption', 'text'),
+  ('about.positioning.landscape_image', '"/assets/images/court_action_landscape_1779705580138.png"'::jsonb, 'about', 'Positioning · Landscape image', 'image'),
+  ('about.positioning.landscape_badge', '"SYNTHETIC SCIENCE"'::jsonb, 'about', 'Positioning · Landscape badge', 'text'),
+  ('about.positioning.landscape_caption', '"Maximized traction coefficient."'::jsonb, 'about', 'Positioning · Landscape caption', 'text'),
+  ('about.positioning.paragraph2', '"Starting from casual weekend exhibition matches, we have structured ourselves into a high-octane network of luxury athletic sanctuaries, where raw physical action and structural design elements operate in perfect equilibrium."'::jsonb, 'about', 'Positioning · Closing paragraph', 'richtext'),
+  ('about.positioning.cta_label', '"Learn more"'::jsonb, 'about', 'Positioning · CTA label', 'text'),
+  ('about.cta.eyebrow', '"/// Join our premier partners list"'::jsonb, 'about', 'CTA · Eyebrow badge', 'text'),
+  ('about.cta.headline_line1', '"READY TO BUILD OR"'::jsonb, 'about', 'CTA · Headline line 1', 'text'),
+  ('about.cta.headline_highlight', '"STOCK THE GEAR?"'::jsonb, 'about', 'CTA · Headline highlight (lime)', 'text'),
+  ('about.cta.paragraph', '"Let''s bypass formal lag. Coordinate directly with structural managers and commercial partners over direct pre-routed GCC WhatsApp lines."'::jsonb, 'about', 'CTA · Paragraph', 'richtext'),
+  ('about.cta.cta_primary', '"Construct Your Court"'::jsonb, 'about', 'CTA · Primary CTA label', 'text'),
+  ('about.cta.cta_secondary', '"Instant Communication Desks"'::jsonb, 'about', 'CTA · Secondary CTA label', 'text'),
+  ('about.bestsellers.badge', '"★ Best Seller"'::jsonb, 'about', 'Best Sellers · Card badge', 'text'),
+  ('about.bestsellers.add_to_bag_label', '"Add to Bag"'::jsonb, 'about', 'Best Sellers · Add to Bag button label', 'text'),
+  ('about.bestsellers.view_product_label', '"View product"'::jsonb, 'about', 'Best Sellers · View product link label', 'text'),
+  ('contact.hero.title_line1', '"LET''S CO-DESIGN"'::jsonb, 'contact', 'Hero · Title line 1', 'text'),
+  ('contact.hero.title_line2', '"GAME CHANNELS"'::jsonb, 'contact', 'Hero · Title line 2', 'text'),
+  ('contact.hero.copy', '"Forget long email wait times. Choose your inquiry division below, insert details, and instantly launch direct WhatsApp communication."'::jsonb, 'contact', 'Hero · Intro copy', 'richtext'),
+  ('contact.hero.cta_label', '"Instant Dispatcher"'::jsonb, 'contact', 'Hero · CTA button label', 'text'),
+  ('contact.hero.bg_image', '"/assets/images/hero_court_background_1779705118750.png"'::jsonb, 'contact', 'Hero · Background image', 'image'),
+  ('contact.hero.response_badge', '"120 MINS RESPONSE TIME"'::jsonb, 'contact', 'Hero · Response-time badge', 'text'),
+  ('contact.hero.stat_title', '"GCC SERVICE LINE"'::jsonb, 'contact', 'Hero · Service line title', 'text'),
+  ('contact.hero.stat_caption', '"Active Desk Operations."'::jsonb, 'contact', 'Hero · Service line caption', 'text'),
+  ('contact.routing.eyebrow', '"Step 1 / Select Division Routing"'::jsonb, 'contact', 'Routing · Eyebrow', 'text'),
+  ('contact.routing.title', '"CHOOSE YOUR TRANSIT DESK"'::jsonb, 'contact', 'Routing · Heading', 'text'),
+  ('contact.routing.description', '"We route your packet to different expert leads in Dubai depending on your structural or equipment requirements."'::jsonb, 'contact', 'Routing · Description', 'richtext'),
+  ('contact.route1.title', '"Court Construction Desk"'::jsonb, 'contact', 'Inquiry Route 1 · Title', 'text'),
+  ('contact.route1.description', '"Establish custom Panoramic or Club courts with official UAE Civil Defense static certifications."'::jsonb, 'contact', 'Inquiry Route 1 · Description', 'richtext'),
+  ('contact.route1.recipient_desk', '"Al Quoz Structural & Static Civil Division"'::jsonb, 'contact', 'Inquiry Route 1 · Recipient desk', 'text'),
+  ('contact.route1.prefilled_text', '"Hello Court Hub! I would like to request an initial cost estimation sheet and static layout catalog for court construction..."'::jsonb, 'contact', 'Inquiry Route 1 · Prefilled WhatsApp text', 'richtext'),
+  ('contact.route2.title', '"Pro Shop & Equipment Sales"'::jsonb, 'contact', 'Inquiry Route 2 · Title', 'text'),
+  ('contact.route2.description', '"Bulk carbon-composite rackets, customized branded tournament balls, and club apparel inventory."'::jsonb, 'contact', 'Inquiry Route 2 · Description', 'richtext'),
+  ('contact.route2.recipient_desk', '"GCC Premium Wholesale Distribution Hub"'::jsonb, 'contact', 'Inquiry Route 2 · Recipient desk', 'text'),
+  ('contact.route2.prefilled_text', '"Hello Court Hub Retail team! I am looking to receive your corporate wholesale price list catalog for Stealth rackets and balls..."'::jsonb, 'contact', 'Inquiry Route 2 · Prefilled WhatsApp text', 'richtext'),
+  ('contact.route3.title', '"Leagues & Dynamic Tournaments"'::jsonb, 'contact', 'Inquiry Route 3 · Title', 'text'),
+  ('contact.route3.description', '"Register corporate groups, check up-coming master cup tables, or coordinate academy matches."'::jsonb, 'contact', 'Inquiry Route 3 · Description', 'richtext'),
+  ('contact.route3.recipient_desk', '"Court Hub Arena & Community Coordinator"'::jsonb, 'contact', 'Inquiry Route 3 · Recipient desk', 'text'),
+  ('contact.route3.prefilled_text', '"Hello! I am inquiring about team registration slots and matching tiers for upcoming Court Hub amateur corporate tournaments..."'::jsonb, 'contact', 'Inquiry Route 3 · Prefilled WhatsApp text', 'richtext'),
+  ('contact.dispatch.eyebrow', '"Pre-filled Package Console"'::jsonb, 'contact', 'Dispatch Card · Eyebrow', 'text'),
+  ('contact.dispatch.title', '"Instant Link Generator"'::jsonb, 'contact', 'Dispatch Card · Heading', 'text'),
+  ('contact.dispatch.description', '"Provide custom tags to immediately append them to your dynamic WhatsApp query template on save."'::jsonb, 'contact', 'Dispatch Card · Description', 'richtext'),
+  ('contact.dispatch.preview_label', '"Live Message Payload Draft:"'::jsonb, 'contact', 'Dispatch Card · Live preview label', 'text'),
+  ('contact.dispatch.cta_label', '"ROUTE QUERY TO WHATSAPP"'::jsonb, 'contact', 'Dispatch Card · WhatsApp CTA label', 'text'),
+  ('contact.dispatch.footnote', '"Instant response desk dispatcher online"'::jsonb, 'contact', 'Dispatch Card · Footnote', 'text'),
+  ('contact.dispatch.whatsapp_phone', '"971500000000"'::jsonb, 'contact', 'Dispatch Card · WhatsApp number', 'text'),
+  ('contact.details.title', '"Contact us"'::jsonb, 'contact', 'Contact Details · Heading', 'text'),
+  ('contact.details.intro', '"If you have any questions, please feel free to get in touch with us via phone, text, email, the form below, or even on social media!"'::jsonb, 'contact', 'Contact Details · Intro copy', 'richtext'),
+  ('contact.form.title', '"GET IN TOUCH"'::jsonb, 'contact', 'Form Card · Heading', 'text'),
+  ('contact.form.submit_label', '"SEND MESSAGE"'::jsonb, 'contact', 'Form Card · Submit button label', 'text'),
+  ('contact.form.success_title', '"Message Sent!"'::jsonb, 'contact', 'Form Card · Success heading', 'text'),
+  ('contact.form.success_cta', '"Send another message"'::jsonb, 'contact', 'Form Card · Success reset button label', 'text'),
+  ('contact.info.title', '"CONTACT INFORMATION"'::jsonb, 'contact', 'Contact Information · Heading', 'text'),
+  ('contact.info.phone_label', '"PHONE"'::jsonb, 'contact', 'Contact Information · Phone label', 'text'),
+  ('contact.info.phone', '"+971 4 456 7890"'::jsonb, 'contact', 'Contact Information · Phone number', 'text'),
+  ('contact.info.address_label', '"ADDRESS"'::jsonb, 'contact', 'Contact Information · Address label', 'text'),
+  ('contact.info.address', '"Plot 124-A, Al Quoz 3 Road, Dubai, UAE"'::jsonb, 'contact', 'Contact Information · Address', 'text'),
+  ('contact.info.email_label', '"EMAIL"'::jsonb, 'contact', 'Contact Information · Email label', 'text'),
+  ('contact.info.email', '"contact@courthub.ae"'::jsonb, 'contact', 'Contact Information · Email address', 'text'),
+  ('contact.hours.title', '"BUSINESS HOURS"'::jsonb, 'contact', 'Business Hours · Heading', 'text'),
+  ('contact.hours.weekday_label', '"MON - FRI"'::jsonb, 'contact', 'Business Hours · Weekday label', 'text'),
+  ('contact.hours.weekday_value', '"9:00 am - 8:00 pm"'::jsonb, 'contact', 'Business Hours · Weekday hours', 'text'),
+  ('contact.hours.saturday_label', '"SATURDAY"'::jsonb, 'contact', 'Business Hours · Saturday label', 'text'),
+  ('contact.hours.saturday_value', '"9:00 am - 6:00 pm"'::jsonb, 'contact', 'Business Hours · Saturday hours', 'text'),
+  ('contact.hours.sunday_label', '"SUNDAY"'::jsonb, 'contact', 'Business Hours · Sunday label', 'text'),
+  ('contact.hours.sunday_value', '"9:00 am - 5:00 pm"'::jsonb, 'contact', 'Business Hours · Sunday hours', 'text'),
+  ('contact.map.image', '"/assets/images/dubai-map.png"'::jsonb, 'contact', 'Map Section · Dubai map image', 'image'),
+  ('construct.hero.bg_image', '"/assets/images/dubai_court_night_construction_1779706759259.png"'::jsonb, 'construct', 'Hero · Background image', 'image'),
+  ('construct.hero.title_line1', '"ENGINEER THE"'::jsonb, 'construct', 'Hero · Title line 1', 'text'),
+  ('construct.hero.title_line2', '"BESPOKE ARENA"'::jsonb, 'construct', 'Hero · Title line 2', 'text'),
+  ('construct.hero.subcopy', '"From soil engineering to certified 12mm safety glass alignments and Mondo turf sod calculations. Turnkey GCC excellence."'::jsonb, 'construct', 'Hero · Subcopy', 'richtext'),
+  ('construct.hero.cta_primary', '"Bespoke Designer"'::jsonb, 'construct', 'Hero · Primary CTA label', 'text'),
+  ('construct.hero.cta_secondary', '"Our Certifications"'::jsonb, 'construct', 'Hero · Secondary CTA label', 'text'),
+  ('construct.hero.spec_badge', '"DUBAI MASTER PROJECT"'::jsonb, 'construct', 'Hero · Spec block badge', 'text'),
+  ('construct.hero.spec_title', '"PANORAMIC STADIUM"'::jsonb, 'construct', 'Hero · Spec block title', 'text'),
+  ('construct.hero.spec_caption', '"Calibrated to 420 Lux night index."'::jsonb, 'construct', 'Hero · Spec block caption', 'text'),
+  ('construct.court_types.eyebrow', '"/// What we build"'::jsonb, 'construct', 'Court Types · Eyebrow', 'text'),
+  ('construct.court_types.heading', '"Four ways to build"'::jsonb, 'construct', 'Court Types · Heading', 'text'),
+  ('construct.court_types.intro', '"Every court is engineered for its site and finished turnkey. Pick the model that fits your space, then configure it below."'::jsonb, 'construct', 'Court Types · Intro paragraph', 'richtext'),
+  ('construct.court_types.card_cta', '"Configure"'::jsonb, 'construct', 'Court Types · Card CTA label (shared)', 'text'),
+  ('construct.court_type1.name', '"Panoramic"'::jsonb, 'construct', 'Court Type 1 · Name', 'text'),
+  ('construct.court_type1.tag', '"Elite"'::jsonb, 'construct', 'Court Type 1 · Tag', 'text'),
+  ('construct.court_type1.desc', '"Frameless tempered-glass walls for uninterrupted 360° sightlines — tournament-grade views."'::jsonb, 'construct', 'Court Type 1 · Description', 'richtext'),
+  ('construct.court_type2.name', '"Classic"'::jsonb, 'construct', 'Court Type 2 · Name', 'text'),
+  ('construct.court_type2.tag', '"Popular"'::jsonb, 'construct', 'Court Type 2 · Tag', 'text'),
+  ('construct.court_type2.desc', '"The proven club standard: heavy-gauge galvanised frame built for high-traffic daily play."'::jsonb, 'construct', 'Court Type 2 · Description', 'richtext'),
+  ('construct.court_type3.name', '"Super Pro"'::jsonb, 'construct', 'Court Type 3 · Name', 'text'),
+  ('construct.court_type3.tag', '"Stadium"'::jsonb, 'construct', 'Court Type 3 · Tag', 'text'),
+  ('construct.court_type3.desc', '"Reinforced structure with integrated LED and broadcast geometry for premium venues."'::jsonb, 'construct', 'Court Type 3 · Description', 'richtext'),
+  ('construct.court_type4.name', '"Indoor"'::jsonb, 'construct', 'Court Type 4 · Name', 'text'),
+  ('construct.court_type4.tag', '"Low-profile"'::jsonb, 'construct', 'Court Type 4 · Tag', 'text'),
+  ('construct.court_type4.desc', '"Reduced-height chassis engineered to fit warehouses and covered courts under existing roofs."'::jsonb, 'construct', 'Court Type 4 · Description', 'richtext'),
+  ('construct.build_form.status_badge', '"Live Proposal System // Online"'::jsonb, 'construct', 'Build Form · Status badge', 'text'),
+  ('construct.build_form.version_badge', '"CH-v2.0"'::jsonb, 'construct', 'Build Form · Version badge', 'text'),
+  ('construct.build_form.eyebrow', '"/// Builder Configurator ///"'::jsonb, 'construct', 'Build Form · Eyebrow', 'text'),
+  ('construct.build_form.heading', '"Configure Your Court"'::jsonb, 'construct', 'Build Form · Heading', 'text'),
+  ('construct.build_form.desc', '"Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp."'::jsonb, 'construct', 'Build Form · Description', 'richtext'),
+  ('construct.build_form.cta', '"Chat on WhatsApp"'::jsonb, 'construct', 'Build Form · Submit CTA label', 'text'),
+  ('construct.build_form.security_caption', '"PROPOSAL DELIVERED SECURELY IN SECONDS"'::jsonb, 'construct', 'Build Form · Security caption', 'text'),
+  ('faq.header.title_line1', '"Common Questions,"'::jsonb, 'faq', 'FAQ Header · Title line 1', 'text'),
+  ('faq.header.title_line2', '"Clear Answers"'::jsonb, 'faq', 'FAQ Header · Title line 2', 'text'),
+  ('faq.header.subheader', '"Everything you need to know about gear, academy coaching, and court construction."'::jsonb, 'faq', 'FAQ Header · Subheader', 'richtext'),
+  ('faq.visual.image', '"/images/faq_padel_detail_1779708774500.webp"'::jsonb, 'faq', 'FAQ Visual · Feature image', 'image'),
+  ('faq.visual.badge', '"Academy Hub · Live"'::jsonb, 'faq', 'FAQ Visual · Live badge label', 'text'),
+  ('faq.q1.question', '"What makes padel different from tennis?"'::jsonb, 'faq', 'FAQ Item 1 · Question', 'text'),
+  ('faq.q1.answer', '"Padel is played on a smaller, enclosed court with glass walls, using solid stringless rackets. It''s more focused on strategy, reflexes, and positioning than raw power, making it incredibly social and faster to learn."'::jsonb, 'faq', 'FAQ Item 1 · Answer', 'richtext'),
+  ('faq.q2.question', '"I''m a complete beginner – can I join?"'::jsonb, 'faq', 'FAQ Item 2 · Question', 'text'),
+  ('faq.q2.answer', '"Absolutely. Our Court Hub Academy has dedicated ''First Serve'' programs for total beginners. We provide the equipment, the coach, and a friendly environment to learn the basics in your first session."'::jsonb, 'faq', 'FAQ Item 2 · Answer', 'richtext'),
+  ('faq.q3.question', '"What do I need to get started?"'::jsonb, 'faq', 'FAQ Item 3 · Question', 'text'),
+  ('faq.q3.answer', '"Just athletic wear and non-marking court shoes. We provide professional-grade Bullpadel rackets and balls if you don''t have your own. As you progress, we can help you choose the right gear from our Pro Shop."'::jsonb, 'faq', 'FAQ Item 3 · Answer', 'richtext'),
+  ('faq.q4.question', '"Can I try a racket before I buy?"'::jsonb, 'faq', 'FAQ Item 4 · Question', 'text'),
+  ('faq.q4.answer', '"Yes — message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit."'::jsonb, 'faq', 'FAQ Item 4 · Answer', 'richtext'),
+  ('faq.q5.question', '"How do I order gear or request a court build?"'::jsonb, 'faq', 'FAQ Item 5 · Question', 'text'),
+  ('faq.q5.answer', '"Gear is simple — browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."'::jsonb, 'faq', 'FAQ Item 5 · Answer', 'richtext'),
+  ('faq.q6.question', '"What happens after I send a court build inquiry?"'::jsonb, 'faq', 'FAQ Item 6 · Question', 'text'),
+  ('faq.q6.answer', '"A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build — you''ll know exactly what''s happening at every stage."'::jsonb, 'faq', 'FAQ Item 6 · Answer', 'richtext'),
+  ('faq.q7.question', '"Do you deliver outside Dubai — or internationally?"'::jsonb, 'faq', 'FAQ Item 7 · Question', 'text'),
+  ('faq.q7.answer', '"We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn''t part of standard checkout yet — if you''re ordering from abroad, message us on WhatsApp and we''ll quote it case by case."'::jsonb, 'faq', 'FAQ Item 7 · Answer', 'richtext'),
+  ('faq.support.title', '"Still have questions?"'::jsonb, 'faq', 'Support Callout · Title', 'text'),
+  ('faq.support.description', '"Our support team is ready to assist you anytime."'::jsonb, 'faq', 'Support Callout · Description', 'richtext'),
+  ('faq.support.cta', '"Contact Support"'::jsonb, 'faq', 'Support Callout · CTA label', 'text')
+on conflict (key) do update
+  set page = excluded.page, label = excluded.label, type = excluded.type;
