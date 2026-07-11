@@ -32,16 +32,9 @@ import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import ConstructBuildAnimation from '@/components/home/ConstructBuildAnimation';
+import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
-
-// The four court models the client sells. PLACEHOLDER copy — safe to edit later.
-const COURT_TYPES = [
-  { name: 'Panoramic', tag: 'Elite', desc: 'Frameless tempered-glass walls for uninterrupted 360° sightlines — tournament-grade views.' },
-  { name: 'Classic', tag: 'Popular', desc: 'The proven club standard: heavy-gauge galvanised frame built for high-traffic daily play.' },
-  { name: 'Super Pro', tag: 'Stadium', desc: 'Reinforced structure with integrated LED and broadcast geometry for premium venues.' },
-  { name: 'Indoor', tag: 'Low-profile', desc: 'Reduced-height chassis engineered to fit warehouses and covered courts under existing roofs.' },
-];
 
 // Staggered active pulsing dot for the stats curved line graph
 const GlowingDot = ({ delay, top }: { delay: number; top: string }) => {
@@ -248,9 +241,17 @@ function MoveEarthRow({ item }: { item: MoveEarthItem; key?: any }) {
   );
 }
 
-export default function ConstructClient() {
+export default function ConstructClient({ content }: { content: ContentMap }) {
   const heroCovered = useHeroCovered();
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
+
+  // The four court models the client sells. PLACEHOLDER copy — safe to edit later.
+  const COURT_TYPES = [
+    { name: content['construct.court_type1.name'], tag: content['construct.court_type1.tag'], desc: content['construct.court_type1.desc'] },
+    { name: content['construct.court_type2.name'], tag: content['construct.court_type2.tag'], desc: content['construct.court_type2.desc'] },
+    { name: content['construct.court_type3.name'], tag: content['construct.court_type3.tag'], desc: content['construct.court_type3.desc'] },
+    { name: content['construct.court_type4.name'], tag: content['construct.court_type4.tag'], desc: content['construct.court_type4.desc'] },
+  ];
   // Configurator States
   const [selectedModel, setSelectedModel] = useState<string>('panoramic');
   const [selectedTurf, setSelectedTurf] = useState<string>('Mondo Supercourt XN');
@@ -379,7 +380,7 @@ export default function ConstructClient() {
             className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
           >
             <img
-              src="/assets/images/dubai_court_night_construction_1779706759259.png"
+              src={content['construct.hero.bg_image']}
               alt=""
               aria-hidden
               className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
@@ -416,7 +417,7 @@ export default function ConstructClient() {
                       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                       className="font-display font-black text-white text-center text-5xl sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
                     >
-                      ENGINEER THE
+                      {content['construct.hero.title_line1']}
                     </motion.h1>
                   </motion.div>
 
@@ -428,7 +429,7 @@ export default function ConstructClient() {
                       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
                       className="font-display font-black text-white text-center text-5xl sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
                     >
-                      BESPOKE ARENA
+                      {content['construct.hero.title_line2']}
                     </motion.h1>
                   </motion.div>
                 </div>
@@ -445,7 +446,7 @@ export default function ConstructClient() {
                 {/* Left Bottom Block - Piles */}
                 <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
-                    From soil engineering to certified 12mm safety glass alignments and Mondo turf sod calculations. Turnkey GCC excellence.
+                    {content['construct.hero.subcopy']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
                     {/* Pulsating Attention CTA Button wrapper */}
@@ -479,7 +480,7 @@ export default function ConstructClient() {
                           href="#construction"
                           className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
                         >
-                          Bespoke Designer
+                          {content['construct.hero.cta_primary']}
                         </a>
                       </motion.div>
                     </div>
@@ -488,7 +489,7 @@ export default function ConstructClient() {
                       href="#authority"
                       className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-all text-center cursor-pointer"
                     >
-                      Our Certifications
+                      {content['construct.hero.cta_secondary']}
                     </a>
                   </div>
                 </div>
@@ -496,12 +497,12 @@ export default function ConstructClient() {
                 {/* Right Bottom Block - Spec details mimicking about stats */}
                 <div className="max-w-xs space-y-2 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
                   <span className="font-mono text-[10px] text-lime uppercase tracking-widest font-black py-1 px-2.5 bg-lime/10 border border-lime/20 rounded">
-                    DUBAI MASTER PROJECT
+                    {content['construct.hero.spec_badge']}
                   </span>
                   <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-right">
-                    PANORAMIC STADIUM
+                    {content['construct.hero.spec_title']}
                   </p>
-                  <p className="text-white/60 text-[11px] font-mono lg:text-right">Calibrated to 420 Lux night index.</p>
+                  <p className="text-white/60 text-[11px] font-mono lg:text-right">{content['construct.hero.spec_caption']}</p>
                 </div>
 
               </motion.div>
@@ -525,13 +526,22 @@ export default function ConstructClient() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16 space-y-4">
               <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-lime font-bold block">
-                /// What we build
+                {content['construct.court_types.eyebrow']}
               </span>
               <h2 className="font-display text-4xl md:text-6xl font-black uppercase italic tracking-tight leading-[0.95]">
-                Four ways to <span className="text-lime">build</span>
+                {/* Last word is lime-highlighted (originally: Four ways to <span>build</span>) */}
+                {(() => {
+                  const heading = content['construct.court_types.heading'];
+                  const cut = heading.lastIndexOf(' ') + 1;
+                  return (
+                    <>
+                      {heading.slice(0, cut)}<span className="text-lime">{heading.slice(cut)}</span>
+                    </>
+                  );
+                })()}
               </h2>
               <p className="text-white/60 text-sm md:text-base leading-relaxed">
-                Every court is engineered for its site and finished turnkey. Pick the model that fits your space, then configure it below.
+                {content['construct.court_types.intro']}
               </p>
             </div>
 
@@ -555,7 +565,7 @@ export default function ConstructClient() {
                     </h3>
                     <p className="text-white/55 text-[13px] leading-relaxed">{t.desc}</p>
                     <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/40 group-hover:text-lime transition-colors pt-2">
-                      Configure
+                      {content['construct.court_types.card_cta']}
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
@@ -566,7 +576,7 @@ export default function ConstructClient() {
         </section>
 
         {/* ================= CONSTRUCT BUILD ANIMATION (court-building scrub from the original home) ================= */}
-        <ConstructBuildAnimation />
+        <ConstructBuildAnimation content={content} />
 
         {/* ================= SECTION 6: INQUIRY FLOW (Guided multi-step pipeline configurator) ================= */}
         {/* HIDDEN per client (July 2026) — configurator kept in code, not shown.

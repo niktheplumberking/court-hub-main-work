@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import ConstructionSection from '@/components/home/ConstructionSection';
+import type { ContentMap } from '@/lib/content/get';
 
 // Device-appropriate construction frame sets — the "-hd" sets are single-pass
 // q88/q80 webp encodes straight from the master PNG exports (the old sets were
@@ -16,7 +17,7 @@ const MOBILE_FRAMES = { folder: '/construction-frames-mobile-hd', count: 90 };
  * that spawns once the build finishes. Self-contained — no Our Story block and
  * no reverse-scroll camera, unlike StoryConstructionWrapper.
  */
-export default function ConstructBuildAnimation() {
+export default function ConstructBuildAnimation({ content }: { content?: ContentMap }) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [resolved, setResolved] = useState(false);
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -50,6 +51,7 @@ export default function ConstructBuildAnimation() {
       onProgress={() => {}}
       preloadedImages={imagesRef}
       frameCount={isDesktop ? DESKTOP_FRAMES.count : MOBILE_FRAMES.count}
+      content={content}
     />
   );
 }

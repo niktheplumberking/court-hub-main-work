@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
 
@@ -134,7 +135,7 @@ function FAQItem({ faq, isOpen, onToggle, index }: FAQItemProps) {
   );
 }
 
-function FAQSupportBox() {
+function FAQSupportBox({ content }: { content?: ContentMap }) {
   const boxRef = useRef<HTMLDivElement>(null);
   
   // Track scroll position of support box
@@ -158,8 +159,8 @@ function FAQSupportBox() {
       className="mt-6 p-8 bg-court-blue/10 border border-court-blue/20 rounded-[32px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6"
     >
       <div>
-        <h4 className="text-ink font-display font-bold text-lg md:text-xl uppercase italic">Still have questions?</h4>
-        <p className="text-ink/60 text-xs md:text-sm mt-1">Our support team is ready to assist you anytime.</p>
+        <h4 className="text-ink font-display font-bold text-lg md:text-xl uppercase italic">{content?.['faq.support.title'] ?? 'Still have questions?'}</h4>
+        <p className="text-ink/60 text-xs md:text-sm mt-1">{content?.['faq.support.description'] ?? 'Our support team is ready to assist you anytime.'}</p>
       </div>
       <MotionLink
         href="/contact"
@@ -167,15 +168,20 @@ function FAQSupportBox() {
         whileTap={{ scale: 0.95 }}
         className="px-6 py-3 bg-court-blue text-white rounded-full font-bold uppercase tracking-wider text-[11px] hover:bg-lime hover:text-ink transition-all shadow-md cursor-pointer"
       >
-        Contact Support
+        {content?.['faq.support.cta'] ?? 'Contact Support'}
       </MotionLink>
     </motion.div>
   );
 }
 
-export default function FAQSection() {
+export default function FAQSection({ content }: { content?: ContentMap }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const faqs = FAQS.map((faq, i) => ({
+    question: content?.[`faq.q${i + 1}.question`] ?? faq.question,
+    answer: content?.[`faq.q${i + 1}.answer`] ?? faq.answer,
+  }));
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -192,13 +198,13 @@ export default function FAQSection() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start md:items-end">
           <div className="md:col-span-8">
             <h2 className="text-4xl md:text-8xl font-display font-black leading-[1] md:leading-[0.9] tracking-tighter uppercase text-ink">
-              Common Questions, <br />
-              Clear Answers
+              {content?.['faq.header.title_line1'] ?? 'Common Questions,'} <br />
+              {content?.['faq.header.title_line2'] ?? 'Clear Answers'}
             </h2>
           </div>
           <div className="md:col-span-4">
             <p className="text-ink/60 text-base md:text-lg font-medium leading-snug md:text-right max-w-xs md:ml-auto">
-              {SUBHEADER}
+              {content?.['faq.header.subheader'] ?? SUBHEADER}
             </p>
           </div>
         </div>
@@ -218,21 +224,21 @@ export default function FAQSection() {
             >
               <motion.img 
                 style={{ y: useTransform(scrollYProgress, [0, 1], ["-20%", "0%"]) }}
-                src="/images/faq_padel_detail_1779708774500.webp" 
+                src={content?.['faq.visual.image'] ?? '/images/faq_padel_detail_1779708774500.webp'}
                 alt="Padel Player" 
                 className="absolute top-0 left-0 w-full h-[120%] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-8 left-8 flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
-                <span className="font-mono text-[10px] uppercase tracking-widest text-white italic">Academy Hub · Live</span>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-white italic">{content?.['faq.visual.badge'] ?? 'Academy Hub · Live'}</span>
               </div>
             </motion.div>
           </div>
 
           {/* Accordion Side */}
           <div className="lg:col-span-8 flex flex-col gap-3 md:gap-4">
-            {FAQS.map((faq, i) => (
+            {faqs.map((faq, i) => (
               <FAQItem
                 key={i}
                 faq={faq}
@@ -243,7 +249,7 @@ export default function FAQSection() {
             ))}
 
             {/* Support Callout Box to increase scroll height and add CTA */}
-            <FAQSupportBox />
+            <FAQSupportBox content={content} />
           </div>
 
         </div>

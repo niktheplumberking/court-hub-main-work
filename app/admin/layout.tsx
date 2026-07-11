@@ -12,6 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="hidden md:flex gap-6 text-sm">
             <Link href="/admin/products" className="text-white/60 hover:text-lime">Products</Link>
             <Link href="/admin/orders" className="text-white/60 hover:text-lime">Orders</Link>
+            <Link href="/admin/content" className="text-white/60 hover:text-lime">Site Content</Link>
             <Link href="/shop" className="text-white/60 hover:text-lime">View Shop ↗</Link>
           </div>
         </div>

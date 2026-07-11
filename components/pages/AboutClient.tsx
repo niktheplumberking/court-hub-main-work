@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import {
@@ -16,45 +16,63 @@ import { useCart } from '@/lib/cart-context';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
+import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
 
-const TOPICS = [
-  {
-    id: '01',
-    title: 'Our Mission: Empowering Champions',
-    desc: 'To construct world-class, structurally silent padel arenas across the GCC that inspire community bonding, peak wellness, and elite athletic performance.',
-    seoText: 'We apply strict aerospace tolerance specifications to every padel court model we manufacture in Al Quoz, Dubai. Fusing Spanish structural tempered glass with custom vibration dampener mechanisms, we deliver uncompromised court performance engineered for extreme desert heat.',
-    image: '/assets/images/dubai_court_night_construction_1779706759259.png',
-    badge: 'OUR MISSION'
-  },
-  {
-    id: '02',
-    title: 'Our Vision: Smarter Connected Spaces',
-    desc: 'To build the world\'s most innovative sports complexes by merging bio-tracking sensors, automated 4K match capture, and eco-friendly structural designs.',
-    seoText: 'Padel courts are evolving from simple playing grounds into highly integrated wellness sanctuaries. By designing pre-wired camera systems and smart gameplay diagnostics, we convert typical physical matches into full-fledged digital training libraries.',
-    image: '/assets/images/hero_court_background_1779705118750.png',
-    badge: 'BRAND VISION'
-  },
-  {
-    id: '03',
-    title: 'Core Pillar: Structural Acoustics',
-    desc: 'Eliminating urban noise reverberation by implementing specialized high-density neoprene gaskets that absorb high-frequency glass vibrations.',
-    seoText: 'High-frequency noise pollution is a major friction point in premium residential neighborhoods. Our patented double-layered glass dampening cores actively absorb glass vibrations, reducing structural noise by 14.2 decibels without altering optimal ball bounce physics.',
-    image: '/assets/images/premium_padel_racket_black_lime_1779706021226.png',
-    badge: 'ACOUSTIC PILLAR'
-  },
-  {
-    id: '04',
-    title: 'Core Pillar: Elite Climatic Shield',
-    desc: 'Forging heavy-duty hot-zinc galvanized metal frames and powder-coated barriers engineered to resist sandstorms, beach salinity, and extreme heat.',
-    seoText: 'Vicious humidity and coastal salinity normally lead to structural rust and turf peeling within months. Court Hub frames undergo multi-layered fusion thermal powder coating, guaranteeing over ten years of rust longevity and supreme wind speed resistance above 145km/h.',
-    image: '/assets/images/faq_padel_detail_1779708774500.png',
-    badge: 'LONGEVITY PILLAR'
-  }
-];
+/**
+ * Stat strings like "180+", "18%", "2.1x" — leading number (commas/decimals
+ * allowed) drives the AnimatedCounter; the remainder becomes its suffix. If
+ * the string doesn't parse, render it statically as-is.
+ */
+function StatCounter({ raw }: { raw: string }) {
+  const m = /^([\d,]+(?:\.\d+)?)(.*)$/.exec(raw);
+  if (!m) return <>{raw}</>;
+  // Thousands-style commas only — "2,1x" (decimal comma) renders statically
+  // instead of silently becoming 21.
+  const numeric = m[1].replace(/,(?=\d{3}(\D|$))/g, '');
+  if (numeric.includes(',')) return <>{raw}</>;
+  const value = parseFloat(numeric);
+  if (Number.isNaN(value)) return <>{raw}</>;
+  const decimals = numeric.includes('.') ? numeric.split('.')[1].length : 0;
+  return <AnimatedCounter value={value} decimals={decimals} suffix={m[2]} />;
+}
 
-export default function AboutClient() {
+export default function AboutClient({ content }: { content: ContentMap }) {
+  const TOPICS = useMemo(() => [
+    {
+      id: '01',
+      title: content['about.topic1.title'],
+      desc: content['about.topic1.desc'],
+      seoText: content['about.topic1.seo_text'],
+      image: content['about.topic1.image'],
+      badge: content['about.topic1.badge']
+    },
+    {
+      id: '02',
+      title: content['about.topic2.title'],
+      desc: content['about.topic2.desc'],
+      seoText: content['about.topic2.seo_text'],
+      image: content['about.topic2.image'],
+      badge: content['about.topic2.badge']
+    },
+    {
+      id: '03',
+      title: content['about.topic3.title'],
+      desc: content['about.topic3.desc'],
+      seoText: content['about.topic3.seo_text'],
+      image: content['about.topic3.image'],
+      badge: content['about.topic3.badge']
+    },
+    {
+      id: '04',
+      title: content['about.topic4.title'],
+      desc: content['about.topic4.desc'],
+      seoText: content['about.topic4.seo_text'],
+      image: content['about.topic4.image'],
+      badge: content['about.topic4.badge']
+    }
+  ], [content]);
   const heroCovered = useHeroCovered();
   const { add, openDrawer } = useCart();
   const racketBestSellers = PRODUCTS.filter(p => p.category === 'rackets').slice(0, 5);
@@ -165,7 +183,7 @@ export default function AboutClient() {
             className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
           >
             <img
-              src="/assets/images/tournament_crowd_night_1779707031611.png"
+              src={content['about.hero.bg_image']}
               alt=""
               aria-hidden
               className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
@@ -199,7 +217,7 @@ export default function AboutClient() {
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                     className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
                   >
-                    EXPERIENCE PADEL
+                    {content['about.hero.title_line1']}
                   </motion.h1>
                 </motion.div>
 
@@ -211,7 +229,7 @@ export default function AboutClient() {
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
                     className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
                   >
-                    ELEVATED
+                    {content['about.hero.title_line2']}
                   </motion.h1>
                 </motion.div>
                 </div>
@@ -228,7 +246,7 @@ export default function AboutClient() {
                 {/* Left Bottom Block - Piles */}
                 <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
-                    Experience state-of-the-art courts, curated wellness zones, and a social atmosphere built around play.
+                    {content['about.hero.paragraph']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
                     {/* Pulsating Attention CTA Button wrapper */}
@@ -262,7 +280,7 @@ export default function AboutClient() {
                           href="/contact"
                           className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md block relative z-10"
                         >
-                          Become a Member
+                          {content['about.hero.cta_primary']}
                         </Link>
                       </motion.div>
                     </div>
@@ -271,7 +289,7 @@ export default function AboutClient() {
                       href="/construct-your-court"
                       className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-all text-center"
                     >
-                      Book a Court
+                      {content['about.hero.cta_secondary']}
                     </Link>
                   </div>
                 </div>
@@ -301,7 +319,7 @@ export default function AboutClient() {
                   </div>
 
                   <p className="text-white/80 text-[11px] sm:text-xs leading-relaxed max-w-[280px] lg:text-right font-medium drop-shadow-md">
-                    We're committed to creating a premium play experience with a friendly, inclusive community for every member.
+                    {content['about.hero.community_blurb']}
                   </p>
                 </div>
 
@@ -346,13 +364,13 @@ export default function AboutClient() {
                   1
                 </div>
                 <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-ink/10 px-4 py-1.5 rounded-full bg-[#0E0E0C]/5 text-[#0E0E0C] shadow-sm">
-                  Our Story
+                  {content['about.story.eyebrow']}
                 </div>
               </div>
               <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-[#0E0E0C]">
-                METALLURGY <span className="text-court-blue">MEETS</span> <br className="hidden sm:inline" />
+                {content['about.story.headline_part1']} <span className="text-court-blue">{content['about.story.headline_part2']}</span> <br className="hidden sm:inline" />
                 <span className="relative inline-block text-ink">
-                  SPORT SCIENCE
+                  {content['about.story.headline_part3']}
                   {/* Lime drawn underline — pure-CSS loop (.ch-underline-draw in globals.css);
                       runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                   <span
@@ -376,15 +394,15 @@ export default function AboutClient() {
               >
                 <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden border border-ink/10 shadow-2xl group cursor-pointer">
                   <img
-                    src="/assets/images/padel_racket_set_lifestyle_1779706056285.png"
+                    src={content['about.story.image']}
                     alt="Aesthetic Padel Court Action Closeup"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104 group-hover:rotate-0.5"
                     referrerPolicy="no-referrer" loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/95 via-transparent to-transparent p-6 sm:p-8 flex flex-col justify-end" />
                   <div className="absolute bottom-6 left-6 text-white text-left mr-6 space-y-2">
-                    <span className="font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black inline-block">DEVELOPMENT LAB</span>
-                    <p className="font-display text-sm sm:text-base md:text-lg font-bold italic uppercase text-white leading-tight">Synthesizing high-density composites for extreme athletic output.</p>
+                    <span className="font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black inline-block">{content['about.story.image_badge']}</span>
+                    <p className="font-display text-sm sm:text-base md:text-lg font-bold italic uppercase text-white leading-tight">{content['about.story.image_caption']}</p>
                   </div>
                 </div>
               </motion.div>
@@ -398,10 +416,10 @@ export default function AboutClient() {
                 className="lg:col-span-5 space-y-8 text-left"
               >
                 <p className="text-ink/85 text-sm sm:text-base md:text-lg leading-relaxed font-sans font-medium">
-                  Court Hub was not conceived in a corporate boardroom. It was forged in a specialized marine metalwork foundry in Al Quoz, Dubai. Our engineers observed that typical imported courts were structural templates—vulnerable to extreme GCC desert heat, coastal salinity, and deafening playground sound repercussions.
+                  {content['about.story.paragraph1']}
                 </p>
                 <p className="text-ink/70 text-xs sm:text-sm leading-relaxed font-sans font-medium">
-                  We set out to re-engineer court diagnostics. Fusing Spanish glass technologies with aerospace structural metal alloy formulations, we designed playing frames that ignore high winds and custom rackets that preserve muscles. Today, we craft sports spaces where architectural integrity meets ultimate player stamina.
+                  {content['about.story.paragraph2']}
                 </p>                 {/* Playful counting statistics row with zoom and brand color-exchanging hover animations */}
                 <div className="grid grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-left">
                   <div className="group/stat cursor-pointer">
@@ -410,9 +428,9 @@ export default function AboutClient() {
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
-                      <AnimatedCounter value={180} suffix="+" />
+                      <StatCounter raw={content['about.story.stat1_value']} />
                     </motion.p>
-                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">Pre-Calibrated Arenas</p>
+                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.stat1_caption']}</p>
                   </div>
                   <div className="group/stat cursor-pointer">
                     <motion.p
@@ -420,9 +438,9 @@ export default function AboutClient() {
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-ink tracking-tighter origin-left inline-block"
                     >
-                      <AnimatedCounter value={18} suffix="%" />
+                      <StatCounter raw={content['about.story.stat2_value']} />
                     </motion.p>
-                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">Larger Sweetspot</p>
+                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.stat2_caption']}</p>
                   </div>
                   <div className="group/stat cursor-pointer">
                     <motion.p
@@ -430,9 +448,9 @@ export default function AboutClient() {
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
-                      <AnimatedCounter value={2.1} decimals={1} suffix="x" />
+                      <StatCounter raw={content['about.story.stat3_value']} />
                     </motion.p>
-                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">Vibration Dampening</p>
+                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.stat3_caption']}</p>
                   </div>
                 </div>
               </motion.div>
@@ -547,7 +565,7 @@ export default function AboutClient() {
 
                           {/* Summary details on image */}
                           <div className="absolute bottom-6 left-6 right-6 text-white space-y-1 z-10 text-left">
-                            <span className="font-mono text-[10px] uppercase text-[#C8FF3D] tracking-widest font-semibold block">/// Active Layer Analysis</span>
+                            <span className="font-mono text-[10px] uppercase text-[#C8FF3D] tracking-widest font-semibold block">{content['about.blueprint.card_kicker']}</span>
                             <h4 className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-tight">
                               {topic.title}
                             </h4>
@@ -568,14 +586,14 @@ export default function AboutClient() {
                       2
                     </div>
                     <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-white/10 px-4 py-1.5 rounded-full bg-white/10 text-white shadow-sm">
-                      Our Mission & Vision
+                      {content['about.blueprint.eyebrow']}
                     </div>
                   </div>
 
                   {/* Subtitle / Main heading matching screenshot layout with vivid lime highlighted focus */}
                   <h2 className="text-xl md:text-5xl font-display font-black uppercase italic tracking-tight text-white leading-[1.05] md:leading-[0.95] mt-1 lg:mt-4">
-                    Pioneering the Future of <br />
-                    <span className="text-[#C8FF3D]">Court Design</span>
+                    {content['about.blueprint.headline_line1']} <br />
+                    <span className="text-[#C8FF3D]">{content['about.blueprint.headline_highlight']}</span>
                   </h2>
 
                   {/* Categories container */}
@@ -667,13 +685,13 @@ export default function AboutClient() {
                   className="lg:col-span-3 lg:sticky lg:top-24 space-y-3"
                 >
                   <span className="font-mono text-xs uppercase tracking-widest text-[#0E0E0C]/60 font-semibold block">
-                    Founded at:
+                    {content['about.positioning.founded_label']}
                   </span>
 
                   {/* Highlight box matching reference screenshot layout exactly */}
                   <div className="w-full max-w-[220px] aspect-[2.1/1] bg-[#C8FF3D] text-[#0E0E0C] flex items-center justify-center rounded-[24px] shadow-[0_12px_36px_rgba(212,255,62,0.18)] select-none border border-[#C8FF3D] hover:scale-[1.12] hover:-rotate-3 hover:shadow-[0_20px_48px_rgba(212,255,62,0.35)] transition-all duration-300 ease-out">
                     <span className="font-sans text-5xl md:text-6xl font-black italic tracking-tighter leading-none select-none">
-                      2024
+                      {content['about.positioning.founded_year']}
                     </span>
                   </div>
                 </motion.div>
@@ -692,14 +710,14 @@ export default function AboutClient() {
                         3
                       </div>
                       <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-ink/10 px-4 py-1.5 rounded-full bg-white text-ink shadow-sm">
-                        About Court Hub
+                        {content['about.positioning.eyebrow']}
                       </div>
                     </div>
 
                     <h2 className="text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-[#0E0E0C]">
-                      ENGINEERING <span className="text-court-blue">THE</span> <br className="hidden sm:inline" />
+                      {content['about.positioning.headline_part1']} <span className="text-court-blue">{content['about.positioning.headline_part2']}</span> <br className="hidden sm:inline" />
                       <span className="relative inline-block text-ink">
-                        FUTURE OF PLAY
+                        {content['about.positioning.headline_part3']}
                         {/* Lime drawn underline — pure-CSS loop (.ch-underline-draw in globals.css);
                             runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                         <span
@@ -710,7 +728,7 @@ export default function AboutClient() {
                     </h2>
 
                     <p className="text-xs sm:text-sm md:text-base lg:text-base font-sans font-medium text-[#0E0E0C]/80 leading-relaxed max-w-4xl pt-1">
-                      Court Hub was engineered from a deep-seated obsession with high-fidelity materials and the scientific belief that architecture can redefine elite sports communities.
+                      {content['about.positioning.paragraph1']}
                     </p>
                   </motion.div>
 
@@ -728,7 +746,7 @@ export default function AboutClient() {
                         className="absolute inset-[-6%] w-[112%] h-[112%] origin-center"
                       >
                         <img
-                          src="/assets/images/player_portrait_1779705596398.png"
+                          src={content['about.positioning.portrait_image']}
                           alt="Player Execution Stroke Portrait"
                           className="w-full h-full object-cover object-[center_35%] sm:object-center transition-all duration-700 ease-out group-hover:scale-112 group-hover:rotate-2 group-hover:brightness-[1.02] filter contrast-[1.05] brightness-[0.95]"
                           referrerPolicy="no-referrer" loading="lazy" decoding="async"
@@ -736,8 +754,8 @@ export default function AboutClient() {
                       </motion.div>
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-6 flex flex-col justify-end pointer-events-none" />
                       <div className="absolute bottom-6 left-6 text-white text-left space-y-1.5 z-10 font-sans pointer-events-none">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-court-blue text-white px-2.5 py-1 rounded font-bold inline-block">STRIKE GEOMETRY</span>
-                        <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">Refining accurate rebound angles.</p>
+                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-court-blue text-white px-2.5 py-1 rounded font-bold inline-block">{content['about.positioning.portrait_badge']}</span>
+                        <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.portrait_caption']}</p>
                       </div>
                     </div>
 
@@ -751,7 +769,7 @@ export default function AboutClient() {
                           className="absolute inset-[-6%] w-[112%] h-[112%] origin-center"
                         >
                           <img
-                            src="/assets/images/court_action_landscape_1779705580138.png"
+                            src={content['about.positioning.landscape_image']}
                             alt="Play action on synthetic blue turf court"
                             className="w-full h-full object-cover object-[center_30%] transition-all duration-700 ease-out group-hover:scale-112 group-hover:-rotate-2 group-hover:brightness-[1.02] filter contrast-[1.05] brightness-[0.95]"
                             referrerPolicy="no-referrer" loading="lazy" decoding="async"
@@ -759,21 +777,21 @@ export default function AboutClient() {
                         </motion.div>
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-4 flex flex-col justify-end pointer-events-none" />
                         <div className="absolute bottom-4 left-4 text-white text-left space-y-1 z-10 font-sans pointer-events-none">
-                          <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black font-semibold inline-block">SYNTHETIC SCIENCE</span>
-                          <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">Maximized traction coefficient.</p>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black font-semibold inline-block">{content['about.positioning.landscape_badge']}</span>
+                          <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.landscape_caption']}</p>
                         </div>
                       </div>
 
                       <div className="space-y-4 flex-1 flex flex-col items-start bg-white/40 p-3 sm:p-5 rounded-3xl border border-ink/5 shadow-sm hover:bg-white/50 transition-colors duration-300">
                         <p className="text-xs sm:text-sm lg:text-sm text-ink/85 leading-relaxed font-sans font-medium">
-                          Starting from casual weekend exhibition matches, we have structured ourselves into a high-octane network of luxury athletic sanctuaries, where raw physical action and structural design elements operate in perfect equilibrium.
+                          {content['about.positioning.paragraph2']}
                         </p>
 
                         <Link
                           href="/contact"
                           className="inline-flex items-center gap-2 group text-xs font-mono font-bold uppercase tracking-widest text-[#0E0E0C] hover:text-court-blue border border-ink/15 px-5 py-2.5 rounded-full bg-white hover:bg-white/80 transition-all shadow-md group shrink-0"
                         >
-                          <span>Learn more</span>
+                          <span>{content['about.positioning.cta_label']}</span>
                           <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#0E0E0C]" />
                         </Link>
                       </div>
@@ -799,14 +817,14 @@ export default function AboutClient() {
             className="max-w-4xl mx-auto space-y-4 sm:space-y-6 relative z-10"
           >
             <span className="font-mono text-[10px] md:text-sm uppercase bg-lime/10 px-4 py-1.5 border border-lime/20 rounded-full text-lime inline-block tracking-widest font-bold">
-              /// Join our premier partners list
+              {content['about.cta.eyebrow']}
             </span>
             <h2 className="text-4xl md:text-6xl font-display font-black uppercase italic tracking-tight text-white leading-none mt-4">
-              READY TO BUILD OR <br />
-              <span className="text-lime">STOCK THE GEAR?</span>
+              {content['about.cta.headline_line1']} <br />
+              <span className="text-lime">{content['about.cta.headline_highlight']}</span>
             </h2>
             <p className="text-white/60 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
-              Let's bypass formal lag. Coordinate directly with structural managers and commercial partners over direct pre-routed GCC WhatsApp lines.
+              {content['about.cta.paragraph']}
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 pt-2">
@@ -828,14 +846,14 @@ export default function AboutClient() {
                 whileHover={{ scale: 1.08 }}
                 className="px-8 py-4 bg-lime text-ink rounded-full font-mono font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-1.5 shadow-lg shadow-lime/15"
               >
-                <span>Construct Your Court</span>
+                <span>{content['about.cta.cta_primary']}</span>
                 <ArrowUpRight className="w-4 h-4 text-ink" />
               </MotionLink>
               <Link
                 href="/contact"
                 className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-mono text-xs uppercase font-bold tracking-widest hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105"
               >
-                Instant Communication Desks
+                {content['about.cta.cta_secondary']}
               </Link>
             </div>
           </motion.div>
@@ -866,7 +884,7 @@ export default function AboutClient() {
                     className="group relative flex-shrink-0 w-[190px] sm:w-[230px] md:w-[260px] rounded-[24px] bg-white border border-ink/10 p-3 shadow-[0_18px_45px_-12px_rgba(14,14,12,0.3)] flex flex-col gap-2.5 cursor-pointer"
                   >
                     <span className="absolute top-4 left-4 z-20 text-[9px] bg-lime text-ink px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm">
-                      ★ Best Seller
+                      {content['about.bestsellers.badge']}
                     </span>
                     <div className="rounded-[16px] bg-[#F5F4F0] aspect-[4/3] flex items-center justify-center p-3 overflow-hidden">
                       <img
@@ -889,13 +907,13 @@ export default function AboutClient() {
                         }}
                         className="w-full py-2 rounded-full bg-lime text-ink text-[10px] font-bold uppercase tracking-wider hover:bg-ink hover:text-white transition-colors"
                       >
-                        Add to Bag
+                        {content['about.bestsellers.add_to_bag_label']}
                       </button>
                       <Link
                         href={`/shop/${p.id}`}
                         className="w-full py-2 rounded-full border border-ink/15 text-ink/70 text-[10px] font-bold uppercase tracking-wider text-center hover:bg-ink/5 transition-colors"
                       >
-                        View product
+                        {content['about.bestsellers.view_product_label']}
                       </Link>
                     </div>
                   </motion.div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
+import type { ContentMap } from '@/lib/content/get';
 
 /**
  * Home hero — the same framed mock-up hero as the swipe pages (white rounded
@@ -14,7 +15,7 @@ import { useMouseParallax } from '@/components/shared/useMouseParallax';
  * effect (per client), which also means the browser culls it once scrolled
  * past — the cheapest hero of the five.
  */
-export default function HomeHero() {
+export default function HomeHero({ content }: { content: ContentMap }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
 
   return (
@@ -25,7 +26,7 @@ export default function HomeHero() {
         className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
       >
         <img
-          src="/assets/images/hero_padel_night_view_1779713624496.png"
+          src={content['home.hero.bg_image']}
           alt=""
           aria-hidden
           className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
@@ -55,7 +56,7 @@ export default function HomeHero() {
                   transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                   className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
                 >
-                  EXPERIENCE PADEL
+                  {content['home.hero.title_line1']}
                 </motion.h1>
               </motion.div>
 
@@ -66,7 +67,7 @@ export default function HomeHero() {
                   transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
                   className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
                 >
-                  ELEVATED
+                  {content['home.hero.title_line2']}
                 </motion.h1>
               </motion.div>
             </div>
@@ -81,8 +82,7 @@ export default function HomeHero() {
           >
             <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
               <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
-                Premium padel courts engineered for the GCC, plus a curated shop
-                of elite rackets and gear — all in one place.
+                {content['home.hero.paragraph']}
               </p>
               <div className="flex flex-wrap items-center gap-4">
                 {/* Pulsating primary CTA */}
@@ -103,7 +103,7 @@ export default function HomeHero() {
                       href="/construct-your-court"
                       className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md block relative z-10"
                     >
-                      Construct Your Court
+                      {content['home.hero.cta_primary']}
                     </Link>
                   </motion.div>
                 </div>
@@ -112,7 +112,7 @@ export default function HomeHero() {
                   href="/shop"
                   className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-all text-center"
                 >
-                  Shop Now
+                  {content['home.hero.cta_secondary']}
                 </Link>
               </div>
             </div>
@@ -143,8 +143,7 @@ export default function HomeHero() {
               </div>
 
               <p className="text-white/80 text-[11px] sm:text-xs leading-relaxed max-w-[280px] lg:text-right font-medium drop-shadow-md">
-                We&apos;re committed to creating a premium play experience with a
-                friendly, inclusive community for every member.
+                {content['home.hero.community_blurb']}
               </p>
             </div>
           </motion.div>

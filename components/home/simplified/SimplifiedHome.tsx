@@ -1,4 +1,5 @@
 import type { Product } from '@/lib/types';
+import type { ContentMap } from '@/lib/content/get';
 import Footer from '@/components/home/Footer';
 import HomeHero from './HomeHero';
 import BrandRibbon from './BrandRibbon';
@@ -16,17 +17,23 @@ import AboutTeaser from './AboutTeaser';
  * The sideways rail floats OVER content as a translucent overlay — no
  * reserved lane (the visible left stripe read as a layout bug to the client).
  */
-export default function SimplifiedHome({ products }: { products: Product[] }) {
+export default function SimplifiedHome({
+  products,
+  content,
+}: {
+  products: Product[];
+  content: ContentMap;
+}) {
   return (
     <div className="ch-home ch-has-rail min-h-screen bg-ink text-ink">
-      <HomeHero />
+      <HomeHero content={content} />
       <div className="relative overflow-x-clip bg-sand">
         <BrandRibbon />
-        <NumbersStrip />
-        <ServicesGrid />
-        <TopSellersRail products={products} />
-        <ConstructPanel />
-        <AboutTeaser />
+        <NumbersStrip content={content} />
+        <ServicesGrid content={content} />
+        <TopSellersRail products={products} content={content} />
+        <ConstructPanel content={content} />
+        <AboutTeaser content={content} />
         <div className="ch-on-dark">
           <Footer />
         </div>

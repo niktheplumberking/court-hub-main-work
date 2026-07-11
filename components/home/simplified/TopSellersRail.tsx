@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/lib/types';
+import type { ContentMap } from '@/lib/content/get';
 import { useCart } from '@/lib/cart-context';
 import { PRODUCTS as PLACEHOLDER_PRODUCTS } from '@/components/shop/placeholder-products';
 
@@ -61,7 +62,13 @@ function toRailItems(products: Product[]): RailItem[] {
   }));
 }
 
-export default function TopSellersRail({ products = [] }: { products?: Product[] }) {
+export default function TopSellersRail({
+  products = [],
+  content,
+}: {
+  products?: Product[];
+  content: ContentMap;
+}) {
   const { add, openDrawer } = useCart();
   const railRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
@@ -93,10 +100,10 @@ export default function TopSellersRail({ products = [] }: { products?: Product[]
         <div className="mb-11 flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/50">
-              Best sellers
+              {content['home.top_sellers.eyebrow']}
             </p>
             <h2 className="font-display text-[clamp(30px,4.4vw,54px)] font-black uppercase leading-[0.95] tracking-[-0.03em] text-ink">
-              Shop Top Sellers
+              {content['home.top_sellers.heading']}
             </h2>
           </div>
           {/* Arrows are pointless on touch — hidden on coarse pointers. */}
@@ -185,7 +192,7 @@ export default function TopSellersRail({ products = [] }: { products?: Product[]
             href="/shop"
             className="inline-flex items-center gap-2.5 rounded-full bg-ink px-7 py-[15px] font-display text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-court-blue"
           >
-            Shop All Products
+            {content['home.top_sellers.cta']}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[15px] w-[15px]" aria-hidden>
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>

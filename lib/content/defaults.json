@@ -1,0 +1,1364 @@
+{
+  "home.hero.bg_image": {
+    "page": "home",
+    "label": "Hero · Background image",
+    "type": "image",
+    "value": "/assets/images/hero_padel_night_view_1779713624496.png"
+  },
+  "home.hero.title_line1": {
+    "page": "home",
+    "label": "Hero · Title line 1",
+    "type": "text",
+    "value": "EXPERIENCE PADEL"
+  },
+  "home.hero.title_line2": {
+    "page": "home",
+    "label": "Hero · Title line 2",
+    "type": "text",
+    "value": "ELEVATED"
+  },
+  "home.hero.paragraph": {
+    "page": "home",
+    "label": "Hero · Paragraph",
+    "type": "richtext",
+    "value": "Premium padel courts engineered for the GCC, plus a curated shop of elite rackets and gear — all in one place."
+  },
+  "home.hero.cta_primary": {
+    "page": "home",
+    "label": "Hero · Primary CTA label",
+    "type": "text",
+    "value": "Construct Your Court"
+  },
+  "home.hero.cta_secondary": {
+    "page": "home",
+    "label": "Hero · Secondary CTA label",
+    "type": "text",
+    "value": "Shop Now"
+  },
+  "home.hero.community_blurb": {
+    "page": "home",
+    "label": "Hero · Community blurb",
+    "type": "richtext",
+    "value": "We're committed to creating a premium play experience with a friendly, inclusive community for every member."
+  },
+  "home.numbers.heading": {
+    "page": "home",
+    "label": "Numbers Strip · Heading",
+    "type": "text",
+    "value": "Court Hub in numbers"
+  },
+  "home.numbers.intro": {
+    "page": "home",
+    "label": "Numbers Strip · Intro",
+    "type": "richtext",
+    "value": "From Al Quoz to the wider GCC — engineered courts and a growing community of players."
+  },
+  "home.numbers.stat1.value": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 1 value",
+    "type": "text",
+    "value": "180+"
+  },
+  "home.numbers.stat1.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 1 caption",
+    "type": "text",
+    "value": "Pre-Calibrated Arenas"
+  },
+  "home.numbers.stat2.value": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 2 value",
+    "type": "text",
+    "value": "5,000+"
+  },
+  "home.numbers.stat2.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 2 caption",
+    "type": "text",
+    "value": "Active Players in Our Community"
+  },
+  "home.numbers.stat3.value": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 3 value",
+    "type": "text",
+    "value": "2.1x"
+  },
+  "home.numbers.stat3.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 3 caption",
+    "type": "text",
+    "value": "Vibration Dampening"
+  },
+  "home.numbers.stat4.value": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 4 value",
+    "type": "text",
+    "value": "10yr"
+  },
+  "home.numbers.stat4.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Stat 4 caption",
+    "type": "text",
+    "value": "Rust & Structure Warranty"
+  },
+  "home.services.eyebrow": {
+    "page": "home",
+    "label": "Services · Eyebrow",
+    "type": "text",
+    "value": "What we do"
+  },
+  "home.services.heading": {
+    "page": "home",
+    "label": "Services · Heading",
+    "type": "text",
+    "value": "Our Services"
+  },
+  "home.services.card1.title": {
+    "page": "home",
+    "label": "Services · Card 1 (Shop) title",
+    "type": "text",
+    "value": "Shop"
+  },
+  "home.services.card1.desc": {
+    "page": "home",
+    "label": "Services · Card 1 (Shop) description",
+    "type": "richtext",
+    "value": "Elite rackets, balls and gear — curated drops from Stealth, HEAD, Wilson and more, priced in AED."
+  },
+  "home.services.card1.cta": {
+    "page": "home",
+    "label": "Services · Card 1 (Shop) CTA label",
+    "type": "text",
+    "value": "Shop now →"
+  },
+  "home.services.card1.icon": {
+    "page": "home",
+    "label": "Services · Card 1 (Shop) icon image",
+    "type": "image",
+    "value": "/assets/icons/svc-shop.webp"
+  },
+  "home.services.card2.title": {
+    "page": "home",
+    "label": "Services · Card 2 (Court Construction) title",
+    "type": "text",
+    "value": "Court Construction"
+  },
+  "home.services.card2.desc": {
+    "page": "home",
+    "label": "Services · Card 2 (Court Construction) description",
+    "type": "richtext",
+    "value": "Turnkey padel arenas built for desert heat — Spanish glass, galvanized frames, 145km/h wind rating."
+  },
+  "home.services.card2.cta": {
+    "page": "home",
+    "label": "Services · Card 2 (Court Construction) CTA label",
+    "type": "text",
+    "value": "Build yours →"
+  },
+  "home.services.card2.icon": {
+    "page": "home",
+    "label": "Services · Card 2 (Court Construction) icon image",
+    "type": "image",
+    "value": "/assets/icons/svc-construction.webp"
+  },
+  "home.services.card3.title": {
+    "page": "home",
+    "label": "Services · Card 3 (Tournaments) title",
+    "type": "text",
+    "value": "Tournaments"
+  },
+  "home.services.card3.desc": {
+    "page": "home",
+    "label": "Services · Card 3 (Tournaments) description",
+    "type": "richtext",
+    "value": "Sanctioned P25–P250 events across the UAE — live groups, brackets and the season leaderboard."
+  },
+  "home.services.card3.cta": {
+    "page": "home",
+    "label": "Services · Card 3 (Tournaments) CTA label",
+    "type": "text",
+    "value": "See the draw →"
+  },
+  "home.services.card3.icon": {
+    "page": "home",
+    "label": "Services · Card 3 (Tournaments) icon image",
+    "type": "image",
+    "value": "/assets/icons/svc-tournaments.webp"
+  },
+  "home.top_sellers.eyebrow": {
+    "page": "home",
+    "label": "Top Sellers · Eyebrow",
+    "type": "text",
+    "value": "Best sellers"
+  },
+  "home.top_sellers.heading": {
+    "page": "home",
+    "label": "Top Sellers · Heading",
+    "type": "text",
+    "value": "Shop Top Sellers"
+  },
+  "home.top_sellers.cta": {
+    "page": "home",
+    "label": "Top Sellers · CTA label",
+    "type": "text",
+    "value": "Shop All Products"
+  },
+  "home.construct.image": {
+    "page": "home",
+    "label": "Construct Panel · Feature image",
+    "type": "image",
+    "value": "/assets/images/dubai_court_night_construction_1779706759259.png"
+  },
+  "home.construct.eyebrow": {
+    "page": "home",
+    "label": "Construct Panel · Eyebrow",
+    "type": "text",
+    "value": "Turnkey construction"
+  },
+  "home.construct.heading": {
+    "page": "home",
+    "label": "Construct Panel · Heading",
+    "type": "richtext",
+    "value": "Construct\nYour Court"
+  },
+  "home.construct.paragraph": {
+    "page": "home",
+    "label": "Construct Panel · Paragraph",
+    "type": "richtext",
+    "value": "Pick a model, get an instant quote on WhatsApp. Engineered for extreme heat, coastal salinity and 145km/h winds — installed anywhere in the GCC."
+  },
+  "home.construct.type1.name": {
+    "page": "home",
+    "label": "Construct Panel · Court type 1 name",
+    "type": "text",
+    "value": "Classic"
+  },
+  "home.construct.type1.desc": {
+    "page": "home",
+    "label": "Construct Panel · Court type 1 description",
+    "type": "text",
+    "value": "The proven standard"
+  },
+  "home.construct.type2.name": {
+    "page": "home",
+    "label": "Construct Panel · Court type 2 name",
+    "type": "text",
+    "value": "Panoramic"
+  },
+  "home.construct.type2.desc": {
+    "page": "home",
+    "label": "Construct Panel · Court type 2 description",
+    "type": "text",
+    "value": "Frameless glass views"
+  },
+  "home.construct.type3.name": {
+    "page": "home",
+    "label": "Construct Panel · Court type 3 name",
+    "type": "text",
+    "value": "Super Pro"
+  },
+  "home.construct.type3.desc": {
+    "page": "home",
+    "label": "Construct Panel · Court type 3 description",
+    "type": "text",
+    "value": "Tournament grade"
+  },
+  "home.construct.cta": {
+    "page": "home",
+    "label": "Construct Panel · CTA label",
+    "type": "text",
+    "value": "Configure & Get Quote"
+  },
+  "home.about_teaser.image": {
+    "page": "home",
+    "label": "About Teaser · Feature image",
+    "type": "image",
+    "value": "/assets/images/court_action_landscape_1779705580138.png"
+  },
+  "home.about_teaser.badge_value": {
+    "page": "home",
+    "label": "About Teaser · Image badge stat value",
+    "type": "text",
+    "value": "180+"
+  },
+  "home.about_teaser.badge_caption": {
+    "page": "home",
+    "label": "About Teaser · Image badge stat caption",
+    "type": "richtext",
+    "value": "Arenas built\nacross the GCC"
+  },
+  "home.about_teaser.eyebrow": {
+    "page": "home",
+    "label": "About Teaser · Eyebrow",
+    "type": "text",
+    "value": "Who we are"
+  },
+  "home.about_teaser.heading": {
+    "page": "home",
+    "label": "About Teaser · Heading",
+    "type": "richtext",
+    "value": "Crafted for\nthe Obsessed"
+  },
+  "home.about_teaser.paragraph": {
+    "page": "home",
+    "label": "About Teaser · Paragraph",
+    "type": "richtext",
+    "value": "Born in Al Quoz, Dubai — we fuse Spanish structural glass with aerospace-grade metal alloys to build courts that ignore high winds, and curate rackets that protect your game. Architectural integrity meets player stamina."
+  },
+  "home.about_teaser.cta": {
+    "page": "home",
+    "label": "About Teaser · CTA label",
+    "type": "text",
+    "value": "Read Our Full Story"
+  },
+  "about.hero.title_line1": {
+    "page": "about",
+    "label": "Hero · Title line 1",
+    "type": "text",
+    "value": "EXPERIENCE PADEL"
+  },
+  "about.hero.title_line2": {
+    "page": "about",
+    "label": "Hero · Title line 2",
+    "type": "text",
+    "value": "ELEVATED"
+  },
+  "about.hero.paragraph": {
+    "page": "about",
+    "label": "Hero · Bottom-left paragraph",
+    "type": "richtext",
+    "value": "Experience state-of-the-art courts, curated wellness zones, and a social atmosphere built around play."
+  },
+  "about.hero.cta_primary": {
+    "page": "about",
+    "label": "Hero · Primary CTA label",
+    "type": "text",
+    "value": "Become a Member"
+  },
+  "about.hero.cta_secondary": {
+    "page": "about",
+    "label": "Hero · Secondary CTA label",
+    "type": "text",
+    "value": "Book a Court"
+  },
+  "about.hero.community_blurb": {
+    "page": "about",
+    "label": "Hero · Community blurb",
+    "type": "richtext",
+    "value": "We're committed to creating a premium play experience with a friendly, inclusive community for every member."
+  },
+  "about.hero.bg_image": {
+    "page": "about",
+    "label": "Hero · Background image",
+    "type": "image",
+    "value": "/assets/images/tournament_crowd_night_1779707031611.png"
+  },
+  "about.story.eyebrow": {
+    "page": "about",
+    "label": "Story · Eyebrow badge",
+    "type": "text",
+    "value": "Our Story"
+  },
+  "about.story.headline_part1": {
+    "page": "about",
+    "label": "Story · Headline part 1",
+    "type": "text",
+    "value": "METALLURGY"
+  },
+  "about.story.headline_part2": {
+    "page": "about",
+    "label": "Story · Headline part 2 (blue highlight)",
+    "type": "text",
+    "value": "MEETS"
+  },
+  "about.story.headline_part3": {
+    "page": "about",
+    "label": "Story · Headline part 3 (lime underlined)",
+    "type": "text",
+    "value": "SPORT SCIENCE"
+  },
+  "about.story.image": {
+    "page": "about",
+    "label": "Story · Feature image",
+    "type": "image",
+    "value": "/assets/images/padel_racket_set_lifestyle_1779706056285.png"
+  },
+  "about.story.image_badge": {
+    "page": "about",
+    "label": "Story · Image badge",
+    "type": "text",
+    "value": "DEVELOPMENT LAB"
+  },
+  "about.story.image_caption": {
+    "page": "about",
+    "label": "Story · Image caption",
+    "type": "text",
+    "value": "Synthesizing high-density composites for extreme athletic output."
+  },
+  "about.story.paragraph1": {
+    "page": "about",
+    "label": "Story · Paragraph 1",
+    "type": "richtext",
+    "value": "Court Hub was not conceived in a corporate boardroom. It was forged in a specialized marine metalwork foundry in Al Quoz, Dubai. Our engineers observed that typical imported courts were structural templates—vulnerable to extreme GCC desert heat, coastal salinity, and deafening playground sound repercussions."
+  },
+  "about.story.paragraph2": {
+    "page": "about",
+    "label": "Story · Paragraph 2",
+    "type": "richtext",
+    "value": "We set out to re-engineer court diagnostics. Fusing Spanish glass technologies with aerospace structural metal alloy formulations, we designed playing frames that ignore high winds and custom rackets that preserve muscles. Today, we craft sports spaces where architectural integrity meets ultimate player stamina."
+  },
+  "about.story.stat1_value": {
+    "page": "about",
+    "label": "Story · Stat 1 value",
+    "type": "text",
+    "value": "180+"
+  },
+  "about.story.stat1_caption": {
+    "page": "about",
+    "label": "Story · Stat 1 caption",
+    "type": "text",
+    "value": "Pre-Calibrated Arenas"
+  },
+  "about.story.stat2_value": {
+    "page": "about",
+    "label": "Story · Stat 2 value",
+    "type": "text",
+    "value": "18%"
+  },
+  "about.story.stat2_caption": {
+    "page": "about",
+    "label": "Story · Stat 2 caption",
+    "type": "text",
+    "value": "Larger Sweetspot"
+  },
+  "about.story.stat3_value": {
+    "page": "about",
+    "label": "Story · Stat 3 value",
+    "type": "text",
+    "value": "2.1x"
+  },
+  "about.story.stat3_caption": {
+    "page": "about",
+    "label": "Story · Stat 3 caption",
+    "type": "text",
+    "value": "Vibration Dampening"
+  },
+  "about.blueprint.eyebrow": {
+    "page": "about",
+    "label": "Blueprint · Eyebrow badge",
+    "type": "text",
+    "value": "Our Mission & Vision"
+  },
+  "about.blueprint.headline_line1": {
+    "page": "about",
+    "label": "Blueprint · Headline line 1",
+    "type": "text",
+    "value": "Pioneering the Future of"
+  },
+  "about.blueprint.headline_highlight": {
+    "page": "about",
+    "label": "Blueprint · Headline highlight (lime)",
+    "type": "text",
+    "value": "Court Design"
+  },
+  "about.blueprint.card_kicker": {
+    "page": "about",
+    "label": "Blueprint · Image card kicker",
+    "type": "text",
+    "value": "/// Active Layer Analysis"
+  },
+  "about.topic1.title": {
+    "page": "about",
+    "label": "Topic 1 · Title",
+    "type": "text",
+    "value": "Our Mission: Empowering Champions"
+  },
+  "about.topic1.desc": {
+    "page": "about",
+    "label": "Topic 1 · Description",
+    "type": "richtext",
+    "value": "To construct world-class, structurally silent padel arenas across the GCC that inspire community bonding, peak wellness, and elite athletic performance."
+  },
+  "about.topic1.seo_text": {
+    "page": "about",
+    "label": "Topic 1 · SEO text",
+    "type": "richtext",
+    "value": "We apply strict aerospace tolerance specifications to every padel court model we manufacture in Al Quoz, Dubai. Fusing Spanish structural tempered glass with custom vibration dampener mechanisms, we deliver uncompromised court performance engineered for extreme desert heat."
+  },
+  "about.topic1.badge": {
+    "page": "about",
+    "label": "Topic 1 · Badge",
+    "type": "text",
+    "value": "OUR MISSION"
+  },
+  "about.topic1.image": {
+    "page": "about",
+    "label": "Topic 1 · Image",
+    "type": "image",
+    "value": "/assets/images/dubai_court_night_construction_1779706759259.png"
+  },
+  "about.topic2.title": {
+    "page": "about",
+    "label": "Topic 2 · Title",
+    "type": "text",
+    "value": "Our Vision: Smarter Connected Spaces"
+  },
+  "about.topic2.desc": {
+    "page": "about",
+    "label": "Topic 2 · Description",
+    "type": "richtext",
+    "value": "To build the world's most innovative sports complexes by merging bio-tracking sensors, automated 4K match capture, and eco-friendly structural designs."
+  },
+  "about.topic2.seo_text": {
+    "page": "about",
+    "label": "Topic 2 · SEO text",
+    "type": "richtext",
+    "value": "Padel courts are evolving from simple playing grounds into highly integrated wellness sanctuaries. By designing pre-wired camera systems and smart gameplay diagnostics, we convert typical physical matches into full-fledged digital training libraries."
+  },
+  "about.topic2.badge": {
+    "page": "about",
+    "label": "Topic 2 · Badge",
+    "type": "text",
+    "value": "BRAND VISION"
+  },
+  "about.topic2.image": {
+    "page": "about",
+    "label": "Topic 2 · Image",
+    "type": "image",
+    "value": "/assets/images/hero_court_background_1779705118750.png"
+  },
+  "about.topic3.title": {
+    "page": "about",
+    "label": "Topic 3 · Title",
+    "type": "text",
+    "value": "Core Pillar: Structural Acoustics"
+  },
+  "about.topic3.desc": {
+    "page": "about",
+    "label": "Topic 3 · Description",
+    "type": "richtext",
+    "value": "Eliminating urban noise reverberation by implementing specialized high-density neoprene gaskets that absorb high-frequency glass vibrations."
+  },
+  "about.topic3.seo_text": {
+    "page": "about",
+    "label": "Topic 3 · SEO text",
+    "type": "richtext",
+    "value": "High-frequency noise pollution is a major friction point in premium residential neighborhoods. Our patented double-layered glass dampening cores actively absorb glass vibrations, reducing structural noise by 14.2 decibels without altering optimal ball bounce physics."
+  },
+  "about.topic3.badge": {
+    "page": "about",
+    "label": "Topic 3 · Badge",
+    "type": "text",
+    "value": "ACOUSTIC PILLAR"
+  },
+  "about.topic3.image": {
+    "page": "about",
+    "label": "Topic 3 · Image",
+    "type": "image",
+    "value": "/assets/images/premium_padel_racket_black_lime_1779706021226.png"
+  },
+  "about.topic4.title": {
+    "page": "about",
+    "label": "Topic 4 · Title",
+    "type": "text",
+    "value": "Core Pillar: Elite Climatic Shield"
+  },
+  "about.topic4.desc": {
+    "page": "about",
+    "label": "Topic 4 · Description",
+    "type": "richtext",
+    "value": "Forging heavy-duty hot-zinc galvanized metal frames and powder-coated barriers engineered to resist sandstorms, beach salinity, and extreme heat."
+  },
+  "about.topic4.seo_text": {
+    "page": "about",
+    "label": "Topic 4 · SEO text",
+    "type": "richtext",
+    "value": "Vicious humidity and coastal salinity normally lead to structural rust and turf peeling within months. Court Hub frames undergo multi-layered fusion thermal powder coating, guaranteeing over ten years of rust longevity and supreme wind speed resistance above 145km/h."
+  },
+  "about.topic4.badge": {
+    "page": "about",
+    "label": "Topic 4 · Badge",
+    "type": "text",
+    "value": "LONGEVITY PILLAR"
+  },
+  "about.topic4.image": {
+    "page": "about",
+    "label": "Topic 4 · Image",
+    "type": "image",
+    "value": "/assets/images/faq_padel_detail_1779708774500.png"
+  },
+  "about.positioning.founded_label": {
+    "page": "about",
+    "label": "Positioning · Founded label",
+    "type": "text",
+    "value": "Founded at:"
+  },
+  "about.positioning.founded_year": {
+    "page": "about",
+    "label": "Positioning · Founded year",
+    "type": "text",
+    "value": "2024"
+  },
+  "about.positioning.eyebrow": {
+    "page": "about",
+    "label": "Positioning · Eyebrow badge",
+    "type": "text",
+    "value": "About Court Hub"
+  },
+  "about.positioning.headline_part1": {
+    "page": "about",
+    "label": "Positioning · Headline part 1",
+    "type": "text",
+    "value": "ENGINEERING"
+  },
+  "about.positioning.headline_part2": {
+    "page": "about",
+    "label": "Positioning · Headline part 2 (blue highlight)",
+    "type": "text",
+    "value": "THE"
+  },
+  "about.positioning.headline_part3": {
+    "page": "about",
+    "label": "Positioning · Headline part 3 (lime underlined)",
+    "type": "text",
+    "value": "FUTURE OF PLAY"
+  },
+  "about.positioning.paragraph1": {
+    "page": "about",
+    "label": "Positioning · Intro paragraph",
+    "type": "richtext",
+    "value": "Court Hub was engineered from a deep-seated obsession with high-fidelity materials and the scientific belief that architecture can redefine elite sports communities."
+  },
+  "about.positioning.portrait_image": {
+    "page": "about",
+    "label": "Positioning · Portrait image",
+    "type": "image",
+    "value": "/assets/images/player_portrait_1779705596398.png"
+  },
+  "about.positioning.portrait_badge": {
+    "page": "about",
+    "label": "Positioning · Portrait badge",
+    "type": "text",
+    "value": "STRIKE GEOMETRY"
+  },
+  "about.positioning.portrait_caption": {
+    "page": "about",
+    "label": "Positioning · Portrait caption",
+    "type": "text",
+    "value": "Refining accurate rebound angles."
+  },
+  "about.positioning.landscape_image": {
+    "page": "about",
+    "label": "Positioning · Landscape image",
+    "type": "image",
+    "value": "/assets/images/court_action_landscape_1779705580138.png"
+  },
+  "about.positioning.landscape_badge": {
+    "page": "about",
+    "label": "Positioning · Landscape badge",
+    "type": "text",
+    "value": "SYNTHETIC SCIENCE"
+  },
+  "about.positioning.landscape_caption": {
+    "page": "about",
+    "label": "Positioning · Landscape caption",
+    "type": "text",
+    "value": "Maximized traction coefficient."
+  },
+  "about.positioning.paragraph2": {
+    "page": "about",
+    "label": "Positioning · Closing paragraph",
+    "type": "richtext",
+    "value": "Starting from casual weekend exhibition matches, we have structured ourselves into a high-octane network of luxury athletic sanctuaries, where raw physical action and structural design elements operate in perfect equilibrium."
+  },
+  "about.positioning.cta_label": {
+    "page": "about",
+    "label": "Positioning · CTA label",
+    "type": "text",
+    "value": "Learn more"
+  },
+  "about.cta.eyebrow": {
+    "page": "about",
+    "label": "CTA · Eyebrow badge",
+    "type": "text",
+    "value": "/// Join our premier partners list"
+  },
+  "about.cta.headline_line1": {
+    "page": "about",
+    "label": "CTA · Headline line 1",
+    "type": "text",
+    "value": "READY TO BUILD OR"
+  },
+  "about.cta.headline_highlight": {
+    "page": "about",
+    "label": "CTA · Headline highlight (lime)",
+    "type": "text",
+    "value": "STOCK THE GEAR?"
+  },
+  "about.cta.paragraph": {
+    "page": "about",
+    "label": "CTA · Paragraph",
+    "type": "richtext",
+    "value": "Let's bypass formal lag. Coordinate directly with structural managers and commercial partners over direct pre-routed GCC WhatsApp lines."
+  },
+  "about.cta.cta_primary": {
+    "page": "about",
+    "label": "CTA · Primary CTA label",
+    "type": "text",
+    "value": "Construct Your Court"
+  },
+  "about.cta.cta_secondary": {
+    "page": "about",
+    "label": "CTA · Secondary CTA label",
+    "type": "text",
+    "value": "Instant Communication Desks"
+  },
+  "about.bestsellers.badge": {
+    "page": "about",
+    "label": "Best Sellers · Card badge",
+    "type": "text",
+    "value": "★ Best Seller"
+  },
+  "about.bestsellers.add_to_bag_label": {
+    "page": "about",
+    "label": "Best Sellers · Add to Bag button label",
+    "type": "text",
+    "value": "Add to Bag"
+  },
+  "about.bestsellers.view_product_label": {
+    "page": "about",
+    "label": "Best Sellers · View product link label",
+    "type": "text",
+    "value": "View product"
+  },
+  "contact.hero.title_line1": {
+    "page": "contact",
+    "label": "Hero · Title line 1",
+    "type": "text",
+    "value": "LET'S CO-DESIGN"
+  },
+  "contact.hero.title_line2": {
+    "page": "contact",
+    "label": "Hero · Title line 2",
+    "type": "text",
+    "value": "GAME CHANNELS"
+  },
+  "contact.hero.copy": {
+    "page": "contact",
+    "label": "Hero · Intro copy",
+    "type": "richtext",
+    "value": "Forget long email wait times. Choose your inquiry division below, insert details, and instantly launch direct WhatsApp communication."
+  },
+  "contact.hero.cta_label": {
+    "page": "contact",
+    "label": "Hero · CTA button label",
+    "type": "text",
+    "value": "Instant Dispatcher"
+  },
+  "contact.hero.bg_image": {
+    "page": "contact",
+    "label": "Hero · Background image",
+    "type": "image",
+    "value": "/assets/images/hero_court_background_1779705118750.png"
+  },
+  "contact.hero.response_badge": {
+    "page": "contact",
+    "label": "Hero · Response-time badge",
+    "type": "text",
+    "value": "120 MINS RESPONSE TIME"
+  },
+  "contact.hero.stat_title": {
+    "page": "contact",
+    "label": "Hero · Service line title",
+    "type": "text",
+    "value": "GCC SERVICE LINE"
+  },
+  "contact.hero.stat_caption": {
+    "page": "contact",
+    "label": "Hero · Service line caption",
+    "type": "text",
+    "value": "Active Desk Operations."
+  },
+  "contact.routing.eyebrow": {
+    "page": "contact",
+    "label": "Routing · Eyebrow",
+    "type": "text",
+    "value": "Step 1 / Select Division Routing"
+  },
+  "contact.routing.title": {
+    "page": "contact",
+    "label": "Routing · Heading",
+    "type": "text",
+    "value": "CHOOSE YOUR TRANSIT DESK"
+  },
+  "contact.routing.description": {
+    "page": "contact",
+    "label": "Routing · Description",
+    "type": "richtext",
+    "value": "We route your packet to different expert leads in Dubai depending on your structural or equipment requirements."
+  },
+  "contact.route1.title": {
+    "page": "contact",
+    "label": "Inquiry Route 1 · Title",
+    "type": "text",
+    "value": "Court Construction Desk"
+  },
+  "contact.route1.description": {
+    "page": "contact",
+    "label": "Inquiry Route 1 · Description",
+    "type": "richtext",
+    "value": "Establish custom Panoramic or Club courts with official UAE Civil Defense static certifications."
+  },
+  "contact.route1.recipient_desk": {
+    "page": "contact",
+    "label": "Inquiry Route 1 · Recipient desk",
+    "type": "text",
+    "value": "Al Quoz Structural & Static Civil Division"
+  },
+  "contact.route1.prefilled_text": {
+    "page": "contact",
+    "label": "Inquiry Route 1 · Prefilled WhatsApp text",
+    "type": "richtext",
+    "value": "Hello Court Hub! I would like to request an initial cost estimation sheet and static layout catalog for court construction..."
+  },
+  "contact.route2.title": {
+    "page": "contact",
+    "label": "Inquiry Route 2 · Title",
+    "type": "text",
+    "value": "Pro Shop & Equipment Sales"
+  },
+  "contact.route2.description": {
+    "page": "contact",
+    "label": "Inquiry Route 2 · Description",
+    "type": "richtext",
+    "value": "Bulk carbon-composite rackets, customized branded tournament balls, and club apparel inventory."
+  },
+  "contact.route2.recipient_desk": {
+    "page": "contact",
+    "label": "Inquiry Route 2 · Recipient desk",
+    "type": "text",
+    "value": "GCC Premium Wholesale Distribution Hub"
+  },
+  "contact.route2.prefilled_text": {
+    "page": "contact",
+    "label": "Inquiry Route 2 · Prefilled WhatsApp text",
+    "type": "richtext",
+    "value": "Hello Court Hub Retail team! I am looking to receive your corporate wholesale price list catalog for Stealth rackets and balls..."
+  },
+  "contact.route3.title": {
+    "page": "contact",
+    "label": "Inquiry Route 3 · Title",
+    "type": "text",
+    "value": "Leagues & Dynamic Tournaments"
+  },
+  "contact.route3.description": {
+    "page": "contact",
+    "label": "Inquiry Route 3 · Description",
+    "type": "richtext",
+    "value": "Register corporate groups, check up-coming master cup tables, or coordinate academy matches."
+  },
+  "contact.route3.recipient_desk": {
+    "page": "contact",
+    "label": "Inquiry Route 3 · Recipient desk",
+    "type": "text",
+    "value": "Court Hub Arena & Community Coordinator"
+  },
+  "contact.route3.prefilled_text": {
+    "page": "contact",
+    "label": "Inquiry Route 3 · Prefilled WhatsApp text",
+    "type": "richtext",
+    "value": "Hello! I am inquiring about team registration slots and matching tiers for upcoming Court Hub amateur corporate tournaments..."
+  },
+  "contact.dispatch.eyebrow": {
+    "page": "contact",
+    "label": "Dispatch Card · Eyebrow",
+    "type": "text",
+    "value": "Pre-filled Package Console"
+  },
+  "contact.dispatch.title": {
+    "page": "contact",
+    "label": "Dispatch Card · Heading",
+    "type": "text",
+    "value": "Instant Link Generator"
+  },
+  "contact.dispatch.description": {
+    "page": "contact",
+    "label": "Dispatch Card · Description",
+    "type": "richtext",
+    "value": "Provide custom tags to immediately append them to your dynamic WhatsApp query template on save."
+  },
+  "contact.dispatch.preview_label": {
+    "page": "contact",
+    "label": "Dispatch Card · Live preview label",
+    "type": "text",
+    "value": "Live Message Payload Draft:"
+  },
+  "contact.dispatch.cta_label": {
+    "page": "contact",
+    "label": "Dispatch Card · WhatsApp CTA label",
+    "type": "text",
+    "value": "ROUTE QUERY TO WHATSAPP"
+  },
+  "contact.dispatch.footnote": {
+    "page": "contact",
+    "label": "Dispatch Card · Footnote",
+    "type": "text",
+    "value": "Instant response desk dispatcher online"
+  },
+  "contact.dispatch.whatsapp_phone": {
+    "page": "contact",
+    "label": "Dispatch Card · WhatsApp number",
+    "type": "text",
+    "value": "971500000000"
+  },
+  "contact.details.title": {
+    "page": "contact",
+    "label": "Contact Details · Heading",
+    "type": "text",
+    "value": "Contact us"
+  },
+  "contact.details.intro": {
+    "page": "contact",
+    "label": "Contact Details · Intro copy",
+    "type": "richtext",
+    "value": "If you have any questions, please feel free to get in touch with us via phone, text, email, the form below, or even on social media!"
+  },
+  "contact.form.title": {
+    "page": "contact",
+    "label": "Form Card · Heading",
+    "type": "text",
+    "value": "GET IN TOUCH"
+  },
+  "contact.form.submit_label": {
+    "page": "contact",
+    "label": "Form Card · Submit button label",
+    "type": "text",
+    "value": "SEND MESSAGE"
+  },
+  "contact.form.success_title": {
+    "page": "contact",
+    "label": "Form Card · Success heading",
+    "type": "text",
+    "value": "Message Sent!"
+  },
+  "contact.form.success_cta": {
+    "page": "contact",
+    "label": "Form Card · Success reset button label",
+    "type": "text",
+    "value": "Send another message"
+  },
+  "contact.info.title": {
+    "page": "contact",
+    "label": "Contact Information · Heading",
+    "type": "text",
+    "value": "CONTACT INFORMATION"
+  },
+  "contact.info.phone_label": {
+    "page": "contact",
+    "label": "Contact Information · Phone label",
+    "type": "text",
+    "value": "PHONE"
+  },
+  "contact.info.phone": {
+    "page": "contact",
+    "label": "Contact Information · Phone number",
+    "type": "text",
+    "value": "+971 4 456 7890"
+  },
+  "contact.info.address_label": {
+    "page": "contact",
+    "label": "Contact Information · Address label",
+    "type": "text",
+    "value": "ADDRESS"
+  },
+  "contact.info.address": {
+    "page": "contact",
+    "label": "Contact Information · Address",
+    "type": "text",
+    "value": "Plot 124-A, Al Quoz 3 Road, Dubai, UAE"
+  },
+  "contact.info.email_label": {
+    "page": "contact",
+    "label": "Contact Information · Email label",
+    "type": "text",
+    "value": "EMAIL"
+  },
+  "contact.info.email": {
+    "page": "contact",
+    "label": "Contact Information · Email address",
+    "type": "text",
+    "value": "contact@courthub.ae"
+  },
+  "contact.hours.title": {
+    "page": "contact",
+    "label": "Business Hours · Heading",
+    "type": "text",
+    "value": "BUSINESS HOURS"
+  },
+  "contact.hours.weekday_label": {
+    "page": "contact",
+    "label": "Business Hours · Weekday label",
+    "type": "text",
+    "value": "MON - FRI"
+  },
+  "contact.hours.weekday_value": {
+    "page": "contact",
+    "label": "Business Hours · Weekday hours",
+    "type": "text",
+    "value": "9:00 am - 8:00 pm"
+  },
+  "contact.hours.saturday_label": {
+    "page": "contact",
+    "label": "Business Hours · Saturday label",
+    "type": "text",
+    "value": "SATURDAY"
+  },
+  "contact.hours.saturday_value": {
+    "page": "contact",
+    "label": "Business Hours · Saturday hours",
+    "type": "text",
+    "value": "9:00 am - 6:00 pm"
+  },
+  "contact.hours.sunday_label": {
+    "page": "contact",
+    "label": "Business Hours · Sunday label",
+    "type": "text",
+    "value": "SUNDAY"
+  },
+  "contact.hours.sunday_value": {
+    "page": "contact",
+    "label": "Business Hours · Sunday hours",
+    "type": "text",
+    "value": "9:00 am - 5:00 pm"
+  },
+  "contact.map.image": {
+    "page": "contact",
+    "label": "Map Section · Dubai map image",
+    "type": "image",
+    "value": "/assets/images/dubai-map.png"
+  },
+  "construct.hero.bg_image": {
+    "page": "construct",
+    "label": "Hero · Background image",
+    "type": "image",
+    "value": "/assets/images/dubai_court_night_construction_1779706759259.png"
+  },
+  "construct.hero.title_line1": {
+    "page": "construct",
+    "label": "Hero · Title line 1",
+    "type": "text",
+    "value": "ENGINEER THE"
+  },
+  "construct.hero.title_line2": {
+    "page": "construct",
+    "label": "Hero · Title line 2",
+    "type": "text",
+    "value": "BESPOKE ARENA"
+  },
+  "construct.hero.subcopy": {
+    "page": "construct",
+    "label": "Hero · Subcopy",
+    "type": "richtext",
+    "value": "From soil engineering to certified 12mm safety glass alignments and Mondo turf sod calculations. Turnkey GCC excellence."
+  },
+  "construct.hero.cta_primary": {
+    "page": "construct",
+    "label": "Hero · Primary CTA label",
+    "type": "text",
+    "value": "Bespoke Designer"
+  },
+  "construct.hero.cta_secondary": {
+    "page": "construct",
+    "label": "Hero · Secondary CTA label",
+    "type": "text",
+    "value": "Our Certifications"
+  },
+  "construct.hero.spec_badge": {
+    "page": "construct",
+    "label": "Hero · Spec block badge",
+    "type": "text",
+    "value": "DUBAI MASTER PROJECT"
+  },
+  "construct.hero.spec_title": {
+    "page": "construct",
+    "label": "Hero · Spec block title",
+    "type": "text",
+    "value": "PANORAMIC STADIUM"
+  },
+  "construct.hero.spec_caption": {
+    "page": "construct",
+    "label": "Hero · Spec block caption",
+    "type": "text",
+    "value": "Calibrated to 420 Lux night index."
+  },
+  "construct.court_types.eyebrow": {
+    "page": "construct",
+    "label": "Court Types · Eyebrow",
+    "type": "text",
+    "value": "/// What we build"
+  },
+  "construct.court_types.heading": {
+    "page": "construct",
+    "label": "Court Types · Heading",
+    "type": "text",
+    "value": "Four ways to build"
+  },
+  "construct.court_types.intro": {
+    "page": "construct",
+    "label": "Court Types · Intro paragraph",
+    "type": "richtext",
+    "value": "Every court is engineered for its site and finished turnkey. Pick the model that fits your space, then configure it below."
+  },
+  "construct.court_types.card_cta": {
+    "page": "construct",
+    "label": "Court Types · Card CTA label (shared)",
+    "type": "text",
+    "value": "Configure"
+  },
+  "construct.court_type1.name": {
+    "page": "construct",
+    "label": "Court Type 1 · Name",
+    "type": "text",
+    "value": "Panoramic"
+  },
+  "construct.court_type1.tag": {
+    "page": "construct",
+    "label": "Court Type 1 · Tag",
+    "type": "text",
+    "value": "Elite"
+  },
+  "construct.court_type1.desc": {
+    "page": "construct",
+    "label": "Court Type 1 · Description",
+    "type": "richtext",
+    "value": "Frameless tempered-glass walls for uninterrupted 360° sightlines — tournament-grade views."
+  },
+  "construct.court_type2.name": {
+    "page": "construct",
+    "label": "Court Type 2 · Name",
+    "type": "text",
+    "value": "Classic"
+  },
+  "construct.court_type2.tag": {
+    "page": "construct",
+    "label": "Court Type 2 · Tag",
+    "type": "text",
+    "value": "Popular"
+  },
+  "construct.court_type2.desc": {
+    "page": "construct",
+    "label": "Court Type 2 · Description",
+    "type": "richtext",
+    "value": "The proven club standard: heavy-gauge galvanised frame built for high-traffic daily play."
+  },
+  "construct.court_type3.name": {
+    "page": "construct",
+    "label": "Court Type 3 · Name",
+    "type": "text",
+    "value": "Super Pro"
+  },
+  "construct.court_type3.tag": {
+    "page": "construct",
+    "label": "Court Type 3 · Tag",
+    "type": "text",
+    "value": "Stadium"
+  },
+  "construct.court_type3.desc": {
+    "page": "construct",
+    "label": "Court Type 3 · Description",
+    "type": "richtext",
+    "value": "Reinforced structure with integrated LED and broadcast geometry for premium venues."
+  },
+  "construct.court_type4.name": {
+    "page": "construct",
+    "label": "Court Type 4 · Name",
+    "type": "text",
+    "value": "Indoor"
+  },
+  "construct.court_type4.tag": {
+    "page": "construct",
+    "label": "Court Type 4 · Tag",
+    "type": "text",
+    "value": "Low-profile"
+  },
+  "construct.court_type4.desc": {
+    "page": "construct",
+    "label": "Court Type 4 · Description",
+    "type": "richtext",
+    "value": "Reduced-height chassis engineered to fit warehouses and covered courts under existing roofs."
+  },
+  "construct.build_form.status_badge": {
+    "page": "construct",
+    "label": "Build Form · Status badge",
+    "type": "text",
+    "value": "Live Proposal System // Online"
+  },
+  "construct.build_form.version_badge": {
+    "page": "construct",
+    "label": "Build Form · Version badge",
+    "type": "text",
+    "value": "CH-v2.0"
+  },
+  "construct.build_form.eyebrow": {
+    "page": "construct",
+    "label": "Build Form · Eyebrow",
+    "type": "text",
+    "value": "/// Builder Configurator ///"
+  },
+  "construct.build_form.heading": {
+    "page": "construct",
+    "label": "Build Form · Heading",
+    "type": "text",
+    "value": "Configure Your Court"
+  },
+  "construct.build_form.desc": {
+    "page": "construct",
+    "label": "Build Form · Description",
+    "type": "richtext",
+    "value": "Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp."
+  },
+  "construct.build_form.cta": {
+    "page": "construct",
+    "label": "Build Form · Submit CTA label",
+    "type": "text",
+    "value": "Chat on WhatsApp"
+  },
+  "construct.build_form.security_caption": {
+    "page": "construct",
+    "label": "Build Form · Security caption",
+    "type": "text",
+    "value": "PROPOSAL DELIVERED SECURELY IN SECONDS"
+  },
+  "faq.header.title_line1": {
+    "page": "faq",
+    "label": "FAQ Header · Title line 1",
+    "type": "text",
+    "value": "Common Questions,"
+  },
+  "faq.header.title_line2": {
+    "page": "faq",
+    "label": "FAQ Header · Title line 2",
+    "type": "text",
+    "value": "Clear Answers"
+  },
+  "faq.header.subheader": {
+    "page": "faq",
+    "label": "FAQ Header · Subheader",
+    "type": "richtext",
+    "value": "Everything you need to know about gear, academy coaching, and court construction."
+  },
+  "faq.visual.image": {
+    "page": "faq",
+    "label": "FAQ Visual · Feature image",
+    "type": "image",
+    "value": "/images/faq_padel_detail_1779708774500.webp"
+  },
+  "faq.visual.badge": {
+    "page": "faq",
+    "label": "FAQ Visual · Live badge label",
+    "type": "text",
+    "value": "Academy Hub · Live"
+  },
+  "faq.q1.question": {
+    "page": "faq",
+    "label": "FAQ Item 1 · Question",
+    "type": "text",
+    "value": "What makes padel different from tennis?"
+  },
+  "faq.q1.answer": {
+    "page": "faq",
+    "label": "FAQ Item 1 · Answer",
+    "type": "richtext",
+    "value": "Padel is played on a smaller, enclosed court with glass walls, using solid stringless rackets. It's more focused on strategy, reflexes, and positioning than raw power, making it incredibly social and faster to learn."
+  },
+  "faq.q2.question": {
+    "page": "faq",
+    "label": "FAQ Item 2 · Question",
+    "type": "text",
+    "value": "I'm a complete beginner – can I join?"
+  },
+  "faq.q2.answer": {
+    "page": "faq",
+    "label": "FAQ Item 2 · Answer",
+    "type": "richtext",
+    "value": "Absolutely. Our Court Hub Academy has dedicated 'First Serve' programs for total beginners. We provide the equipment, the coach, and a friendly environment to learn the basics in your first session."
+  },
+  "faq.q3.question": {
+    "page": "faq",
+    "label": "FAQ Item 3 · Question",
+    "type": "text",
+    "value": "What do I need to get started?"
+  },
+  "faq.q3.answer": {
+    "page": "faq",
+    "label": "FAQ Item 3 · Answer",
+    "type": "richtext",
+    "value": "Just athletic wear and non-marking court shoes. We provide professional-grade Bullpadel rackets and balls if you don't have your own. As you progress, we can help you choose the right gear from our Pro Shop."
+  },
+  "faq.q4.question": {
+    "page": "faq",
+    "label": "FAQ Item 4 · Question",
+    "type": "text",
+    "value": "Can I try a racket before I buy?"
+  },
+  "faq.q4.answer": {
+    "page": "faq",
+    "label": "FAQ Item 4 · Answer",
+    "type": "richtext",
+    "value": "Yes — message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit."
+  },
+  "faq.q5.question": {
+    "page": "faq",
+    "label": "FAQ Item 5 · Question",
+    "type": "text",
+    "value": "How do I order gear or request a court build?"
+  },
+  "faq.q5.answer": {
+    "page": "faq",
+    "label": "FAQ Item 5 · Answer",
+    "type": "richtext",
+    "value": "Gear is simple — browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."
+  },
+  "faq.q6.question": {
+    "page": "faq",
+    "label": "FAQ Item 6 · Question",
+    "type": "text",
+    "value": "What happens after I send a court build inquiry?"
+  },
+  "faq.q6.answer": {
+    "page": "faq",
+    "label": "FAQ Item 6 · Answer",
+    "type": "richtext",
+    "value": "A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build — you'll know exactly what's happening at every stage."
+  },
+  "faq.q7.question": {
+    "page": "faq",
+    "label": "FAQ Item 7 · Question",
+    "type": "text",
+    "value": "Do you deliver outside Dubai — or internationally?"
+  },
+  "faq.q7.answer": {
+    "page": "faq",
+    "label": "FAQ Item 7 · Answer",
+    "type": "richtext",
+    "value": "We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn't part of standard checkout yet — if you're ordering from abroad, message us on WhatsApp and we'll quote it case by case."
+  },
+  "faq.support.title": {
+    "page": "faq",
+    "label": "Support Callout · Title",
+    "type": "text",
+    "value": "Still have questions?"
+  },
+  "faq.support.description": {
+    "page": "faq",
+    "label": "Support Callout · Description",
+    "type": "richtext",
+    "value": "Our support team is ready to assist you anytime."
+  },
+  "faq.support.cta": {
+    "page": "faq",
+    "label": "Support Callout · CTA label",
+    "type": "text",
+    "value": "Contact Support"
+  }
+}

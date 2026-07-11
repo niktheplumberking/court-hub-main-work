@@ -1,4 +1,5 @@
 import ContactClient from '@/components/pages/ContactClient';
+import { getPageContent } from '@/lib/content/get';
 
 export const metadata = {
   title: 'Contact — Court Hub',
@@ -6,6 +7,9 @@ export const metadata = {
     'Reach Court Hub on WhatsApp for rackets, court construction and orders — plus phone, email, showroom details in Al Quoz, Dubai.',
 };
 
-export default function ContactPage() {
-  return <ContactClient />;
+export const revalidate = 300;
+
+export default async function ContactPage() {
+  const content = await getPageContent('contact');
+  return <ContactClient content={content} />;
 }

@@ -20,9 +20,7 @@ import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
-
-// Owner-provided Dubai street-map image, used verbatim as the contact-page map.
-const dubaiMapImg = '/assets/images/dubai-map.png';
+import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
 
@@ -34,36 +32,36 @@ interface ContactRoute {
   prefilledText: string;
 }
 
-const INQUIRY_ROUTES: ContactRoute[] = [
-  {
-    id: 'construction',
-    title: 'Court Construction Desk',
-    recipientDesk: 'Al Quoz Structural & Static Civil Division',
-    description: 'Establish custom Panoramic or Club courts with official UAE Civil Defense static certifications.',
-    prefilledText: 'Hello Court Hub! I would like to request an initial cost estimation sheet and static layout catalog for court construction...'
-  },
-  {
-    id: 'wholesale',
-    title: 'Pro Shop & Equipment Sales',
-    recipientDesk: 'GCC Premium Wholesale Distribution Hub',
-    description: 'Bulk carbon-composite rackets, customized branded tournament balls, and club apparel inventory.',
-    prefilledText: 'Hello Court Hub Retail team! I am looking to receive your corporate wholesale price list catalog for Stealth rackets and balls...'
-  },
-  {
-    id: 'tournaments',
-    title: 'Leagues & Dynamic Tournaments',
-    recipientDesk: 'Court Hub Arena & Community Coordinator',
-    description: 'Register corporate groups, check up-coming master cup tables, or coordinate academy matches.',
-    prefilledText: 'Hello! I am inquiring about team registration slots and matching tiers for upcoming Court Hub amateur corporate tournaments...'
-  }
-];
-
-export default function ContactClient() {
+export default function ContactClient({ content }: { content: ContentMap }) {
   const heroCovered = useHeroCovered();
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
   const [selectedRouteId, setSelectedRouteId] = useState<string>('construction');
   const [inquirerName, setInquirerName] = useState<string>('');
   const [customSnippet, setCustomSnippet] = useState<string>('');
+
+  const INQUIRY_ROUTES: ContactRoute[] = useMemo(() => [
+    {
+      id: 'construction',
+      title: content['contact.route1.title'],
+      recipientDesk: content['contact.route1.recipient_desk'],
+      description: content['contact.route1.description'],
+      prefilledText: content['contact.route1.prefilled_text']
+    },
+    {
+      id: 'wholesale',
+      title: content['contact.route2.title'],
+      recipientDesk: content['contact.route2.recipient_desk'],
+      description: content['contact.route2.description'],
+      prefilledText: content['contact.route2.prefilled_text']
+    },
+    {
+      id: 'tournaments',
+      title: content['contact.route3.title'],
+      recipientDesk: content['contact.route3.recipient_desk'],
+      description: content['contact.route3.description'],
+      prefilledText: content['contact.route3.prefilled_text']
+    }
+  ], [content]);
 
   // States for the new Personal Information Form (Reference style)
   const [personalName, setPersonalName] = useState<string>('');
@@ -76,11 +74,13 @@ export default function ContactClient() {
 
   const activeRoute = useMemo(() => {
     return INQUIRY_ROUTES.find(r => r.id === selectedRouteId) || INQUIRY_ROUTES[0];
-  }, [selectedRouteId]);
+  }, [selectedRouteId, INQUIRY_ROUTES]);
 
   // Construct direct WhatsApp deep link with custom encoded pre-filled text
   const whatsappUrl = useMemo(() => {
-    const phoneNo = '971500000000'; // official GCC service line
+    // Official GCC service line. Normalized to bare digits: the WhatsApp API
+    // rejects '+'/spaces, and the client will plausibly type "+971 50 123 4567".
+    const phoneNo = (content['contact.dispatch.whatsapp_phone'] || '').replace(/\D/g, '');
     const nameSection = inquirerName ? `• Inquirer Name: ${inquirerName}\n` : '';
     const remarkSection = customSnippet ? `• Client Remarks: ${customSnippet}\n` : '';
     const divisionSection = `• Routed Division: ${activeRoute.title}\n• Handled By: ${activeRoute.recipientDesk}\n`;
@@ -88,7 +88,7 @@ export default function ContactClient() {
 
     const finalMessage = `Hello Court Hub team!\n\n*NEW DYNAMIC PORTAL INQUIRY*\n\n${divisionSection}${nameSection}${remarkSection}${messageSection}`;
     return `https://api.whatsapp.com/send?phone=${phoneNo}&text=${encodeURIComponent(finalMessage)}`;
-  }, [activeRoute, inquirerName, customSnippet]);
+  }, [activeRoute, inquirerName, customSnippet, content]);
 
   // Form submission handler for Personal Information
   const handleSubmitPersonalForm = (e: FormEvent) => {
@@ -117,7 +117,7 @@ export default function ContactClient() {
             className="absolute inset-[-4%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
           >
             <img
-              src="/assets/images/hero_court_background_1779705118750.png"
+              src={content['contact.hero.bg_image']}
               alt=""
               aria-hidden
               className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.15] saturate-[1.15]"
@@ -154,7 +154,7 @@ export default function ContactClient() {
                       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                       className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
                     >
-                      LET'S CO-DESIGN
+                      {content['contact.hero.title_line1']}
                     </motion.h1>
                   </motion.div>
 
@@ -166,7 +166,7 @@ export default function ContactClient() {
                       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
                       className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
                     >
-                      GAME CHANNELS
+                      {content['contact.hero.title_line2']}
                     </motion.h1>
                   </motion.div>
                 </div>
@@ -183,7 +183,7 @@ export default function ContactClient() {
                 {/* Left Bottom Block - Piles */}
                 <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
-                    Forget long email wait times. Choose your inquiry division below, insert details, and instantly launch direct WhatsApp communication.
+                    {content['contact.hero.copy']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
                     {/* Pulsating Attention CTA Button wrapper */}
@@ -217,7 +217,7 @@ export default function ContactClient() {
                           href="#selection"
                           className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-sans text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
                         >
-                          Instant Dispatcher
+                          {content['contact.hero.cta_label']}
                         </a>
                       </motion.div>
                     </div>
@@ -227,12 +227,12 @@ export default function ContactClient() {
                 {/* Right Bottom Block - Spec details mimicking about stats */}
                 <div className="max-w-xs space-y-2 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
                   <span className="font-sans text-[10px] text-lime uppercase tracking-widest font-black py-1 px-2.5 bg-lime/10 border border-lime/20 rounded">
-                    120 MINS RESPONSE TIME
+                    {content['contact.hero.response_badge']}
                   </span>
                   <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-right">
-                    GCC SERVICE LINE
+                    {content['contact.hero.stat_title']}
                   </p>
-                  <p className="text-white/60 text-[11px] font-sans lg:text-right">Active Desk Operations.</p>
+                  <p className="text-white/60 text-[11px] font-sans lg:text-right">{content['contact.hero.stat_caption']}</p>
                 </div>
 
               </motion.div>
@@ -258,13 +258,13 @@ export default function ContactClient() {
             <div className="lg:col-span-6 space-y-8 flex flex-col justify-between">
               <div className="space-y-3 text-left">
                 <span className="font-sans text-xs uppercase bg-white/10 px-3 py-1 border border-white/10 rounded-full inline-block">
-                  Step 1 / Select Division Routing
+                  {content['contact.routing.eyebrow']}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-display font-extrabold uppercase italic tracking-tight">
-                  CHOOSE YOUR TRANSIT DESK
+                  {content['contact.routing.title']}
                 </h2>
                 <p className="text-white/70 text-xs md:text-sm max-w-md">
-                  We route your packet to different expert leads in Dubai depending on your structural or equipment requirements.
+                  {content['contact.routing.description']}
                 </p>
               </div>
 
@@ -321,13 +321,13 @@ export default function ContactClient() {
                 <div className="space-y-2">
                   <div className="inline-flex items-center gap-1.5 font-sans text-lime text-[11px] uppercase tracking-wider font-bold">
                     <span className="w-2 h-2 rounded-full bg-lime animate-ping" />
-                    Pre-filled Package Console
+                    {content['contact.dispatch.eyebrow']}
                   </div>
                   <h3 className="font-display font-black text-2xl uppercase italic text-white leading-tight">
-                    Instant Link Generator
+                    {content['contact.dispatch.title']}
                   </h3>
                   <p className="text-white/40 text-[11px] leading-relaxed">
-                    Provide custom tags to immediately append them to your dynamic WhatsApp query template on save.
+                    {content['contact.dispatch.description']}
                   </p>
                 </div>
 
@@ -362,7 +362,7 @@ export default function ContactClient() {
                 {/* Dynamic Live Text Preview */}
                 <div className="p-6 bg-ink-2 rounded-[20px] border border-white/10 space-y-3 font-sans shadow-inner">
                   <span className="text-[11px] uppercase tracking-widest text-[#C8FF3D] font-extrabold block">
-                    Live Message Payload Draft:
+                    {content['contact.dispatch.preview_label']}
                   </span>
                   <p className="italic text-white/90 text-sm md:text-[15px] leading-relaxed">
                     "Hello Court Hub team! [Inquiry: {activeRoute.title}], My Name: {inquirerName || 'Inquirer'}. Message: {activeRoute.prefilledText} {customSnippet}"
@@ -389,13 +389,13 @@ export default function ContactClient() {
                   className="w-full py-4.5 bg-[#C8FF3D] hover:bg-white text-ink transition-all font-sans font-bold text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2.5 shadow-xl shadow-[#C8FF3D]/10 cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4 text-ink" />
-                  <span>ROUTE QUERY TO WHATSAPP</span>
+                  <span>{content['contact.dispatch.cta_label']}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </motion.a>
 
                 <div className="flex justify-center items-center gap-2 font-sans text-[9px] text-white/30 uppercase tracking-widest">
                   <Clock className="w-3.5 h-3.5 text-lime" />
-                  <span>Instant response desk dispatcher online</span>
+                  <span>{content['contact.dispatch.footnote']}</span>
                 </div>
               </div>
             </div>
@@ -416,10 +416,10 @@ export default function ContactClient() {
             {/* Header: side-by-side on desktop */}
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 pb-10 border-b border-ink/10">
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-display font-black tracking-tight text-ink uppercase leading-none">
-                Contact us
+                {content['contact.details.title']}
               </h2>
               <p className="text-ink/60 font-sans text-sm sm:text-base max-w-lg leading-relaxed md:text-right">
-                If you have any questions, please feel free to get in touch with us via phone, text, email, the form below, or even on social media!
+                {content['contact.details.intro']}
               </p>
             </div>
 
@@ -430,7 +430,7 @@ export default function ContactClient() {
               <div className="lg:col-span-7 bg-[#FFFFFF] p-8 md:p-10 rounded-[28px] border border-slate-200/60 shadow-sm text-left">
                 <div className="pb-4 mb-8 border-b border-slate-200">
                   <h3 className="font-display font-bold text-lg text-ink uppercase tracking-wider">
-                    GET IN TOUCH
+                    {content['contact.form.title']}
                   </h3>
                 </div>
 
@@ -513,7 +513,7 @@ export default function ContactClient() {
                           type="submit"
                           className="px-8 py-4 bg-court-blue hover:bg-[#1546bd] text-white font-sans font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-350 cursor-pointer shadow-md shadow-court-blue/20"
                         >
-                          SEND MESSAGE
+                          {content['contact.form.submit_label']}
                         </button>
                       </div>
 
@@ -531,7 +531,7 @@ export default function ContactClient() {
                       </div>
                       <div className="space-y-2">
                         <h4 className="text-2xl font-display font-black text-ink uppercase tracking-tight">
-                          Message Sent!
+                          {content['contact.form.success_title']}
                         </h4>
                         <p className="text-green text-sm font-semibold">
                           Thank you, {personalName}.
@@ -552,7 +552,7 @@ export default function ContactClient() {
                         }}
                         className="px-6 py-2.5 bg-ink text-white hover:bg-court-blue font-sans text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors duration-200 cursor-pointer"
                       >
-                        Send another message
+                        {content['contact.form.success_cta']}
                       </button>
                     </motion.div>
                   )}
@@ -567,7 +567,7 @@ export default function ContactClient() {
                   <div>
                     <div className="pb-4 mb-6 border-b border-slate-200">
                       <h3 className="font-display font-bold text-lg text-ink uppercase tracking-wider">
-                        CONTACT INFORMATION
+                        {content['contact.info.title']}
                       </h3>
                     </div>
 
@@ -578,9 +578,9 @@ export default function ContactClient() {
                           <Phone className="w-4 h-4" />
                         </div>
                         <div className="space-y-0.5">
-                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">PHONE</p>
-                          <a href="tel:+97144567890" className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
-                            +971 4 456 7890
+                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">{content['contact.info.phone_label']}</p>
+                          <a href={`tel:${content['contact.info.phone'].replace(/\s+/g, '')}`} className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
+                            {content['contact.info.phone']}
                           </a>
                         </div>
                       </div>
@@ -591,9 +591,9 @@ export default function ContactClient() {
                           <MapPin className="w-4 h-4" />
                         </div>
                         <div className="space-y-0.5">
-                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">ADDRESS</p>
+                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">{content['contact.info.address_label']}</p>
                           <p className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink leading-tight">
-                            Plot 124-A, Al Quoz 3 Road, Dubai, UAE
+                            {content['contact.info.address']}
                           </p>
                         </div>
                       </div>
@@ -604,9 +604,9 @@ export default function ContactClient() {
                           <Mail className="w-4 h-4" />
                         </div>
                         <div className="space-y-0.5">
-                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">EMAIL</p>
-                          <a href="mailto:contact@courthub.ae" className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
-                            contact@courthub.ae
+                          <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">{content['contact.info.email_label']}</p>
+                          <a href={`mailto:${content['contact.info.email']}`} className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
+                            {content['contact.info.email']}
                           </a>
                         </div>
                       </div>
@@ -619,7 +619,7 @@ export default function ContactClient() {
                   <div>
                     <div className="pb-4 mb-6 border-b border-slate-200">
                       <h3 className="font-display font-bold text-lg text-ink uppercase tracking-wider">
-                        BUSINESS HOURS
+                        {content['contact.hours.title']}
                       </h3>
                     </div>
 
@@ -628,30 +628,30 @@ export default function ContactClient() {
                       {/* Weekday */}
                       <div className="space-y-1.5">
                         <p className="text-slate-400 text-[10px] md:text-[11px] font-extrabold uppercase tracking-wider font-sans leading-tight">
-                          MON - FRI
+                          {content['contact.hours.weekday_label']}
                         </p>
                         <p className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink leading-snug">
-                          9:00 am - 8:00 pm
+                          {content['contact.hours.weekday_value']}
                         </p>
                       </div>
 
                       {/* Saturday */}
                       <div className="space-y-1.5">
                         <p className="text-slate-400 text-[10px] md:text-[11px] font-extrabold uppercase tracking-wider font-sans leading-tight">
-                          SATURDAY
+                          {content['contact.hours.saturday_label']}
                         </p>
                         <p className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink leading-snug">
-                          9:00 am - 6:00 pm
+                          {content['contact.hours.saturday_value']}
                         </p>
                       </div>
 
                       {/* Sunday */}
                       <div className="space-y-1.5">
                         <p className="text-slate-400 text-[10px] md:text-[11px] font-extrabold uppercase tracking-wider font-sans leading-tight">
-                          SUNDAY
+                          {content['contact.hours.sunday_label']}
                         </p>
                         <p className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink leading-snug">
-                          9:00 am - 5:00 pm
+                          {content['contact.hours.sunday_value']}
                         </p>
                       </div>
                     </div>
@@ -671,7 +671,7 @@ export default function ContactClient() {
                 className="absolute inset-[-5%] z-0 select-none pointer-events-none overflow-hidden scale-105 origin-center"
               >
                 <img
-                  src={dubaiMapImg}
+                  src={content['contact.map.image']}
                   alt="Map of Dubai"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer" loading="lazy" decoding="async"
