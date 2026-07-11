@@ -1,48 +1,49 @@
 import Link from 'next/link';
 import Reveal from './Reveal';
+import type { ContentMap } from '@/lib/content/get';
 
-// Exactly three services, in the client's order: Shop, Court Construction,
-// Tournaments. Icons are Higgsfield-generated line-art tiles (cream bg, lime
-// accent) stored in /public/assets/icons — they fill the .ch-svc-icon tile.
-const SERVICES = [
-  {
-    title: 'Shop',
-    desc: 'Elite rackets, balls and gear — curated drops from Stealth, HEAD, Wilson and more, priced in AED.',
-    go: 'Shop now →',
-    href: '/shop',
-    icon: '/assets/icons/svc-shop.webp',
-  },
-  {
-    title: 'Court Construction',
-    desc: 'Turnkey padel arenas built for desert heat — Spanish glass, galvanized frames, 145km/h wind rating.',
-    go: 'Build yours →',
-    href: '/construct-your-court',
-    icon: '/assets/icons/svc-construction.webp',
-  },
-  {
-    title: 'Tournaments',
-    desc: 'Sanctioned P25–P250 events across the UAE — live groups, brackets and the season leaderboard.',
-    go: 'See the draw →',
-    href: '/tournaments',
-    icon: '/assets/icons/svc-tournaments.webp',
-  },
-];
+export default function ServicesGrid({ content }: { content: ContentMap }) {
+  // Exactly three services, in the client's order: Shop, Court Construction,
+  // Tournaments. Icons are Higgsfield-generated line-art tiles (cream bg, lime
+  // accent) stored in /public/assets/icons — they fill the .ch-svc-icon tile.
+  const services = [
+    {
+      title: content['home.services.card1.title'],
+      desc: content['home.services.card1.desc'],
+      go: content['home.services.card1.cta'],
+      href: '/shop',
+      icon: content['home.services.card1.icon'],
+    },
+    {
+      title: content['home.services.card2.title'],
+      desc: content['home.services.card2.desc'],
+      go: content['home.services.card2.cta'],
+      href: '/construct-your-court',
+      icon: content['home.services.card2.icon'],
+    },
+    {
+      title: content['home.services.card3.title'],
+      desc: content['home.services.card3.desc'],
+      go: content['home.services.card3.cta'],
+      href: '/tournaments',
+      icon: content['home.services.card3.icon'],
+    },
+  ];
 
-export default function ServicesGrid() {
   return (
     <section id="services" className="scroll-mt-16 py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="mb-11">
           <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/50">
-            What we do
+            {content['home.services.eyebrow']}
           </p>
           <h2 className="font-display text-[clamp(30px,4.4vw,54px)] font-black uppercase leading-[0.95] tracking-[-0.03em] text-ink">
-            Our Services
+            {content['home.services.heading']}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 gap-4 min-[561px]:grid-cols-3">
-          {SERVICES.map((s) => (
+          {services.map((s) => (
             <Reveal key={s.title} className="h-full">
               <Link
                 href={s.href}

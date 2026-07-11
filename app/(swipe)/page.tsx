@@ -1,5 +1,6 @@
 import SimplifiedHome from '@/components/home/simplified/SimplifiedHome';
 import { supabasePublic } from '@/lib/supabase/public';
+import { getPageContent } from '@/lib/content/get';
 import type { Product } from '@/lib/types';
 
 export const revalidate = 60;
@@ -29,6 +30,9 @@ async function getTopSellerProducts(): Promise<Product[]> {
 }
 
 export default async function HomePage() {
-  const products = await getTopSellerProducts();
-  return <SimplifiedHome products={products} />;
+  const [products, content] = await Promise.all([
+    getTopSellerProducts(),
+    getPageContent('home'),
+  ]);
+  return <SimplifiedHome products={products} content={content} />;
 }

@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, ChevronDown, Mail, MapPin, Check, ShieldCheck, Sparkles } from 'lucide-react';
 import { waHref } from '@/lib/whatsapp';
+import type { ContentMap } from '@/lib/content/get';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,10 @@ interface ConstructionSectionProps {
   /** Hide the built-in Configure-Your-Court WhatsApp form (e.g. when embedding
    *  this purely as a build-animation elsewhere, with a separate configurator). */
   hideForm?: boolean;
+  /** Site Content map (construct page). Optional — legacy mounts (homepage
+   *  StoryConstructionWrapper) omit it and every field falls back to its
+   *  original hardcoded copy. */
+  content?: ContentMap;
 }
 
 export default function ConstructionSection({
@@ -30,7 +35,8 @@ export default function ConstructionSection({
   canvasRef: externalCanvasRef,
   formRef: externalFormRef,
   frameCount = 150,
-  hideForm = false
+  hideForm = false,
+  content
 }: ConstructionSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const internalCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -258,19 +264,19 @@ Configuration Details:
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-green"></span>
                 </span>
                 <span className="font-mono text-[8px] md:text-[9px] tracking-wider text-green uppercase font-semibold">
-                  Live Proposal System // Online
+                  {content?.['construct.build_form.status_badge'] ?? 'Live Proposal System // Online'}
                 </span>
               </div>
               <span className="font-mono text-[8px] md:text-[9px] text-white/30 uppercase tracking-widest">
-                CH-v2.0
+                {content?.['construct.build_form.version_badge'] ?? 'CH-v2.0'}
               </span>
             </div>
 
             <div className="space-y-0.5 md:space-y-1">
-              <span className="font-mono text-[8px] md:text-[10px] tracking-[0.2em] text-lime uppercase font-bold">/// Builder Configurator ///</span>
-              <h3 className="text-base md:text-3xl font-display font-black text-white uppercase italic leading-none">Configure Your Court</h3>
+              <span className="font-mono text-[8px] md:text-[10px] tracking-[0.2em] text-lime uppercase font-bold">{content?.['construct.build_form.eyebrow'] ?? '/// Builder Configurator ///'}</span>
+              <h3 className="text-base md:text-3xl font-display font-black text-white uppercase italic leading-none">{content?.['construct.build_form.heading'] ?? 'Configure Your Court'}</h3>
               <p className="hidden md:block text-[10px] md:text-xs text-white/50 leading-relaxed">
-                Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp.
+                {content?.['construct.build_form.desc'] ?? 'Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp.'}
               </p>
             </div>
 
@@ -376,12 +382,12 @@ Configuration Details:
                   className="w-full py-2.5 bg-lime text-ink rounded-lg md:rounded-2xl font-display font-extrabold uppercase tracking-widest text-[9px] md:text-xs flex items-center justify-center gap-1.5 md:gap-2 hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 button-glow-effect cursor-pointer"
                 >
                   <MessageSquare className="w-3 h-3 fill-ink" />
-                  Chat on WhatsApp
+                  {content?.['construct.build_form.cta'] ?? 'Chat on WhatsApp'}
                 </button>
                 
                 <div className="hidden md:flex items-center justify-center gap-1 md:gap-1.5 text-[8px] md:text-[9px] font-mono text-white/40 uppercase tracking-wider">
                   <ShieldCheck className="w-3 md:w-3.5 h-3 md:h-3.5 text-lime" />
-                  <span>PROPOSAL DELIVERED SECURELY IN SECONDS</span>
+                  <span>{content?.['construct.build_form.security_caption'] ?? 'PROPOSAL DELIVERED SECURELY IN SECONDS'}</span>
                 </div>
               </div>
 
