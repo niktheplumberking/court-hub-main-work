@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import type { ContentMap } from '@/lib/content/get';
@@ -132,10 +131,6 @@ export default function ContactClient({ content }: { content: ContentMap }) {
             <div
               className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 flex flex-col justify-between p-4 pb-10 sm:p-8 md:p-10 lg:p-12"
             >
-
-              {/* Prev/next page arrows — shared swipe-cycle chevrons (they arm
-                  the horizontal slide transition) */}
-              <SwipeChevrons />
 
               {/* In-frame hero navbar (the design's integrated sub-header row) */}
               <HeroFrameNav active="contact" />

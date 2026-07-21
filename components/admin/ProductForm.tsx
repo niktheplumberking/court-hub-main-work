@@ -1,15 +1,9 @@
 'use client';
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { Sparkles, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { saveProduct } from '@/lib/actions/products';
 import type { Product, Category } from '@/lib/types';
-
-type Parsed = {
-  title?: string; brand?: string; model?: string; description?: string;
-  price_aed?: number; condition?: string; category_slug?: string;
-  head_size?: string; weight?: string; grip_size?: string; balance?: string; year?: string;
-};
 
 export default function ProductForm({ product, categories }: { product?: Product; categories: Category[] }) {
   const [form, setForm] = useState({
@@ -32,50 +26,10 @@ export default function ProductForm({ product, categories }: { product?: Product
     spec_year: product?.specs?.year ?? '',
   });
   const [existingImages, setExistingImages] = useState<string[]>(product?.images ?? []);
-  const [caption, setCaption] = useState('');
-  const [parsing, setParsing] = useState(false);
-  const [parseError, setParseError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const set = (k: string, v: string | boolean) => setForm((f) => ({ ...f, [k]: v }));
-
-  const parseCaption = async () => {
-    if (!caption.trim()) return;
-    setParsing(true);
-    setParseError(null);
-    try {
-      const res = await fetch('/api/parse-listing', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ caption }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Parsing failed');
-      const p: Parsed = data.parsed;
-      const cat = categories.find((c) => c.slug === p.category_slug);
-      setForm((f) => ({
-        ...f,
-        title: p.title ?? f.title,
-        brand: p.brand ?? f.brand,
-        model: p.model ?? f.model,
-        description: p.description ?? f.description,
-        price_aed: p.price_aed != null ? String(p.price_aed) : f.price_aed,
-        condition: p.condition ?? f.condition,
-        category_id: cat?.id ?? f.category_id,
-        is_unique: p.condition !== 'new',
-        spec_head_size: p.head_size ?? f.spec_head_size,
-        spec_weight: p.weight ?? f.spec_weight,
-        spec_grip_size: p.grip_size ?? f.spec_grip_size,
-        spec_balance: p.balance ?? f.spec_balance,
-        spec_year: p.year ?? f.spec_year,
-      }));
-    } catch (e) {
-      setParseError(e instanceof Error ? e.message : 'Parsing failed');
-    } finally {
-      setParsing(false);
-    }
-  };
 
   const submit = (formData: FormData) => {
     setSaveError(null);
@@ -95,27 +49,6 @@ export default function ProductForm({ product, categories }: { product?: Product
 
   return (
     <div className="space-y-6">
-      {/* ── AI Instagram Import ── */}
-      <div className="adm-card p-6 space-y-4 border-court-blue/30 bg-court-blue/10">
-        <div className="flex items-center gap-2 text-court-blue">
-          <Sparkles size={16} />
-          <h2 className="adm-eyebrow text-court-blue!">/// IMPORT FROM INSTAGRAM</h2>
-        </div>
-        <p className="text-white/40 text-xs">Paste the caption of an @used_rackets post — AI fills the form below. Review, attach the photo, publish.</p>
-        <textarea
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          rows={4}
-          placeholder={'e.g. "Babolat Technical Viper 2023 🔥 370g, used one season, great condition. 750 AED. DM to buy"'}
-          className="adm-textarea"
-        />
-        <button type="button" onClick={parseCaption} disabled={parsing || !caption.trim()}
-          className="px-5 py-2.5 rounded-full bg-court-blue text-white font-bold text-sm hover:brightness-110 transition disabled:opacity-40">
-          {parsing ? 'PARSING…' : '✨ PARSE WITH AI'}
-        </button>
-        {parseError && <p className="text-fire text-sm">{parseError}</p>}
-      </div>
-
       {/* ── Product form ── */}
       <form action={submit} className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
@@ -230,7 +163,7 @@ export default function ProductForm({ product, categories }: { product?: Product
           <div className="adm-card p-6">
             <label className={labelCls}>Instagram post URL</label>
             <input name="ig_post_url" value={form.ig_post_url} onChange={(e) => set('ig_post_url', e.target.value)} className="adm-input" placeholder="https://instagram.com/p/…" />
-            <input type="hidden" name="source" value={caption ? 'instagram' : (product?.source ?? 'manual')} />
+            <input type="hidden" name="source" value={product?.source ?? 'manual'} />
           </div>
 
           {saveError && <p className="text-fire text-sm">{saveError}</p>}

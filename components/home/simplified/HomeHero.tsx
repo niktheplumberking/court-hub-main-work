@@ -3,7 +3,6 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import type { ContentMap } from '@/lib/content/get';
 
@@ -40,9 +39,6 @@ export default function HomeHero({ content }: { content: ContentMap }) {
       <div className="w-full h-full max-w-[1720px] mx-auto relative z-10 flex flex-col">
         {/* The outer polished rounded frame */}
         <div className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 flex flex-col justify-between p-3 pb-10 sm:p-8 md:p-10 lg:p-12">
-          {/* Prev/next page arrows — same swipe cycle as every hero */}
-          <SwipeChevrons />
-
           {/* In-frame navbar */}
           <HeroFrameNav active="home" />
 
@@ -85,66 +81,21 @@ export default function HomeHero({ content }: { content: ContentMap }) {
                 {content['home.hero.paragraph']}
               </p>
               <div className="flex flex-wrap items-center gap-4">
-                {/* Pulsating primary CTA */}
-                <div className="relative inline-flex group">
-                  <motion.span
-                    animate={{ scale: [1, 1.35, 1], opacity: [0.45, 0, 0.45] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute inset-0 bg-[#C8FF3D] rounded-full blur-md -z-10"
-                  />
-                  <motion.div
-                    animate={{
-                      rotate: [0, 1.2, -1.2, 0.8, -0.8, 0],
-                      scale: [1, 1.025, 0.985, 1.025, 1],
-                    }}
-                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 3.5, ease: 'easeInOut' }}
-                  >
-                    <Link
-                      href="/construct-your-court"
-                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md block relative z-10"
-                    >
-                      {content['home.hero.cta_primary']}
-                    </Link>
-                  </motion.div>
-                </div>
+                {/* Primary CTA (static) */}
+                <Link
+                  href="/construct-your-court"
+                  className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
+                >
+                  {content['home.hero.cta_primary']}
+                </Link>
 
                 <Link
                   href="/shop"
-                  className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-all text-center"
+                  className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center"
                 >
                   {content['home.hero.cta_secondary']}
                 </Link>
               </div>
-            </div>
-
-            {/* Right bottom block — avatar row community badge */}
-            <div className="max-w-sm space-y-3 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
-              <div className="bg-white/10 backdrop-blur-md border border-white/25 rounded-full py-2 px-4 flex items-center shadow-2xl">
-                <div className="flex -space-x-2.5">
-                  {[
-                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-                    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&q=80',
-                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-                  ].map((src, i) => (
-                    <motion.img
-                      key={i}
-                      whileHover={{ scale: 1.25, zIndex: 10 }}
-                      transition={{ type: 'spring', stiffness: 450, damping: 15 }}
-                      className="w-8 h-8 rounded-full border-2 border-[#0E0E0C] object-cover relative cursor-pointer"
-                      src={src}
-                      alt="Member"
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <p className="text-white/80 text-[11px] sm:text-xs leading-relaxed max-w-[280px] lg:text-right font-medium drop-shadow-md">
-                {content['home.hero.community_blurb']}
-              </p>
             </div>
           </motion.div>
         </div>

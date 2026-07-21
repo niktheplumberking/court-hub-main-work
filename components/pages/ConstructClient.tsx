@@ -28,7 +28,6 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import SwipeChevrons from '@/components/swipe/SwipeChevrons';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import ConstructBuildAnimation from '@/components/home/ConstructBuildAnimation';
@@ -396,10 +395,6 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
               className="w-full h-full border-2 md:border-[3px] border-white/60 rounded-[28px] sm:rounded-[36px] md:rounded-[44px] overflow-hidden relative shadow-[0_32px_120px_rgba(0,0,0,0.7)] bg-black/15 flex flex-col justify-between p-4 pb-10 sm:p-8 md:p-10 lg:p-12"
             >
 
-              {/* Prev/next page arrows — shared swipe-cycle chevrons (they arm
-                  the horizontal slide transition) */}
-              <SwipeChevrons />
-
               {/* In-frame hero navbar (the design's integrated sub-header row) */}
               <HeroFrameNav active="construct" />
 
@@ -449,60 +444,22 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                     {content['construct.hero.subcopy']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
-                    {/* Pulsating Attention CTA Button wrapper */}
-                    <div className="relative inline-flex group">
-                      {/* Dynamic Sonar Shockwave */}
-                      <motion.span
-                        animate={{
-                          scale: [1, 1.35, 1],
-                          opacity: [0.45, 0, 0.45]
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        className="absolute inset-0 bg-[#C8FF3D] rounded-full blur-md -z-10"
-                      />
-                      <motion.div
-                        animate={{
-                          rotate: [0, 1.2, -1.2, 0.8, -0.8, 0],
-                          scale: [1, 1.025, 0.985, 1.025, 1]
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          repeatDelay: 3.5,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <a
-                          href="#construction"
-                          className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
-                        >
-                          {content['construct.hero.cta_primary']}
-                        </a>
-                      </motion.div>
-                    </div>
-
-                    <a
-                      href="#authority"
-                      className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-all text-center cursor-pointer"
+                    {/* Primary CTA (static) — Contact Us */}
+                    <Link
+                      href="/contact"
+                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                     >
-                      {content['construct.hero.cta_secondary']}
+                      Contact Us
+                    </Link>
+
+                    {/* Secondary CTA (static) — scrolls to the models/info section on this page */}
+                    <a
+                      href="#court-models"
+                      className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center cursor-pointer"
+                    >
+                      More info
                     </a>
                   </div>
-                </div>
-
-                {/* Right Bottom Block - Spec details mimicking about stats */}
-                <div className="max-w-xs space-y-2 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
-                  <span className="font-mono text-[10px] text-lime uppercase tracking-widest font-black py-1 px-2.5 bg-lime/10 border border-lime/20 rounded">
-                    {content['construct.hero.spec_badge']}
-                  </span>
-                  <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-right">
-                    {content['construct.hero.spec_title']}
-                  </p>
-                  <p className="text-white/60 text-[11px] font-mono lg:text-right">{content['construct.hero.spec_caption']}</p>
                 </div>
 
               </motion.div>
@@ -522,7 +479,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
 
 
         {/* ================= COURT TYPES (the four models the client sells) ================= */}
-        <section className="bg-ink text-white py-20 md:py-28 px-6 md:px-8 border-t border-white/10">
+        <section id="court-models" className="scroll-mt-24 bg-ink text-white py-20 md:py-28 px-6 md:px-8 border-t border-white/10">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16 space-y-4">
               <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-lime font-bold block">

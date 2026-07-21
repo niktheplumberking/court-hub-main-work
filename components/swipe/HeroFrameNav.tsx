@@ -72,26 +72,13 @@ export default function HeroFrameNav({
         )}
       </div>
 
-      {/* Book a Court pill with sonar shockwave + idle wobble */}
-      <div className="relative inline-flex group">
-        <motion.span
-          animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 bg-lime rounded-full blur-md -z-10"
-        />
-        <motion.div
-          className="relative z-10"
-          animate={{ rotate: [0, 1.2, -1.2, 0.8, -0.8, 0], scale: [1, 1.025, 0.985, 1.025, 1] }}
-          transition={{ duration: 4, repeat: Infinity, repeatDelay: 3.5, ease: 'easeInOut' }}
-        >
-          <Link
-            href="/contact"
-            className="bg-lime hover:bg-white text-ink font-sans text-[10px] md:text-xs font-bold uppercase tracking-widest px-5 py-2.5 sm:px-6 sm:py-3.5 rounded-full transition-all duration-300 shadow-md shadow-lime/10 flex items-center gap-1.5"
-          >
-            <span>Book a Court</span>
-          </Link>
-        </motion.div>
-      </div>
+      {/* Book a Court pill (static) */}
+      <Link
+        href="/contact"
+        className="shrink-0 bg-lime hover:bg-white text-ink font-sans text-[10px] md:text-xs font-bold uppercase tracking-widest px-5 py-2.5 sm:px-6 sm:py-3.5 rounded-full transition-colors duration-300 shadow-md shadow-lime/10 flex items-center gap-1.5"
+      >
+        <span>Book a Court</span>
+      </Link>
     </motion.div>
   );
 }

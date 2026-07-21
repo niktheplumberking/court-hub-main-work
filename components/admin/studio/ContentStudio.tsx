@@ -155,7 +155,10 @@ export default function ContentStudio({ overrides }: { overrides: Record<string,
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search this page's copy…"
             aria-label="Search content fields on this page"
-            className="adm-input pl-10"
+            // Inline pad wins over .adm-input's `padding` shorthand (which was
+            // resetting padding-left and letting text slide under the icon).
+            style={{ paddingLeft: '2.5rem' }}
+            className="adm-input [&::-webkit-search-cancel-button]:appearance-none"
           />
         </div>
       </header>
