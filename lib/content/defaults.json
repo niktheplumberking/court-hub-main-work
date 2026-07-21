@@ -1229,6 +1229,30 @@
     "type": "text",
     "value": "PROPOSAL DELIVERED SECURELY IN SECONDS"
   },
+  "shop.header.eyebrow": {
+    "page": "shop",
+    "label": "Header · Eyebrow",
+    "type": "text",
+    "value": "Collection"
+  },
+  "shop.header.heading_line1": {
+    "page": "shop",
+    "label": "Header · Heading (first line)",
+    "type": "text",
+    "value": "Dominate the game with"
+  },
+  "shop.header.heading_highlight": {
+    "page": "shop",
+    "label": "Header · Heading (highlighted words)",
+    "type": "text",
+    "value": "Top Padel Gear"
+  },
+  "shop.header.intro": {
+    "page": "shop",
+    "label": "Header · Intro paragraph",
+    "type": "richtext",
+    "value": "Dominate the game with top padel gear designed for unmatched performance, control, power, and winning precision."
+  },
   "faq.header.title_line1": {
     "page": "faq",
     "label": "FAQ Header · Title line 1",

@@ -14,8 +14,9 @@ import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import type { Product } from '@/components/shop/placeholder-products';
+import type { ContentMap } from '@/lib/content/get';
 
-export default function ShopClient() {
+export default function ShopClient({ content }: { content: ContentMap }) {
   const { add, count, openDrawer } = useCart();
   const [activeBrand, setActiveBrand] = useState<'ALL' | 'STEALTH' | 'HEAD' | 'Wilson'>('ALL');
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'rackets' | 'used' | 'accessories'>('ALL');
@@ -133,17 +134,17 @@ export default function ShopClient() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-8 border-b border-ink/10">
               <div className="md:col-span-7 text-left space-y-3">
                 <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/65 font-bold block">
-                  COLLECTION
+                  {content['shop.header.eyebrow']}
                 </span>
                 <h2 className="text-4.5xl sm:text-5xl lg:text-6xl font-display font-black leading-[0.9] tracking-tighter uppercase text-ink">
-                  DOMINATE THE GAME WITH <br className="hidden sm:inline" />
-                  <span className="text-court-blue">TOP PADEL GEAR</span>
+                  {content['shop.header.heading_line1']} <br className="hidden sm:inline" />
+                  <span className="text-court-blue">{content['shop.header.heading_highlight']}</span>
                 </h2>
               </div>
 
               <div className="md:col-span-5 text-left md:text-right">
                 <p className="text-ink/80 text-[11px] sm:text-xs leading-relaxed max-w-sm md:ml-auto font-mono uppercase tracking-wider font-semibold">
-                  DOMINATE THE GAME WITH TOP PADEL GEAR DESIGNED FOR UNMATCHED PERFORMANCE, CONTROL, POWER, AND WINNING PRECISION.
+                  {content['shop.header.intro']}
                 </p>
               </div>
             </div>

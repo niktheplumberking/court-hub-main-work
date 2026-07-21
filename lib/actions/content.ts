@@ -30,6 +30,7 @@ const PAGE_PATHS: Record<ContentPage, string> = {
   about: '/about',
   contact: '/contact',
   construct: '/construct-your-court',
+  shop: '/shop',
   faq: '/', // FAQ section is not currently mounted; home is its historic host
 };
 

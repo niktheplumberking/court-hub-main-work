@@ -17,7 +17,7 @@ import defaults from './defaults.json';
 // any Node host (plain `next start` on a VPS included; nothing Vercel-only).
 // ============================================================================
 
-export type ContentPage = 'home' | 'about' | 'contact' | 'construct' | 'faq';
+export type ContentPage = 'home' | 'about' | 'contact' | 'construct' | 'shop' | 'faq';
 export type ContentType = 'text' | 'richtext' | 'image';
 
 export interface ContentField {

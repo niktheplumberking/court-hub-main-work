@@ -83,13 +83,11 @@ export const STUDIO_PAGES: StudioPage[] = [
     ],
   },
   {
-    page: 'faq',
-    title: 'FAQ',
-    path: null, // not currently mounted on the site — edits are kept for later
+    page: 'shop',
+    title: 'Shop',
+    path: '/shop',
     sections: [
-      { id: 'header', title: 'Section heading', hint: 'Title and intro of the FAQ block.', prefixes: ['header', 'visual'] },
-      { id: 'questions', title: 'Questions & answers', hint: 'All seven Q&A pairs.', prefixes: ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'] },
-      { id: 'support', title: 'Support callout', hint: 'The "Still have questions?" box.', prefixes: ['support'] },
+      { id: 'header', title: 'Collection header', hint: 'The eyebrow, big heading and intro line above the products. (Products, prices and photos update automatically from your Products list — only this wording is editable.)', prefixes: ['header'] },
     ],
   },
 ];
