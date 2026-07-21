@@ -8,7 +8,7 @@ import type { ContentMap } from '@/lib/content/get';
 // Spanish glass + alloy engineering) — same source as the approved demo.
 export default function AboutTeaser({ content }: { content: ContentMap }) {
   return (
-    <section id="about" className="py-[88px]">
+    <section id="about" data-cms="home:about_teaser" className="py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="grid grid-cols-1 items-center gap-8 min-[901px]:grid-cols-2 min-[901px]:gap-14">
           <Reveal>

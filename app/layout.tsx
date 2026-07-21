@@ -6,6 +6,7 @@ import CartDrawer from '@/components/cart/CartDrawer';
 import MotionProvider from '@/components/shared/MotionProvider';
 import Cursor from '@/components/shared/Cursor';
 import NavigationFlag from '@/components/shared/NavigationFlag';
+import StudioEditBridge from '@/components/shared/StudioEditBridge';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3005';
 
@@ -49,6 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             first in-app route change — drives the homepage's first-landing-only
             preloader. Renders nothing. */}
         <NavigationFlag />
+        {/* No-op on the normal site; enables click-to-edit inside the Studio preview. */}
+        <StudioEditBridge />
         <MotionProvider>
           <CartProvider>
             {/* Tournaments session store lives at the root (like the cart) so

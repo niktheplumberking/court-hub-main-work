@@ -78,7 +78,7 @@ export default function NumbersStrip({ content }: { content: ContentMap }) {
   }));
 
   return (
-    <section id="numbers" className="border-b border-ink/10 py-[72px]">
+    <section id="numbers" data-cms="home:numbers" className="border-b border-ink/10 py-[72px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="mb-11 flex flex-wrap items-end justify-between gap-6">
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/50">

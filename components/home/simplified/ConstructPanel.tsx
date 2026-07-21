@@ -14,7 +14,7 @@ export default function ConstructPanel({ content }: { content: ContentMap }) {
   ];
 
   return (
-    <section id="construct" className="py-[88px]">
+    <section id="construct" data-cms="home:construct" className="py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <Reveal>
           <div className="ch-on-dark grid min-h-[520px] grid-cols-1 overflow-hidden rounded-[44px] bg-ink min-[901px]:grid-cols-[1.05fr_1fr]">

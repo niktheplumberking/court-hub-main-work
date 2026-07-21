@@ -18,7 +18,7 @@ export default function HomeHero({ content }: { content: ContentMap }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
 
   return (
-    <section className="ch-rail-exempt relative h-[100dvh] md:h-screen min-h-[620px] w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
+    <section data-cms="home:hero" className="ch-rail-exempt relative h-[100dvh] md:h-screen min-h-[620px] w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
       {/* Edge-to-edge night-courts background image */}
       <motion.div
         style={{ x: parallaxX, y: parallaxY }}

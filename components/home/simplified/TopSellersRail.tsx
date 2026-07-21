@@ -95,7 +95,7 @@ export default function TopSellersRail({
     'flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-ink/20 text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-lime disabled:pointer-events-none disabled:opacity-25';
 
   return (
-    <section className="border-y border-ink/[.08] bg-white py-[88px]">
+    <section data-cms="home:top_sellers" className="border-y border-ink/[.08] bg-white py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="mb-11 flex flex-wrap items-end justify-between gap-6">
           <div>

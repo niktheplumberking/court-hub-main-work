@@ -23,7 +23,11 @@ export default function PreviewPane({
   const [device, setDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [manualRefresh, setManualRefresh] = useState(0);
 
-  const src = page.path ? `${page.path}${anchor ? `#${anchor}` : ''}` : null;
+  // cmsedit=1 tells the site (inside this iframe) to turn on click-to-edit:
+  // hovering highlights editable sections, clicking one jumps the studio to it.
+  const src = page.path ? `${page.path}?cmsedit=1${anchor ? `#${anchor}` : ''}` : null;
+  // Address-bar shows the clean path (without the edit flag).
+  const displaySrc = page.path ? `${page.path}${anchor ? `#${anchor}` : ''}` : null;
   const frameKey = `${page.page}|${anchor ?? ''}|${reloadKey}|${manualRefresh}`;
 
   return (
@@ -77,7 +81,7 @@ export default function PreviewPane({
               <i className="w-2.5 h-2.5 rounded-full bg-lime/50" />
             </span>
             <span className="flex-1 truncate rounded-full bg-white/5 px-3.5 py-1 text-[11px] font-mono text-white/40">
-              {src}
+              {displaySrc}
             </span>
             <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-lime/70">
               <span className="adm-live-dot" aria-hidden />
@@ -115,6 +119,7 @@ export default function PreviewPane({
 
       <p className="text-xs text-white/35">
         This is the real live site — it updates moments after you save.
+        {src && ' Tip: click any highlighted section in the preview to jump straight to its text.'}
       </p>
     </div>
   );

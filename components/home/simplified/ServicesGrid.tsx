@@ -31,7 +31,7 @@ export default function ServicesGrid({ content }: { content: ContentMap }) {
   ];
 
   return (
-    <section id="services" className="scroll-mt-16 py-[88px]">
+    <section id="services" data-cms="home:services" className="scroll-mt-16 py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="mb-11">
           <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/50">

@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, Search, SearchX } from 'lucide-react';
 import { CONTENT_DEFAULTS, type ContentPage } from '@/lib/content/get';
 import { STUDIO_PAGES, sectionForKey, type StudioPage, type StudioSection } from '@/lib/content/sections';
@@ -116,6 +116,27 @@ export default function ContentStudio({ overrides }: { overrides: Record<string,
     setActivePageId(id);
     setOpenSectionId(null); // re-derive the auto-open section for the new page
   };
+
+  // Click-to-edit: the preview iframe (loaded with ?cmsedit=1) posts a
+  // {page, section} when the editor clicks a highlighted section on the live
+  // site. Jump the studio to that page + open that section.
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== window.location.origin) return;
+      const data = e.data;
+      if (!data || data.source !== 'courthub-cms' || data.type !== 'cms-edit') return;
+      const target = STUDIO_PAGES.find((p) => p.page === data.page);
+      if (!target) return;
+      const sectionExists = target.sections.some((s) => s.id === data.section);
+      setQuery('');
+      setActivePageId(target.page);
+      setOpenSectionId(sectionExists ? data.section : null);
+      // Bring the studio (parent) into view in case it was scrolled away.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
 
   const renderField = (key: string) => (
     <FieldCard

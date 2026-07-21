@@ -131,7 +131,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
           <div id="catalog" className="max-w-7xl mx-auto pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 md:px-8 space-y-12 sm:space-y-16 relative z-10">
 
             {/* Collection Header Block aligned with reference image layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-8 border-b border-ink/10">
+            <div data-cms="shop:header" className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-8 border-b border-ink/10">
               <div className="md:col-span-7 text-left space-y-3">
                 <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/65 font-bold block">
                   {content['shop.header.eyebrow']}
