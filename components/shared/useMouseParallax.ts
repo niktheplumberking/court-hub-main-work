@@ -21,6 +21,10 @@ export function useMouseParallax(intensity: number = 24) {
     if (typeof window === 'undefined') return;
     // Pointer-fine only — skip on touch to save work and avoid jank.
     if (!window.matchMedia('(pointer: fine)').matches) return;
+    // Honor reduced-motion: no listener, no spring rAF, backgrounds stay put.
+    // (This is a background-shift-on-mouse effect — exactly the kind of motion
+    // reduced-motion users opt out of — and it removes real per-frame work.)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
