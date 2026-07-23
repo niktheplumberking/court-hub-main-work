@@ -36,7 +36,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
 
         {/* Brand & Mission */}
         <div className="md:col-span-3 space-y-6 md:space-y-8">
-          <div className="flex items-center gap-1.5 font-sans font-bold text-2xl md:text-3xl tracking-wide">
+          <div dir="ltr" className="flex items-center gap-1.5 font-sans font-bold text-2xl md:text-3xl tracking-wide">
             <span>COURT</span>
             <span className="text-lime">HUB</span>
           </div>

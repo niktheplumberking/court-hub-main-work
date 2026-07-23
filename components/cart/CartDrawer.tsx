@@ -139,7 +139,7 @@ export default function CartDrawer() {
         onClick={closeDrawer}
         aria-hidden
         style={{ opacity: drawerOpen ? 1 : 0, transition: 'opacity 300ms ease' }}
-        className={`fixed inset-0 bg-black/60 z-[70] ${
+        className={`fixed inset-0 bg-black/60 z-[10000] ${
           drawerOpen ? 'cursor-pointer' : 'pointer-events-none'
         }`}
       />
@@ -156,7 +156,9 @@ export default function CartDrawer() {
           transform: drawerOpen ? 'translateX(0)' : `translateX(${105 * sign}%)`,
           transition: SLIDE_TRANSITION,
         }}
-        className={`fixed top-0 end-0 bottom-0 w-full max-w-md bg-ink-2 z-[80] border-s border-white/10 shadow-2xl flex flex-col ${
+        // Above the mobile header wrapper (z-[9999]) — the open cart must cover
+        // every nav surface; only the preloader and custom cursor sit higher.
+        className={`fixed top-0 end-0 bottom-0 w-full max-w-md bg-ink-2 z-[10010] border-s border-white/10 shadow-2xl flex flex-col ${
           drawerOpen ? '' : 'pointer-events-none'
         }`}
       >

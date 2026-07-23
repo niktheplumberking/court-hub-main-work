@@ -9,6 +9,15 @@ async function requireAdmin() {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
+  // Allow-list check (same gate as content/categories): being authenticated is
+  // not enough — the account must be enrolled in the admins table. Keeps the
+  // admin closed even if dashboard signups are ever re-enabled.
+  const { data, error } = await supabaseAdmin()
+    .from('admins')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error || !data) throw new Error('Unauthorized — account is not enrolled in the admins list.');
   return user;
 }
 

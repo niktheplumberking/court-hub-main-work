@@ -51,9 +51,10 @@ export default function HeroFrameNav({
           : 'relative z-30 w-full hidden md:flex items-center justify-between border-b border-white/15 pb-4 md:pb-6'
       }
     >
-      {/* Logo */}
+      {/* Logo — Latin wordmark, never flips (dir=ltr keeps COURT before HUB in RTL) */}
       <Link
         href={lp('/')}
+        dir="ltr"
         className="text-start flex items-center select-none font-sans shrink-0 group tracking-[0.16em]"
       >
         <span className="font-sans font-bold text-white text-lg md:text-xl uppercase group-hover:text-lime transition-colors">

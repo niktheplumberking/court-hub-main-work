@@ -242,8 +242,9 @@ export default function Header() {
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
 
-              {/* Logo — green/white combo, beside the hamburger. */}
-              <Link href={lp('/')} className="font-sans text-[20px] tracking-wide flex items-center select-none">
+              {/* Logo — green/white combo, beside the hamburger. Latin wordmark,
+                  never flips (dir=ltr keeps COURT before HUB in RTL). */}
+              <Link href={lp('/')} dir="ltr" className="font-sans text-[20px] tracking-wide flex items-center select-none">
                 <span className="font-bold uppercase tracking-wide text-white">COURT</span>
                 <span className="font-bold uppercase ms-1 tracking-wide text-lime">HUB</span>
               </Link>
@@ -326,7 +327,7 @@ export default function Header() {
 
               {/* Bottom Logo inside Hamburger Menu */}
               <div className="mt-12 pt-8 flex flex-col items-center justify-center select-none border-t border-white/5">
-                <div className="font-sans text-[22px] tracking-wide flex items-center">
+                <div dir="ltr" className="font-sans text-[22px] tracking-wide flex items-center">
                   <span className="font-bold uppercase tracking-wide text-white">COURT</span>
                   <span className="font-bold uppercase ms-2 tracking-wide text-lime">HUB</span>
                 </div>
