@@ -95,9 +95,9 @@ export default function NumbersStrip({ content }: { content: ContentMap }) {
             return (
               <div
                 key={s.label}
-                className={`border-l border-ink/[.12] px-8 first:border-l-0 first:pl-0 ${
+                className={`border-s border-ink/[.12] px-8 first:border-s-0 first:ps-0 ${
                   // 2-col mobile grid: the 3rd item starts a new row — drop its divider.
-                  i === 2 ? 'max-[820px]:border-l-0 max-[820px]:pl-0' : ''
+                  i === 2 ? 'max-[820px]:border-s-0 max-[820px]:ps-0' : ''
                 }`}
               >
                 <p className="font-display text-[clamp(38px,4.6vw,60px)] font-black leading-none tracking-[-0.04em] text-ink">

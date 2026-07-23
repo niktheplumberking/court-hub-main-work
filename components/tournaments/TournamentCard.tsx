@@ -1,23 +1,28 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Tournament, TournamentStatus } from '@/lib/tournaments/data';
-import { StatusPill, TierBadge, DivChip, CalIcon, PinIcon, FmtIcon, money, btnBase, btnPad, btnVariant, type BtnVariant } from './ui';
+import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
+import type { Dict } from '@/lib/i18n/dict';
+import { StatusPill, TierBadge, DivChip, CalIcon, PinIcon, FmtIcon, money, btnBase, btnPad, btnVariant, divisionLabel, formatLabel, type BtnVariant } from './ui';
 
-const CTA: Record<TournamentStatus, { label: string; variant: BtnVariant }> = {
-  live: { label: 'Watch Live', variant: 'ink' },
-  open: { label: 'Book Your Spot', variant: 'lime' },
-  soon: { label: 'Get Notified', variant: 'ghost' },
-  done: { label: 'View Results', variant: 'ghost' },
+const CTA: Record<TournamentStatus, { label: (d: Dict['tournaments']) => string; variant: BtnVariant }> = {
+  live: { label: (d) => d.watchLive, variant: 'ink' },
+  open: { label: (d) => d.bookYourSpot, variant: 'lime' },
+  soon: { label: (d) => d.getNotified, variant: 'ghost' },
+  done: { label: (d) => d.viewResults, variant: 'ghost' },
 };
 
 export default function TournamentCard({ t }: { t: Tournament }) {
+  const T = useT().tournaments;
+  const lp = useLocalePath();
   const pct = Math.round((t.reg / t.cap) * 100);
   const cta = CTA[t.status];
-  const spotsLabel = t.status === 'soon' ? 'Opens soon' : `${t.cap - t.reg} spots left`;
+  const spotsLabel = t.status === 'soon' ? T.opensSoon : T.spotsLeft(t.cap - t.reg);
 
   return (
     <Link
-      href={`/tournaments/${t.slug}`}
+      href={lp(`/tournaments/${t.slug}`)}
       className="group flex flex-col overflow-hidden rounded-[22px] border border-ink/10 bg-sand-card transition-[transform,box-shadow] duration-200 hover:-translate-y-[5px] hover:shadow-[0_22px_44px_rgba(14,14,12,0.11)]"
     >
       {/* Cover */}
@@ -36,7 +41,7 @@ export default function TournamentCard({ t }: { t: Tournament }) {
         </div>
         <div className="relative z-[2]">
           <span className="inline-block rounded-full border border-white/20 bg-white/[0.12] px-2.5 py-1 font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] text-white">
-            {t.division}
+            {divisionLabel(T, t.division)}
           </span>
         </div>
       </div>
@@ -49,7 +54,7 @@ export default function TournamentCard({ t }: { t: Tournament }) {
         <div className="flex flex-col gap-2 text-[12.5px] text-ink/60">
           <div className="flex items-center gap-2.5"><span className="text-ink/40"><CalIcon /></span>{t.dates}</div>
           <div className="flex items-center gap-2.5"><span className="text-ink/40"><PinIcon /></span>{t.venue}</div>
-          <div className="flex items-center gap-2.5"><span className="text-ink/40"><FmtIcon /></span>{t.format}</div>
+          <div className="flex items-center gap-2.5"><span className="text-ink/40"><FmtIcon /></span>{formatLabel(T, t.format)}</div>
         </div>
         <div className="mt-0.5">
           <div className="h-1.5 overflow-hidden rounded-full bg-sand-2">
@@ -59,7 +64,7 @@ export default function TournamentCard({ t }: { t: Tournament }) {
             />
           </div>
           <div className="mt-1.5 flex justify-between font-mono text-[9.5px] font-bold uppercase tracking-[0.06em] text-ink/50">
-            <span>{t.reg}/{t.cap} pairs</span>
+            <span>{t.reg}/{t.cap} {T.pairs}</span>
             <span>{spotsLabel}</span>
           </div>
         </div>
@@ -68,18 +73,18 @@ export default function TournamentCard({ t }: { t: Tournament }) {
       {/* Footer: fee + prize */}
       <div className="mt-auto flex items-center justify-between border-t border-ink/10 px-[18px] py-3.5">
         <div>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.1em] text-ink/45">Entry / pair</span>
+          <span className="block font-mono text-[9px] uppercase tracking-[0.1em] text-ink/45">{T.entryPerPair}</span>
           <b className="font-display text-[16px] font-extrabold text-court-blue">AED {money(t.fee)}</b>
         </div>
-        <div className="text-right">
-          <span className="block font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Prize pool</span>
+        <div className="text-end">
+          <span className="block font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.prizePool}</span>
           <span className="font-display text-[15px] font-extrabold text-ink">AED {money(t.prize)}</span>
         </div>
       </div>
 
       {/* CTA (whole card links to detail; this is the visual button) */}
       <div className="px-[18px] pb-[18px]">
-        <span className={`${btnBase} ${btnPad} ${btnVariant[cta.variant]} w-full`}>{cta.label}</span>
+        <span className={`${btnBase} ${btnPad} ${btnVariant[cta.variant]} w-full`}>{cta.label(T)}</span>
       </div>
     </Link>
   );

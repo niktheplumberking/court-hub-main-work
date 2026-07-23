@@ -8,6 +8,7 @@ import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { swipeDirection } from '@/components/swipe/pageOrder';
 import { swipeIntent } from '@/components/swipe/swipeIntent';
+import { useDirSign } from '@/lib/i18n/LocaleProvider';
 import Header from '@/components/home/Header';
 import SmoothScroll from '@/components/shared/SmoothScroll';
 
@@ -49,6 +50,9 @@ const variants: Variants = {
  */
 export default function SwipeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  // RTL mirrors the slide: "forward" moves toward the inline-end, which is
+  // visually LEFT in Arabic — multiply the physical x sign accordingly.
+  const dirSign = useDirSign();
   // Track the previous path + direction across renders (this layout persists
   // while navigating within the group). Computed at render time so the exiting
   // page already has the right direction.
@@ -63,7 +67,7 @@ export default function SwipeLayout({ children }: { children: React.ReactNode })
     swipeIntent.current = false;
     prevPath.current = pathname;
   }
-  const custom: SwipeCustom = { dir: dir.current, swipe: swipeMode.current };
+  const custom: SwipeCustom = { dir: dir.current * dirSign, swipe: swipeMode.current };
 
   return (
     // Lenis smooth-scroll for the whole swipe group — one instance, persists

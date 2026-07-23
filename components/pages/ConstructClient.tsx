@@ -31,6 +31,7 @@ import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
 import ConstructBuildAnimation from '@/components/home/ConstructBuildAnimation';
+import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
@@ -242,6 +243,8 @@ function MoveEarthRow({ item }: { item: MoveEarthItem; key?: any }) {
 
 export default function ConstructClient({ content }: { content: ContentMap }) {
   const heroCovered = useHeroCovered();
+  const t = useT();
+  const lp = useLocalePath();
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
 
   // The four court models the client sells. PLACEHOLDER copy — safe to edit later.
@@ -370,7 +373,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
         {/* ================= SECTION 1: RECREATED "COURT HUB" MOCK-UP HERO ================= */}
         {/* Exactly viewport-height (no min-h) so the frame bottom is never cut
             off; `invisible` once covered stops paint/composite cost. */}
-        <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
+        <div className={`fixed top-0 start-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
           <section data-cms="construct:hero" className="ch-rail-exempt relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
@@ -439,17 +442,17 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
               >
 
                 {/* Left Bottom Block - Piles */}
-                <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
+                <div className="space-y-4 max-w-md text-start w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
                     {content['construct.hero.subcopy']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
                     {/* Primary CTA (static) — Contact Us */}
                     <Link
-                      href="/contact"
+                      href={lp('/contact')}
                       className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                     >
-                      Contact Us
+                      {t.nav.contact}
                     </Link>
 
                     {/* Secondary CTA (static) — scrolls to the models/info section on this page */}
@@ -457,7 +460,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                       href="#court-models"
                       className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center cursor-pointer"
                     >
-                      More info
+                      {t.pages.moreInfo}
                     </a>
                   </div>
                 </div>
@@ -523,7 +526,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                     <p className="text-white/55 text-[13px] leading-relaxed">{t.desc}</p>
                     <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/40 group-hover:text-lime transition-colors pt-2">
                       {content['construct.court_types.card_cta']}
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <ArrowUpRight className="w-3.5 h-3.5 rtl:-scale-x-100" />
                     </span>
                   </div>
                 </a>

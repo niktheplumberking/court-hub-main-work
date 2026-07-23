@@ -1,7 +1,9 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Match, Pair, Tournament } from '@/lib/tournaments/data';
-import { StatusPill, TierBadge, btn } from './ui';
+import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
+import { StatusPill, TierBadge, btn, divisionLabel } from './ui';
 
 function ScoreRow({ team, my, opp }: { team: Pair; my: number[]; opp: number[] }) {
   const win = my.filter((s, i) => s > opp[i]).length > opp.filter((s, i) => s > my[i]).length;
@@ -30,6 +32,8 @@ function ScoreRow({ team, my, opp }: { team: Pair; my: number[]; opp: number[] }
 }
 
 export default function LiveBanner({ t, final }: { t: Tournament; final: Match | null }) {
+  const T = useT().tournaments;
+  const lp = useLocalePath();
   const showScore = !!(final && final.a && final.b);
   return (
     <section className="pb-0 pt-[34px]">
@@ -37,15 +41,15 @@ export default function LiveBanner({ t, final }: { t: Tournament; final: Match |
         <div className="relative grid overflow-hidden rounded-[36px] border border-white/[0.06] bg-[linear-gradient(120deg,#0E0E0C_0%,#161613_100%)] md:grid-cols-[1.15fr_1fr]">
           <div className="relative min-h-[180px] md:min-h-[300px]">
             <Image src={t.cover} alt={t.name} fill sizes="(max-width:820px) 100vw, 55vw" className="object-cover brightness-[0.7] saturate-[1.1]" />
-            {/* Fade into the body (bottom on mobile, right on desktop) */}
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,#0E0E0C_100%)] md:bg-[linear-gradient(90deg,transparent_40%,#0E0E0C_100%)]" />
+            {/* Fade into the body (bottom on mobile, inline-end side on desktop) */}
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,#0E0E0C_100%)] md:bg-[linear-gradient(90deg,transparent_40%,#0E0E0C_100%)] md:rtl:bg-[linear-gradient(270deg,transparent_40%,#0E0E0C_100%)]" />
           </div>
           <div className="relative z-[2] flex flex-col justify-center gap-4 p-[38px_28px] md:p-[38px_40px]">
             <div className="flex flex-wrap items-center gap-2">
               <StatusPill status="live" />
               <TierBadge tier={t.tier} />
               <span className="rounded-full border border-white/25 px-2.5 py-1 font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] text-white/80">
-                {t.division}
+                {divisionLabel(T, t.division)}
               </span>
             </div>
             <h3 className="font-display text-[clamp(26px,3vw,40px)] font-black uppercase leading-[0.95] tracking-[-0.03em] text-white">
@@ -53,7 +57,7 @@ export default function LiveBanner({ t, final }: { t: Tournament; final: Match |
             </h3>
             {showScore && final && (
               <>
-                <p className="-mt-1 text-[13px] text-white/60">Final in progress · {final.court}</p>
+                <p className="-mt-1 text-[13px] text-white/60">{T.liveFinal} · {final.court}</p>
                 <div className="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-[16px_18px]">
                   <ScoreRow team={final.a!} my={final.sa} opp={final.sb} />
                   <ScoreRow team={final.b!} my={final.sb} opp={final.sa} />
@@ -61,8 +65,8 @@ export default function LiveBanner({ t, final }: { t: Tournament; final: Match |
               </>
             )}
             <div className="mt-1.5 flex gap-2.5">
-              <Link href={`/tournaments/${t.slug}/standings`} className={btn('lime', '', true)}>View Bracket</Link>
-              <Link href={`/tournaments/${t.slug}`} className={btn('ghostLight', '', true)}>Tournament Hub</Link>
+              <Link href={lp(`/tournaments/${t.slug}/standings`)} className={btn('lime', '', true)}>{T.viewBracket}</Link>
+              <Link href={lp(`/tournaments/${t.slug}`)} className={btn('ghostLight', '', true)}>{T.tournamentHub}</Link>
             </div>
           </div>
         </div>

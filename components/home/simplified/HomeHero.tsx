@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
+import { useLocalePath } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
 
 /**
@@ -16,6 +17,7 @@ import type { ContentMap } from '@/lib/content/get';
  */
 export default function HomeHero({ content }: { content: ContentMap }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
+  const lp = useLocalePath();
 
   return (
     <section data-cms="home:hero" className="ch-rail-exempt relative h-[100dvh] md:h-screen min-h-[620px] w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
@@ -76,21 +78,21 @@ export default function HomeHero({ content }: { content: ContentMap }) {
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
             className="relative z-30 w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 border-t border-white/10 pt-4 mt-auto"
           >
-            <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
+            <div className="space-y-4 max-w-md text-start w-full lg:w-auto">
               <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
                 {content['home.hero.paragraph']}
               </p>
               <div className="flex flex-wrap items-center gap-4">
                 {/* Primary CTA (static) */}
                 <Link
-                  href="/construct-your-court"
+                  href={lp('/construct-your-court')}
                   className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                 >
                   {content['home.hero.cta_primary']}
                 </Link>
 
                 <Link
-                  href="/shop"
+                  href={lp('/shop')}
                   className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center"
                 >
                   {content['home.hero.cta_secondary']}

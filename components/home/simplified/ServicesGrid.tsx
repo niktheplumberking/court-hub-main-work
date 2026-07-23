@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import Reveal from './Reveal';
+import { localePath, type Locale } from '@/lib/i18n/locale';
 import type { ContentMap } from '@/lib/content/get';
 
-export default function ServicesGrid({ content }: { content: ContentMap }) {
+export default function ServicesGrid({
+  content,
+  locale = 'en',
+}: {
+  content: ContentMap;
+  locale?: Locale;
+}) {
   // Exactly three services, in the client's order: Shop, Court Construction,
   // Tournaments. Icons are Higgsfield-generated line-art tiles (cream bg, lime
   // accent) stored in /public/assets/icons — they fill the .ch-svc-icon tile.
@@ -46,7 +53,7 @@ export default function ServicesGrid({ content }: { content: ContentMap }) {
           {services.map((s) => (
             <Reveal key={s.title} className="h-full">
               <Link
-                href={s.href}
+                href={localePath(locale, s.href)}
                 className="ch-svc group relative flex h-full flex-col gap-4 overflow-hidden rounded-[24px] border border-ink/[.08] bg-white px-[26px] py-[30px] transition-[transform,box-shadow] duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgba(14,14,12,0.1)]"
               >
                 <div className="ch-svc-icon overflow-hidden">

@@ -1,4 +1,6 @@
 import { Fragment } from 'react';
+import { getDict } from '@/lib/i18n/dict';
+import type { Locale } from '@/lib/i18n/locale';
 
 // Same catalog as the shop teaser's ticker (ShopSection BRANDS).
 const BRANDS = ['STEALTH', 'DOPADEL', 'MUSA', 'WILSON', 'HEAD', 'BULLPADEL'];
@@ -7,9 +9,10 @@ const BRANDS = ['STEALTH', 'DOPADEL', 'MUSA', 'WILSON', 'HEAD', 'BULLPADEL'];
 // .ch-ribbon-track) under OS reduce-motion — see globals.css.
 const TRACK = [...BRANDS, ...BRANDS];
 
-export default function BrandRibbon() {
+export default function BrandRibbon({ locale = 'en' }: { locale?: Locale }) {
+  const t = getDict(locale);
   return (
-    <div aria-label="Brands we carry" className="ch-ribbon relative overflow-hidden bg-ink py-[26px]">
+    <div aria-label={t.pages.brandsAria} className="ch-ribbon relative overflow-hidden bg-ink py-[26px]">
       <div className="ch-marquee ch-ribbon-track flex w-max items-center gap-[72px] whitespace-nowrap">
         {TRACK.map((brand, i) => (
           <Fragment key={`${brand}-${i}`}>

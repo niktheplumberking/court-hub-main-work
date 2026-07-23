@@ -5,6 +5,10 @@ import type { Product } from '@/lib/types';
 
 export const revalidate = 60;
 
+export const metadata = {
+  alternates: { canonical: '/', languages: { en: '/', ar: '/ar', 'x-default': '/' } },
+};
+
 /**
  * Fetches the eight newest active products for the homepage top-sellers rail.
  * Uses the cookie-less supabasePublic() client so the route stays static

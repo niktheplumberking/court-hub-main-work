@@ -13,11 +13,14 @@ import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
+import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
 import type { Product } from '@/components/shop/placeholder-products';
 import type { ContentMap } from '@/lib/content/get';
 
 export default function ShopClient({ content }: { content: ContentMap }) {
   const { add, count, openDrawer } = useCart();
+  const t = useT();
+  const lp = useLocalePath();
   const [activeBrand, setActiveBrand] = useState<'ALL' | 'STEALTH' | 'HEAD' | 'Wilson'>('ALL');
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'rackets' | 'used' | 'accessories'>('ALL');
 
@@ -59,7 +62,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
   const handleAdd = (p: Product, e: React.MouseEvent) => {
     const id = Date.now() + Math.random();
     setFlyers(prev => [...prev, { id, x: e.clientX, y: e.clientY, p }]);
-    showToast(`Added ${p.name} to your bag!`);
+    showToast(t.shop.addedToBag(p.name));
     // Drive the cart from a deterministic timer — NOT the flyer's onAnimationComplete,
     // which Framer can pre-empt when an intervening re-render restarts the opacity
     // keyframe (the callback then never fires). After the ~0.7s flight: add the item
@@ -132,7 +135,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
 
             {/* Collection Header Block aligned with reference image layout */}
             <div data-cms="shop:header" className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-8 border-b border-ink/10">
-              <div className="md:col-span-7 text-left space-y-3">
+              <div className="md:col-span-7 text-start space-y-3">
                 <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/65 font-bold block">
                   {content['shop.header.eyebrow']}
                 </span>
@@ -142,8 +145,8 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                 </h2>
               </div>
 
-              <div className="md:col-span-5 text-left md:text-right">
-                <p className="text-ink/80 text-[11px] sm:text-xs leading-relaxed max-w-sm md:ml-auto font-mono uppercase tracking-wider font-semibold">
+              <div className="md:col-span-5 text-start md:text-end">
+                <p className="text-ink/80 text-[11px] sm:text-xs leading-relaxed max-w-sm md:ms-auto font-mono uppercase tracking-wider font-semibold">
                   {content['shop.header.intro']}
                 </p>
               </div>
@@ -155,6 +158,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
               <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white/[0.03] rounded-full">
                 {(['ALL', 'STEALTH', 'HEAD', 'Wilson'] as const).map(brand => {
                   const isActive = activeBrand === brand;
+                  const brandLabel = brand === 'ALL' ? t.shop.filterAll : brand;
                   return (
                     <button
                       key={brand}
@@ -170,7 +174,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                           className="absolute inset-0 bg-lime rounded-full -z-10"
                         />
                       )}
-                      {brand}
+                      {brandLabel}
                     </button>
                   );
                 })}
@@ -182,10 +186,10 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                   <SlidersHorizontal className="w-4 h-4 text-white/40 shrink-0" />
                   <div className="flex gap-1 bg-white/[0.03] p-1 rounded-full border border-white/5 relative">
                     {[
-                      { id: 'ALL', label: 'All Items' },
-                      { id: 'rackets', label: 'Pro Rackets' },
-                      { id: 'used', label: 'Pre-Owned' },
-                      { id: 'accessories', label: 'Gear & Balls' }
+                      { id: 'ALL', label: t.shop.allItems },
+                      { id: 'rackets', label: t.shop.proRackets },
+                      { id: 'used', label: t.shop.preOwned },
+                      { id: 'accessories', label: t.shop.gearBalls }
                     ].map(cat => {
                       const isActive = activeCategory === cat.id;
                       return (
@@ -227,7 +231,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                   return (
                     <motion.div
                       key={prod.id}
-                      className="group bg-white rounded-[20px] p-5 border border-ink/5 hover:border-ink/15 hover:shadow-[0_16px_48px_rgba(10,13,24,0.06)] flex flex-col justify-between transition-all duration-500 relative overflow-hidden text-left"
+                      className="group bg-white rounded-[20px] p-5 border border-ink/5 hover:border-ink/15 hover:shadow-[0_16px_48px_rgba(10,13,24,0.06)] flex flex-col justify-between transition-all duration-500 relative overflow-hidden text-start"
                     >
                       <div className="relative z-10 space-y-4">
                         {/* Soft premium grey-beige backplate for product photo. `isolate`
@@ -237,7 +241,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                             rectangle ever shows. (racket-19/20 had their black bgs flood-filled
                             to white so they behave the same.) */}
                         <div className="relative w-full aspect-[4/3] rounded-[12px] bg-[#F5F4F0] overflow-hidden border border-ink/5 isolate">
-                          <Link href={`/shop/${prod.id}`} className="block w-full h-full cursor-pointer">
+                          <Link href={lp(`/shop/${prod.id}`)} className="block w-full h-full cursor-pointer">
                             <img
                               src={prod.image}
                               alt={prod.name}
@@ -247,18 +251,18 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                           </Link>
 
                           {/* Left Stacked badges like user screenshot */}
-                          <div className="absolute top-4 left-4 flex flex-col gap-1 items-start pointer-events-none">
+                          <div className="absolute top-4 start-4 flex flex-col gap-1 items-start pointer-events-none">
                             <span className="bg-[#1E5AE8] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                              BEST SELLER
+                              {t.shop.bestSeller}
                             </span>
                             {prod.brand === 'STEALTH' && (
                               <span className="bg-[#E84525] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                                10% OFF
+                                {t.shop.percentOff(10)}
                               </span>
                             )}
                             {prod.category === 'used' && (
                               <span className="bg-[#E84525] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                                15% OFF
+                                {t.shop.percentOff(15)}
                               </span>
                             )}
                           </div>
@@ -266,7 +270,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                           {/* Heart Icon Toggle */}
                           <button
                             onClick={() => toggleFavorite(prod.id)}
-                            className="absolute top-4 right-4 p-2 bg-white hover:bg-ink text-ink hover:text-white rounded-full transition-all cursor-pointer border border-ink/5 flex items-center justify-center shadow-sm"
+                            className="absolute top-4 end-4 p-2 bg-white hover:bg-ink text-ink hover:text-white rounded-full transition-all cursor-pointer border border-ink/5 flex items-center justify-center shadow-sm"
                           >
                             <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-fire fill-[#E84525]' : 'text-ink/40 group-hover:text-ink'}`} />
                           </button>
@@ -277,13 +281,13 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                           <span>{prod.brand}</span>
                           <span className="flex items-center gap-1 text-ink/70">
                             <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-                            IN STOCK
+                            {t.shop.inStock}
                           </span>
                         </div>
 
                         {/* Title & brief description */}
                         <div className="space-y-1">
-                          <Link href={`/shop/${prod.id}`} className="block group/title">
+                          <Link href={lp(`/shop/${prod.id}`)} className="block group/title">
                             <h3 className="text-base font-display font-black leading-tight text-ink uppercase tracking-tight group-hover/title:text-[#1E5AE8] transition-colors line-clamp-1">
                               {prod.name}
                             </h3>
@@ -310,7 +314,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                           className="px-4.5 py-2.5 bg-ink text-white hover:bg-lime hover:text-ink rounded-full font-bold uppercase text-[9px] tracking-widest transition-all cursor-pointer flex items-center gap-1.5 hover:-translate-y-0.5 shadow-md shadow-black/5"
                         >
                           <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
-                          <span>Add to bag</span>
+                          <span>{t.shop.addToBag}</span>
                         </button>
                       </div>
                     </motion.div>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
+import { LocaleProvider } from '@/lib/i18n/LocaleProvider';
 import { CartProvider } from '@/lib/cart-context';
 import { TournamentStoreProvider } from '@/lib/tournaments/store';
 import CartDrawer from '@/components/cart/CartDrawer';
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <body className="bg-ink text-white antialiased">
         {/* Persists across navigations (above the page) so it can record the
             first in-app route change — drives the homepage's first-landing-only
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NavigationFlag />
         {/* No-op on the normal site; enables click-to-edit inside the Studio preview. */}
         <StudioEditBridge />
+        <LocaleProvider locale="en">
         <MotionProvider>
           <CartProvider>
             {/* Tournaments session store lives at the root (like the cart) so
@@ -65,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </TournamentStoreProvider>
           </CartProvider>
         </MotionProvider>
+        </LocaleProvider>
         {/* Cursor lives in the layout (NOT template.tsx) so it persists across
             route changes instead of remounting and briefly leaving the user
             with no visible cursor. */}

@@ -2,9 +2,16 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Reveal from './Reveal';
+import { localePath, type Locale } from '@/lib/i18n/locale';
 import type { ContentMap } from '@/lib/content/get';
 
-export default function ConstructPanel({ content }: { content: ContentMap }) {
+export default function ConstructPanel({
+  content,
+  locale = 'en',
+}: {
+  content: ContentMap;
+  locale?: Locale;
+}) {
   // The configurator has no model deep-link (ConstructClient reads no search
   // params), so all three type rows land on /construct-your-court.
   const courtTypes = [
@@ -26,7 +33,7 @@ export default function ConstructPanel({ content }: { content: ContentMap }) {
                 sizes="(max-width: 900px) 100vw, 660px"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_55%,rgba(14,14,12,0.55)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_55%,rgba(14,14,12,0.55)_100%)] rtl:bg-[linear-gradient(270deg,transparent_55%,rgba(14,14,12,0.55)_100%)]" />
             </div>
 
             <div className="flex flex-col justify-center gap-[22px] px-7 py-9 text-white min-[901px]:px-[52px] min-[901px]:py-14">
@@ -49,8 +56,8 @@ export default function ConstructPanel({ content }: { content: ContentMap }) {
                 {courtTypes.map((t) => (
                   <Link
                     key={t.name}
-                    href="/construct-your-court"
-                    className="flex items-center justify-between border-b border-white/[.12] px-1 py-[15px] transition-[padding] duration-200 hover:pl-3"
+                    href={localePath(locale, '/construct-your-court')}
+                    className="flex items-center justify-between border-b border-white/[.12] px-1 py-[15px] transition-[padding] duration-200 hover:ps-3"
                   >
                     <span className="font-display text-base font-extrabold uppercase tracking-[0.01em]">
                       {t.name}
@@ -64,11 +71,11 @@ export default function ConstructPanel({ content }: { content: ContentMap }) {
 
               <div className="mt-1.5 flex flex-wrap gap-3">
                 <Link
-                  href="/construct-your-court"
+                  href={localePath(locale, '/construct-your-court')}
                   className="inline-flex items-center gap-2.5 rounded-full bg-lime px-7 py-[15px] font-display text-sm font-bold text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
                 >
                   {content['home.construct.cta']}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[15px] w-[15px]" aria-hidden>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[15px] w-[15px] rtl:-scale-x-100" aria-hidden>
                     <path d="M7 17L17 7M17 7H8M17 7v9" />
                   </svg>
                 </Link>

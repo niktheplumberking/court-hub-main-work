@@ -15,6 +15,7 @@ import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
+import { useLocalePath, useDirSign } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
@@ -74,6 +75,8 @@ export default function AboutClient({ content }: { content: ContentMap }) {
   ], [content]);
   const heroCovered = useHeroCovered();
   const { add, openDrawer } = useCart();
+  const lp = useLocalePath();
+  const dirSign = useDirSign();
   const racketBestSellers = PRODUCTS.filter(p => p.category === 'rackets').slice(0, 5);
   const bestSellers = racketBestSellers.length >= 5 ? racketBestSellers : PRODUCTS.slice(0, 5);
   const [activeSection, setActiveSection] = useState(0);
@@ -173,7 +176,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
         {/* Exactly viewport-height (no min-h): a fixed hero taller than the
             viewport can never be scrolled, so its frame bottom would be cut off
             on laptops. `invisible` once covered stops paint/composite cost. */}
-        <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
+        <div className={`fixed top-0 start-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
           <section data-cms="about:hero" className="ch-rail-exempt relative h-full w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
@@ -240,21 +243,21 @@ export default function AboutClient({ content }: { content: ContentMap }) {
               >
 
                 {/* Left Bottom Block - Piles */}
-                <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
+                <div className="space-y-4 max-w-md text-start w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
                     {content['about.hero.paragraph']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
                     {/* Primary CTA (static) */}
                     <Link
-                      href="/contact"
+                      href={lp('/contact')}
                       className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                     >
                       {content['about.hero.cta_primary']}
                     </Link>
 
                     <Link
-                      href="/construct-your-court"
+                      href={lp('/construct-your-court')}
                       className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center"
                     >
                       {content['about.hero.cta_secondary']}
@@ -296,7 +299,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-left space-y-6"
+              className="text-start space-y-6"
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-[#0E0E0C] text-[#C8FF3D] font-mono text-xs flex items-center justify-center font-black">
@@ -314,7 +317,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                       runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                   <span
                     aria-hidden
-                    className="ch-underline-draw absolute left-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
+                    className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
                   />
                 </span>.
               </h2>
@@ -339,7 +342,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                     referrerPolicy="no-referrer" loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/95 via-transparent to-transparent p-6 sm:p-8 flex flex-col justify-end" />
-                  <div className="absolute bottom-6 left-6 text-white text-left mr-6 space-y-2">
+                  <div className="absolute bottom-6 start-6 text-white text-start me-6 space-y-2">
                     <span className="font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black inline-block">{content['about.story.image_badge']}</span>
                     <p className="font-display text-sm sm:text-base md:text-lg font-bold italic uppercase text-white leading-tight">{content['about.story.image_caption']}</p>
                   </div>
@@ -352,7 +355,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="lg:col-span-5 space-y-8 text-left"
+                className="lg:col-span-5 space-y-8 text-start"
               >
                 <p className="text-ink/85 text-sm sm:text-base md:text-lg leading-relaxed font-sans font-medium">
                   {content['about.story.paragraph1']}
@@ -360,7 +363,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                 <p className="text-ink/70 text-xs sm:text-sm leading-relaxed font-sans font-medium">
                   {content['about.story.paragraph2']}
                 </p>                 {/* Playful counting statistics row with zoom and brand color-exchanging hover animations */}
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-left">
+                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-start">
                   <div className="group/stat cursor-pointer">
                     <motion.p
                       whileHover={{ scale: 1.15, color: '#C8FF3D', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
@@ -495,15 +498,15 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                             referrerPolicy="no-referrer" loading="lazy" decoding="async"
                           />
                           {/* Gradient overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-[black]/95 via-[black]/20 to-transparent p-8 flex flex-col justify-end text-left" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[black]/95 via-[black]/20 to-transparent p-8 flex flex-col justify-end text-start" />
 
                           {/* Floating Indicator */}
-                          <div className="absolute top-6 right-6 font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-[#0E0E0C] px-3.5 py-1.5 rounded-full font-bold shadow-lg">
+                          <div className="absolute top-6 end-6 font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-[#0E0E0C] px-3.5 py-1.5 rounded-full font-bold shadow-lg">
                             {topic.badge}
                           </div>
 
                           {/* Summary details on image */}
-                          <div className="absolute bottom-6 left-6 right-6 text-white space-y-1 z-10 text-left">
+                          <div className="absolute bottom-6 start-6 end-6 text-white space-y-1 z-10 text-start">
                             <span className="font-mono text-[10px] uppercase text-[#C8FF3D] tracking-widest font-semibold block">{content['about.blueprint.card_kicker']}</span>
                             <h4 className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-tight">
                               {topic.title}
@@ -517,7 +520,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                 </div>
 
                 {/* Right Column: Topics / Scroll anchors (SWAPPED to Right) */}
-                <div className="lg:col-span-6 space-y-3 lg:space-y-8 text-left">
+                <div className="lg:col-span-6 space-y-3 lg:space-y-8 text-start">
 
                   {/* Simulated Badge matching the reference screenshot exactly with color contrast calibration */}
                   <div id="dna-strategy-trigger" className="flex items-center gap-3">
@@ -536,7 +539,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                   </h2>
 
                   {/* Categories container */}
-                  <div className="mt-2 lg:mt-8 space-y-0 text-left">
+                  <div className="mt-2 lg:mt-8 space-y-0 text-start">
                     {TOPICS.map((topic, index) => {
                       const isActive = activeSection === index;
                       return (
@@ -554,7 +557,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
 
                             {/* Text elements. Inactive titles shrink on mobile (smaller font) to
                                 free vertical space for the active topic's full, un-clamped copy. */}
-                            <div className="space-y-2 flex-1 text-left">
+                            <div className="space-y-2 flex-1 text-start">
                               <h3 className={`font-display font-black uppercase italic tracking-tight transition-all duration-300 md:text-xl ${isActive ? 'text-base md:text-xl text-white scale-102 origin-left' : 'text-[13px] text-white/40 scale-100 group-hover:text-white/70'}`}>
                                 {topic.title}
                               </h3>
@@ -575,7 +578,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
 
                                 {/* SEO text — full copy on every breakpoint (no clamp); the
                                     shrunk inactive titles above buy back the space it needs. */}
-                                <p className="text-[10px] md:text-xs text-white/70 leading-snug md:leading-relaxed font-mono mt-1.5 mb-1 border-l-2 border-[#C8FF3D] pl-2.5 md:pl-3 italic bg-black/15 p-2 md:p-2.5 rounded-r-xl">
+                                <p className="text-[10px] md:text-xs text-white/70 leading-snug md:leading-relaxed font-mono mt-1.5 mb-1 border-s-2 border-[#C8FF3D] ps-2.5 md:ps-3 italic bg-black/15 p-2 md:p-2.5 rounded-e-xl">
                                   {topic.seoText}
                                 </p>
 
@@ -608,14 +611,14 @@ export default function AboutClient({ content }: { content: ContentMap }) {
 
           {/* The sliding Brand Positioning panel */}
           <motion.div
-            style={{ x: `${percentX}%` }}
-            className="absolute inset-0 bg-[#EDE8E1] text-[#0E0E0C] z-30 flex items-start sm:items-center overflow-y-auto lg:overflow-y-auto px-6 md:px-8 pt-[76px] pb-3 sm:py-8 lg:py-10 border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
+            style={{ x: `${percentX * dirSign}%` }}
+            className="absolute inset-0 bg-[#EDE8E1] text-[#0E0E0C] z-30 flex items-start sm:items-center overflow-y-auto lg:overflow-y-auto px-6 md:px-8 pt-[76px] pb-3 sm:py-8 lg:py-10 border-s border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
           >
             {/* Grid Background with fine spacing for balanced quadrants and elegant reduced opacity (0.04) */}
             <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,rgba(10,13,24,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,13,24,0.04)_1px,transparent_1px)] bg-[size:5.0rem_5.0rem] pointer-events-none" />
 
             <div className="max-w-[85rem] xl:max-w-[90rem] 2xl:max-w-[96rem] mx-auto w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10 lg:my-auto py-3 sm:py-8">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 xl:gap-16 items-start text-left">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 xl:gap-16 items-start text-start">
 
                 {/* Left Column: Foundation Year Anchor - STEP 1 */}
                 <motion.div
@@ -661,7 +664,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                             runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                         <span
                           aria-hidden
-                          className="ch-underline-draw absolute left-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
+                          className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
                         />
                       </span>.
                     </h2>
@@ -692,14 +695,14 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                         />
                       </motion.div>
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-6 flex flex-col justify-end pointer-events-none" />
-                      <div className="absolute bottom-6 left-6 text-white text-left space-y-1.5 z-10 font-sans pointer-events-none">
+                      <div className="absolute bottom-6 start-6 text-white text-start space-y-1.5 z-10 font-sans pointer-events-none">
                         <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-court-blue text-white px-2.5 py-1 rounded font-bold inline-block">{content['about.positioning.portrait_badge']}</span>
                         <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.portrait_caption']}</p>
                       </div>
                     </div>
 
                     {/* Right landscape image + descriptor column */}
-                    <div className="md:col-span-6 space-y-4 lg:space-y-6 flex flex-col justify-between text-left">
+                    <div className="md:col-span-6 space-y-4 lg:space-y-6 flex flex-col justify-between text-start">
 
                       {/* Landscape image column with mouse parallax and increased height for improved crop/fit */}
                       <div className="relative h-[110px] sm:h-[130px] md:h-[150px] lg:h-[170px] xl:h-[180px] w-full rounded-[32px] overflow-hidden border border-ink/10 shadow-xl group hidden md:block cursor-pointer bg-black">
@@ -715,7 +718,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                           />
                         </motion.div>
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-4 flex flex-col justify-end pointer-events-none" />
-                        <div className="absolute bottom-4 left-4 text-white text-left space-y-1 z-10 font-sans pointer-events-none">
+                        <div className="absolute bottom-4 start-4 text-white text-start space-y-1 z-10 font-sans pointer-events-none">
                           <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black font-semibold inline-block">{content['about.positioning.landscape_badge']}</span>
                           <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.landscape_caption']}</p>
                         </div>
@@ -727,11 +730,11 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                         </p>
 
                         <Link
-                          href="/contact"
+                          href={lp('/contact')}
                           className="inline-flex items-center gap-2 group text-xs font-mono font-bold uppercase tracking-widest text-[#0E0E0C] hover:text-court-blue border border-ink/15 px-5 py-2.5 rounded-full bg-white hover:bg-white/80 transition-all shadow-md group shrink-0"
                         >
                           <span>{content['about.positioning.cta_label']}</span>
-                          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#0E0E0C]" />
+                          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#0E0E0C] rtl:-scale-x-100" />
                         </Link>
                       </div>
 
@@ -768,15 +771,15 @@ export default function AboutClient({ content }: { content: ContentMap }) {
 
             <div className="flex flex-wrap justify-center gap-4 pt-2">
               <MotionLink
-                href="/construct-your-court"
+                href={lp('/construct-your-court')}
                 whileHover={{ scale: 1.08 }}
                 className="px-8 py-4 bg-lime text-ink rounded-full font-mono font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-1.5 shadow-lg shadow-lime/15"
               >
                 <span>{content['about.cta.cta_primary']}</span>
-                <ArrowUpRight className="w-4 h-4 text-ink" />
+                <ArrowUpRight className="w-4 h-4 text-ink rtl:-scale-x-100" />
               </MotionLink>
               <Link
-                href="/contact"
+                href={lp('/contact')}
                 className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-mono text-xs uppercase font-bold tracking-widest hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105"
               >
                 {content['about.cta.cta_secondary']}
@@ -792,7 +795,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
             {/* Fanned "rainbow" deck — original arc arrangement, each card now a real
                 best-seller: placeholder image + Add-to-Bag + View-product. Hover lifts
                 and straightens a card to reveal it (matches the original interaction). */}
-            <div className="flex flex-nowrap justify-center items-center -space-x-10 sm:-space-x-16 md:-space-x-24 w-full overflow-visible py-10 relative z-10 select-none">
+            <div className="flex flex-nowrap justify-center items-center -space-x-10 sm:-space-x-16 md:-space-x-24 rtl:space-x-reverse w-full overflow-visible py-10 relative z-10 select-none">
               {bestSellers.map((p, index) => {
                 const cfg = [
                   { rotate: -12, y: 38, zIndex: 10, opacity: 0.7 },
@@ -809,7 +812,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                     transition={{ type: 'spring', stiffness: 100, damping: 15 }}
                     className="group relative flex-shrink-0 w-[190px] sm:w-[230px] md:w-[260px] rounded-[24px] bg-white border border-ink/10 p-3 shadow-[0_18px_45px_-12px_rgba(14,14,12,0.3)] flex flex-col gap-2.5 cursor-pointer"
                   >
-                    <span className="absolute top-4 left-4 z-20 text-[9px] bg-lime text-ink px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm">
+                    <span className="absolute top-4 start-4 z-20 text-[9px] bg-lime text-ink px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm">
                       {content['about.bestsellers.badge']}
                     </span>
                     <div className="rounded-[16px] bg-[#F5F4F0] aspect-[4/3] flex items-center justify-center p-3 overflow-hidden">
@@ -836,7 +839,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                         {content['about.bestsellers.add_to_bag_label']}
                       </button>
                       <Link
-                        href={`/shop/${p.id}`}
+                        href={lp(`/shop/${p.id}`)}
                         className="w-full py-2 rounded-full border border-ink/15 text-ink/70 text-[10px] font-bold uppercase tracking-wider text-center hover:bg-ink/5 transition-colors"
                       >
                         {content['about.bestsellers.view_product_label']}

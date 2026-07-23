@@ -7,6 +7,8 @@ import { ShoppingBag, X, Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatAED } from '@/lib/utils';
 import { waHref } from '@/lib/whatsapp';
+import { useDirSign, useLocalePath, useT } from '@/lib/i18n/LocaleProvider';
+import { stripLocale } from '@/lib/i18n/locale';
 
 // WhatsApp glyph (brand mark) for the floating contact button.
 function WhatsAppGlyph({ className }: { className?: string }) {
@@ -16,9 +18,6 @@ function WhatsAppGlyph({ className }: { className?: string }) {
     </svg>
   );
 }
-
-// Friendly opener for the WhatsApp contact button (primary lead channel).
-const WA_MESSAGE = "Hi Court Hub! I'd like to know more about your padel courts and gear.";
 
 // Drawer slide easing — a weighted ease-out that reads like a soft spring.
 // Driven by inline styles (not Tailwind translate utilities) so the transform
@@ -41,11 +40,14 @@ export default function CartDrawer() {
   const { items, count, total, setQty, remove, drawerOpen, openDrawer, closeDrawer } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useT();
+  const lp = useLocalePath();
+  const sign = useDirSign();
   const tab = drawerOpen ? 0 : -1;
   // The floating widget is the cart bag ONLY in the shop (where you add items);
   // everywhere else it's a WhatsApp contact button (the primary lead channel).
-  const pathname = usePathname();
-  const isShopArea = pathname === '/shop' || pathname.startsWith('/shop/');
+  const path = stripLocale(usePathname());
+  const isShopArea = path === '/shop' || path.startsWith('/shop/');
 
   // Lock body scroll while the drawer is open.
   useEffect(() => {
@@ -77,11 +79,11 @@ export default function CartDrawer() {
         body: JSON.stringify({ items: items.map((i) => ({ id: i.id, qty: i.qty })) }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Checkout is not available yet.');
+      if (!res.ok) throw new Error(data.error || t.cart.checkoutError);
       window.location.href = data.url;
     } catch (e: unknown) {
       // Checkout is intentionally deferred until Stripe keys exist; fail soft.
-      setError(e instanceof Error ? e.message : 'Checkout is not available yet.');
+      setError(e instanceof Error ? e.message : t.cart.checkoutError);
       setLoading(false);
     }
   };
@@ -96,7 +98,7 @@ export default function CartDrawer() {
           opacity: drawerOpen ? 0 : 1,
           transition: 'transform 300ms ease-out, opacity 300ms ease-out',
         }}
-        className={`fixed bottom-7 right-6 md:bottom-8 md:right-8 z-[60] ${
+        className={`fixed bottom-7 end-6 md:bottom-8 md:end-8 z-[60] ${
           drawerOpen ? 'pointer-events-none' : ''
         }`}
       >
@@ -104,7 +106,7 @@ export default function CartDrawer() {
           <button
             id="cart-fab"
             onClick={openDrawer}
-            aria-label={`Open cart${count > 0 ? ` (${count} item${count === 1 ? '' : 's'})` : ''}`}
+            aria-label={t.cart.openCart(count)}
             className="relative p-4 bg-lime hover:bg-white text-ink rounded-full shadow-2xl flex items-center justify-center cursor-pointer group border border-white/10 transition-colors"
           >
             <ShoppingBag className="w-5 h-5 text-ink group-hover:scale-110 transition-transform" />
@@ -113,7 +115,7 @@ export default function CartDrawer() {
                 key={count}
                 animate={{ scale: [1.4, 0.9, 1] }}
                 transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-                className="absolute -top-1.5 -right-1.5 bg-court-blue text-white text-[10px] font-mono font-bold min-w-5 h-5 px-1 rounded-full flex items-center justify-center shadow-lg border border-white/10"
+                className="absolute -top-1.5 -end-1.5 bg-court-blue text-white text-[10px] font-mono font-bold min-w-5 h-5 px-1 rounded-full flex items-center justify-center shadow-lg border border-white/10"
               >
                 {count}
               </motion.span>
@@ -121,10 +123,10 @@ export default function CartDrawer() {
           </button>
         ) : (
           <a
-            href={waHref(WA_MESSAGE)}
+            href={waHref(t.cart.waMessage)}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Chat with Court Hub on WhatsApp"
+            aria-label={t.cart.whatsappAria}
             className="p-4 bg-[#25D366] hover:bg-[#1ebe5b] text-white rounded-full shadow-2xl flex items-center justify-center cursor-pointer group border border-white/10 transition-colors"
           >
             <WhatsAppGlyph className="w-6 h-6 group-hover:scale-110 transition-transform" />
@@ -145,15 +147,16 @@ export default function CartDrawer() {
       {/* Drawer — always mounted, slid off-screen when closed (inline transform). */}
       <aside
         role="dialog"
-        aria-label="Shopping cart"
+        aria-label={t.cart.dialogLabel}
         aria-hidden={!drawerOpen}
         style={{
-          // 105% (not 100%) so the panel — and its faint left-border hairline —
+          // 105% (not 100%) so the panel — and its faint border hairline —
           // fully clears the scrollbar gutter when closed; no edge sliver peeks.
-          transform: drawerOpen ? 'translateX(0)' : 'translateX(105%)',
+          // Slides from the inline-end: +x in LTR, -x in RTL.
+          transform: drawerOpen ? 'translateX(0)' : `translateX(${105 * sign}%)`,
           transition: SLIDE_TRANSITION,
         }}
-        className={`fixed top-0 right-0 bottom-0 w-full max-w-md bg-ink-2 z-[80] border-l border-white/10 shadow-2xl flex flex-col ${
+        className={`fixed top-0 end-0 bottom-0 w-full max-w-md bg-ink-2 z-[80] border-s border-white/10 shadow-2xl flex flex-col ${
           drawerOpen ? '' : 'pointer-events-none'
         }`}
       >
@@ -162,12 +165,12 @@ export default function CartDrawer() {
           <div className="flex items-center gap-3">
             <ShoppingBag className="w-5 h-5 text-lime" />
             <h2 className="text-lg font-display font-bold uppercase tracking-wider text-white">
-              Your Bag ({count})
+              {t.cart.yourBag(count)}
             </h2>
           </div>
           <button
             onClick={closeDrawer}
-            aria-label="Close cart"
+            aria-label={t.cart.closeCart}
             tabIndex={tab}
             className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors cursor-pointer text-white/60 hover:text-white"
           >
@@ -184,19 +187,19 @@ export default function CartDrawer() {
               </div>
               <div>
                 <p className="font-display font-bold uppercase tracking-wider text-sm text-white">
-                  Bag as empty as a blank court
+                  {t.cart.emptyTitle}
                 </p>
                 <p className="text-white/40 text-[11px] font-mono uppercase tracking-widest mt-1">
-                  Select paddles or accessories to pack
+                  {t.cart.emptySub}
                 </p>
               </div>
               <Link
-                href="/shop"
+                href={lp('/shop')}
                 onClick={closeDrawer}
                 tabIndex={tab}
                 className="inline-block mt-2 px-7 py-3 rounded-full bg-lime text-ink font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-[filter,transform] duration-200"
               >
-                Browse the shop
+                {t.cart.browseShop}
               </Link>
             </div>
           ) : (
@@ -208,7 +211,7 @@ export default function CartDrawer() {
                 >
                   {/* Thumbnail */}
                   <Link
-                    href={`/shop/${i.slug}`}
+                    href={lp(`/shop/${i.slug}`)}
                     onClick={closeDrawer}
                     tabIndex={tab}
                     className="w-16 h-16 bg-black/40 rounded-[12px] flex items-center justify-center p-2.5 shrink-0 border border-white/5"
@@ -227,7 +230,7 @@ export default function CartDrawer() {
                   {/* Name + qty */}
                   <div className="flex-1 min-w-0 space-y-2">
                     <Link
-                      href={`/shop/${i.slug}`}
+                      href={lp(`/shop/${i.slug}`)}
                       onClick={closeDrawer}
                       tabIndex={tab}
                       className="block truncate text-sm font-display font-bold leading-tight text-white hover:text-lime transition-colors"
@@ -237,7 +240,7 @@ export default function CartDrawer() {
                     <div className="flex items-center gap-1.5 bg-white/5 rounded-[12px] p-1 w-fit border border-white/5">
                       <button
                         onClick={() => setQty(i.id, i.qty - 1)}
-                        aria-label="Decrease quantity"
+                        aria-label={t.cart.decreaseQty}
                         tabIndex={tab}
                         className="p-1 hover:bg-white/10 rounded-full text-white/50 hover:text-white cursor-pointer transition-colors"
                       >
@@ -246,7 +249,7 @@ export default function CartDrawer() {
                       <span className="px-2 font-mono text-xs text-white w-7 text-center">{i.qty}</span>
                       <button
                         onClick={() => setQty(i.id, i.qty + 1)}
-                        aria-label="Increase quantity"
+                        aria-label={t.cart.increaseQty}
                         tabIndex={tab}
                         className="p-1 hover:bg-white/10 rounded-full text-white/50 hover:text-white cursor-pointer transition-colors"
                       >
@@ -262,7 +265,7 @@ export default function CartDrawer() {
                     </span>
                     <button
                       onClick={() => remove(i.id)}
-                      aria-label={`Remove ${i.title} from cart`}
+                      aria-label={t.cart.removeItem(i.title)}
                       tabIndex={tab}
                       className="text-white/30 hover:text-fire cursor-pointer transition-colors p-1"
                     >
@@ -280,17 +283,17 @@ export default function CartDrawer() {
           <div className="p-6 border-t border-white/10 bg-ink space-y-5 shrink-0">
             <div className="space-y-2.5">
               <div className="flex justify-between items-center text-xs font-mono text-white/50 tracking-wider">
-                <span>BAG SUBTOTAL</span>
+                <span className="uppercase">{t.cart.subtotal}</span>
                 <span>{formatAED(total)}</span>
               </div>
               <div className="flex justify-between items-center text-xs font-mono text-white/50 tracking-wider">
-                <span>ESTIMATED COURIER SHIPPING</span>
-                <span className="text-lime uppercase">Free shipping</span>
+                <span className="uppercase">{t.cart.shippingLabel}</span>
+                <span className="text-lime uppercase">{t.cart.freeShipping}</span>
               </div>
               <div className="h-px bg-white/10 my-2" />
               <div className="flex justify-between items-end">
                 <span className="text-xs font-semibold uppercase tracking-widest font-mono text-white">
-                  Total
+                  {t.cart.total}
                 </span>
                 <span className="text-3xl font-display font-black text-lime">{formatAED(total)}</span>
               </div>
@@ -304,10 +307,10 @@ export default function CartDrawer() {
               tabIndex={tab}
               className="w-full py-4 bg-lime hover:bg-white text-ink font-display font-black uppercase tracking-[0.16em] rounded-full shadow-xl transition-colors duration-300 cursor-pointer text-xs flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-60"
             >
-              {loading ? 'Redirecting…' : 'Proceed to secure pay ↑'}
+              {loading ? t.cart.redirecting : t.cart.proceed}
             </button>
             <p className="text-white/30 text-[10px] font-mono uppercase tracking-widest text-center">
-              Secure payment via Stripe · AED
+              {t.cart.securePayment}
             </p>
           </div>
         )}

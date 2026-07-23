@@ -4,6 +4,9 @@
    font-black heading + the hero title rendered as faux (browser-synthesized)
    weights. Loading the real weights fixes that. */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* Arabic UI stack (real weights only — faux bold ruins Arabic): IBM Plex Sans
+   Arabic for body/labels, Cairo heavy weights for display headings. */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -136,6 +139,15 @@ html.lenis body {
   transform-origin: left center; /* enter: grow from the left */
 }
 
+/* RTL mirror — the reveal grows from the inline-start (right) instead. */
+[dir='rtl'] .link-underline::after {
+  transform-origin: left center;
+}
+[dir='rtl'] .link-underline:hover::after,
+[dir='rtl'] .link-underline:focus-visible::after {
+  transform-origin: right center;
+}
+
 /* Custom-cursor mode — Cursor.tsx toggles this class on <body> for fine
    pointers only; text fields keep their native cursor (I-beam wins). */
 @media (pointer: fine) {
@@ -228,6 +240,9 @@ html.lenis body {
   transform-origin: left center;
   animation: ch-underline-draw 9.5s ease-in-out infinite;
   will-change: transform;
+}
+[dir='rtl'] .ch-underline-draw {
+  transform-origin: right center; /* draws R→L, matching Arabic reading order */
 }
 
 /* Product SALE badge — lands a couple seconds after the page, with a springy pop and
@@ -450,7 +465,57 @@ html.lenis body {
    Heroes opt out via .ch-rail-exempt (the rail never shows over a hero). */
 @media (min-width: 768px) and (max-width: 1519.98px) {
   .ch-has-rail :where(section, footer):not(.ch-rail-exempt) {
-    padding-left: 6.75rem; /* 96px rail + breathing room */
+    /* Logical: clears the rail on the inline-start side — left in English,
+       right in Arabic (the rail mirrors with the direction). */
+    padding-inline-start: 6.75rem; /* 96px rail + breathing room */
   }
+}
+
+/* ── Arabic / RTL layer ─────────────────────────────────────────────────────
+   Direction and lang land on <html> per root layout. Font variables swap here
+   so every Tailwind font-sans/display/mono utility resolves to the Arabic
+   stack — no component changes needed. */
+html[lang='ar'] {
+  --font-sans: 'IBM Plex Sans Arabic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  --font-mono: 'IBM Plex Sans Arabic', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Arabic is a connected script: ANY letter-spacing severs the letters. The
+   design system tracks Latin labels heavily (370+ tracking-*), so kill it
+   wholesale under the Arabic root — Latin fragments on Arabic pages lose
+   their tracking, which is the correct trade. */
+html[lang='ar'] * {
+  letter-spacing: 0 !important;
+}
+
+/* Arabic has taller ascenders/deeper descenders — display headings set to
+   leading-none clip Arabic glyphs; give them safe minimums. */
+html[lang='ar'] .leading-none {
+  line-height: 1.25 !important;
+}
+html[lang='ar'] .leading-tight {
+  line-height: 1.35 !important;
+}
+
+/* Italic display styling is a Latin brand affordance; slanted Arabic reads
+   as an error. Neutralize italics on the Arabic root. */
+html[lang='ar'] .italic {
+  font-style: normal;
+}
+
+/* Machine-format fields stay LTR islands inside RTL layouts (labels stay RTL). */
+html[dir='rtl'] input[type='tel'],
+html[dir='rtl'] input[type='email'],
+html[dir='rtl'] input[type='url'],
+html[dir='rtl'] .ltr-island {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: end;
+}
+
+/* Mirror helper for directional glyphs/icons (arrows, chevrons, send). */
+[dir='rtl'] .rtl-mirror {
+  transform: scaleX(-1);
 }
 

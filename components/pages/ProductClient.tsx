@@ -25,15 +25,16 @@ import {
 } from 'lucide-react';
 import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
+import { useT, useLocalePath, useDirSign } from '@/lib/i18n/LocaleProvider';
 import Footer from '@/components/home/Footer';
 
 // Shared reveal vocabulary — matches the fade-up rhythm used across the other
 // pages so the product page no longer feels animation-starved next to them.
 const RISE_EASE = [0.25, 1, 0.5, 1] as const;
-const colLeft = {
-  hidden: { opacity: 0, x: -28 },
+const colLeft = (sign: 1 | -1) => ({
+  hidden: { opacity: 0, x: -28 * sign },
   show: { opacity: 1, x: 0, transition: { duration: 0.7, ease: RISE_EASE } },
-};
+});
 const colRight = {
   hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: RISE_EASE, delay: 0.08 } },
@@ -54,6 +55,9 @@ const sectionReveal = {
 export default function ProductClient() {
   const { slug } = useParams<{ slug: string }>();
   const { add, openDrawer } = useCart();
+  const t = useT();
+  const lp = useLocalePath();
+  const dirSign = useDirSign();
 
   // Find product by id
   const product = PRODUCTS.find(p => p.id === slug);
@@ -97,27 +101,27 @@ export default function ProductClient() {
 
   if (!product) {
     return (
-      <div className="bg-sand min-h-screen text-ink flex flex-col items-center justify-center p-6 text-center font-sans md:max-[1519px]:pl-24">
+      <div className="bg-sand min-h-screen text-ink flex flex-col items-center justify-center p-6 text-center font-sans md:max-[1519px]:ps-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6 max-w-md p-8 bg-white rounded-[32px] border border-ink/5 shadow-2xl"
         >
           <span className="text-[10px] text-[#1E5AE8] font-mono tracking-[0.2em] uppercase font-bold py-1.5 px-3 bg-[#1E5AE8]/10 border border-[#1E5AE8]/20 rounded-full inline-block">
-            EQUIPMENT NOT FOUND
+            {t.shop.notFoundBadge}
           </span>
           <h2 className="text-3xl font-display font-black uppercase tracking-tight italic">
-            ITEM OUT OF GRID
+            {t.shop.notFoundTitle}
           </h2>
           <p className="text-ink/60 text-sm leading-relaxed">
-            The premium item reference you specified does not exist in our active tournament shelf inventory.
+            {t.shop.notFoundDesc}
           </p>
           <Link
-            href="/shop"
+            href={lp('/shop')}
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#1E5AE8] hover:bg-ink text-white font-bold uppercase text-[11px] tracking-widest rounded-full transition-all cursor-pointer shadow-md shadow-[#1E5AE8]/20"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Return to Shop</span>
+            <ArrowLeft className="w-4 h-4 rtl:-scale-x-100" />
+            <span>{t.shop.returnToShop}</span>
           </Link>
         </motion.div>
       </div>
@@ -132,7 +136,7 @@ export default function ProductClient() {
         ? prev.filter(item => item !== product.id)
         : [...prev, product.id]
     );
-    showToast(isFavorite ? "Removed from saved gear" : "Added to saved gear!");
+    showToast(isFavorite ? t.shop.removedFromSaved : t.shop.addedToSaved);
   };
 
   const showToast = (msg: string) => {
@@ -153,7 +157,7 @@ export default function ProductClient() {
       quantity
     );
     setTimeout(() => openDrawer(), 200);
-    showToast(`Added ${quantity}x ${product.name} to your bag!`);
+    showToast(t.shop.addedQtyToBag(quantity, product.name));
   };
 
   const handleShare = () => {
@@ -161,7 +165,7 @@ export default function ProductClient() {
       navigator.clipboard.writeText(window.location.href);
     }
     setIsCopied(true);
-    showToast("Product link copied to clipboard!");
+    showToast(t.shop.linkCopied);
     setTimeout(() => setIsCopied(false), 2000);
   };
 
@@ -183,7 +187,7 @@ export default function ProductClient() {
   return (
     // Rail is always-on here; root carries bg-sand, so band-padding it clears
     // the rail with no visible lane (padding area paints the same sand).
-    <div className="bg-sand min-h-screen text-ink selection:bg-lime/30 font-sans relative overflow-x-hidden md:max-[1519px]:pl-24">
+    <div className="bg-sand min-h-screen text-ink selection:bg-lime/30 font-sans relative overflow-x-hidden md:max-[1519px]:ps-24">
 
       {/* Dynamic Toast Feedback */}
       <AnimatePresence>
@@ -209,10 +213,10 @@ export default function ProductClient() {
 
           {/* Breadcrumb Indicator */}
           <nav className="flex items-center gap-2 text-xs font-sans text-stone-500 font-medium pt-8 pb-4">
-            <Link href="/shop" className="hover:text-ink transition-colors">Products</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <Link href={lp('/shop')} className="hover:text-ink transition-colors">{t.shop.products}</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 rtl:-scale-x-100" />
             <span className="text-stone-400 uppercase tracking-wider text-[10px] font-bold">{product.brand}</span>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 rtl:-scale-x-100" />
             <span className="text-ink font-bold truncate max-w-[200px] sm:max-w-none">{product.name}</span>
           </nav>
 
@@ -223,7 +227,7 @@ export default function ProductClient() {
 
             {/* COLUMN 1: LEFT SIDE (Large card + variants thumbnails) */}
             <motion.div
-              variants={colLeft}
+              variants={colLeft(dirSign)}
               initial="hidden"
               animate="show"
               className="lg:col-span-6 space-y-6"
@@ -235,10 +239,10 @@ export default function ProductClient() {
                 {/* SALE badge — perched on the top-left corner, NO rotation. Hidden on load, then
                     pops in after ~2.4s with a springy entrance and a pulsing blue glow halo behind
                     it (pure CSS, see .ch-badge-pop / .ch-badge-glow in globals.css). */}
-                <div className="ch-badge-pop absolute -top-6 -left-6 z-20 pointer-events-none">
+                <div className="ch-badge-pop absolute -top-6 -start-6 z-20 pointer-events-none">
                   <span aria-hidden className="ch-badge-glow absolute inset-0 rounded-full bg-[#1E5AE8] blur-xl" />
                   <div className="relative w-[76px] h-[76px] bg-[#1E5AE8] rounded-full flex items-center justify-center select-none shadow-[0_8px_24px_rgba(30,90,232,0.45)] ring-1 ring-white/15">
-                    <span className="text-[11px] font-sans font-extrabold tracking-[0.25em] text-white uppercase ml-0.5">SALE</span>
+                    <span className="text-[11px] font-sans font-extrabold tracking-[0.25em] text-white uppercase ms-0.5">{t.shop.sale}</span>
                   </div>
                 </div>
 
@@ -272,7 +276,7 @@ export default function ProductClient() {
 
                 {/* Variant 1: Lime */}
                 <Link
-                  href="/shop/finder-pro"
+                  href={lp('/shop/finder-pro')}
                   className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
                     product.id === 'finder-pro' ? 'border-lime shadow-sm' : 'border-white/10 hover:border-white/30'
                   }`}
@@ -287,7 +291,7 @@ export default function ProductClient() {
 
                 {/* Variant 2: Stealth Blue */}
                 <Link
-                  href="/shop/stealth-blue"
+                  href={lp('/shop/stealth-blue')}
                   className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
                     product.id === 'stealth-blue' ? 'border-court-blue shadow-sm' : 'border-white/10 hover:border-white/30'
                   }`}
@@ -302,7 +306,7 @@ export default function ProductClient() {
 
                 {/* Variant 3: Propulsion Carbon */}
                 <Link
-                  href="/shop/propulsion-carbon"
+                  href={lp('/shop/propulsion-carbon')}
                   className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
                     product.id === 'propulsion-carbon' ? 'border-lime shadow-sm' : 'border-white/10 hover:border-white/30'
                   }`}
@@ -324,7 +328,7 @@ export default function ProductClient() {
               variants={colRight}
               initial="hidden"
               animate="show"
-              className="lg:col-span-6 space-y-6 lg:pl-4 text-left"
+              className="lg:col-span-6 space-y-6 lg:ps-4 text-start"
             >
 
               {/* Category */}
@@ -346,15 +350,15 @@ export default function ProductClient() {
                   <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
                   <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
                 </div>
-                <span className="text-ink ml-1">4.9</span>
-                <span className="text-stone-400">({product.id === 'stealth-blue' ? '45' : '36'} reviews)</span>
+                <span className="text-ink ms-1">4.9</span>
+                <span className="text-stone-400">{t.shop.reviews(product.id === 'stealth-blue' ? 45 : 36)}</span>
               </div>
 
               {/* Price display with excl notation */}
               <div className="flex items-baseline gap-3 pt-3">
                 <span className="text-4xl font-sans font-black text-ink tracking-tight">AED {product.price}</span>
                 <span className="text-xs font-sans font-bold text-stone-400 uppercase tracking-widest leading-none">
-                  VAT & shipping excl.
+                  {t.shop.vatNote}
                 </span>
               </div>
 
@@ -365,7 +369,7 @@ export default function ProductClient() {
 
               {/* Setup Flavor Options (Choose your taste equivalent) */}
               <div className="space-y-3 pt-4">
-                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">Choose your setup flavor</h3>
+                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.chooseSetup}</h3>
                 <div className="flex flex-wrap gap-2.5">
                   {['Eva Elastic', 'Pro Carbon', 'Gel Shock', 'Dynamic Core'].map((setup) => {
                     const isSel = selectedCore === setup;
@@ -388,7 +392,7 @@ export default function ProductClient() {
 
               {/* Weight class / frame size option */}
               <div className="space-y-3 pt-3">
-                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">Weight Class / Specification</h3>
+                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.specLabel}</h3>
                 <div className="flex flex-wrap gap-2.5">
                   {['350 g', '365 g', '375 g'].map((w) => {
                     const isSel = selectedWeight === w;
@@ -411,7 +415,7 @@ export default function ProductClient() {
 
               {/* Quantity */}
               <div className="space-y-3 pt-3">
-                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">Quantity</h3>
+                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.quantity}</h3>
                 <div className="flex items-center">
                   <div className="flex items-center bg-white/60 rounded-full p-1.5 h-11 border border-ink/5">
                     <button
@@ -437,13 +441,13 @@ export default function ProductClient() {
                   onClick={addToCart}
                   className="w-full py-4.5 bg-ink hover:bg-court-blue text-white hover:text-white font-sans text-xs md:text-[13px] font-extrabold uppercase tracking-[0.2em] rounded-full shadow-lg transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5 border border-white/5 active:scale-[0.98]"
                 >
-                  <span>add to cart</span>
+                  <span>{t.shop.addToCart}</span>
                 </button>
               </div>
 
               {/* Customer Overlapping Avatars Social Proof */}
               <div className="flex items-center gap-3 pt-2">
-                <div className="flex -space-x-2.5 select-none">
+                <div className="flex -space-x-2.5 rtl:space-x-reverse select-none">
                   <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150" alt="avatar" />
                   <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150" alt="avatar" />
                   <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="avatar" />
@@ -452,7 +456,7 @@ export default function ProductClient() {
                   </div>
                 </div>
                 <span className="text-xs font-sans text-stone-500 font-bold tracking-wide">
-                  13 other people purchased it today
+                  {t.shop.purchasedToday(13)}
                 </span>
               </div>
 
@@ -463,21 +467,21 @@ export default function ProductClient() {
                   <div className="w-6 h-6 rounded-full bg-court-blue/10 border border-court-blue/20 flex items-center justify-center text-court-blue shrink-0">
                     <Zap className="w-3 h-3 fill-current" />
                   </div>
-                  <span>Carbon-Optimized Sweet Spot</span>
+                  <span>{t.shop.uspSweetSpot}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-lime/10 border border-lime/20 flex items-center justify-center text-ink shrink-0">
                     <Truck className="w-3 h-3" />
                   </div>
-                  <span>Shipped right to your door</span>
+                  <span>{t.shop.shippedToDoor}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-court-blue/10 border border-court-blue/20 flex items-center justify-center text-court-blue shrink-0">
                     <ShieldCheck className="w-3 h-3" />
                   </div>
-                  <span>100% authentic, 2-Year Official Guarantee</span>
+                  <span>{t.shop.uspGuarantee}</span>
                 </div>
 
               </div>
@@ -493,21 +497,21 @@ export default function ProductClient() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
-            className="border-t border-ink/10 pt-16 pb-8 text-left space-y-8 mt-12 scroll-mt-6"
+            className="border-t border-ink/10 pt-16 pb-8 text-start space-y-8 mt-12 scroll-mt-6"
           >
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-stone-400 block">EXPERIENCE MORE GRID</span>
+                <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-stone-400 block">{t.shop.experienceMore}</span>
                 <h2 className="text-2xl sm:text-3xl lg:text-3.5xl font-display font-black uppercase tracking-tight italic text-ink">
-                  RECOMMENDED EQUIPMENT
+                  {t.shop.recommended}
                 </h2>
               </div>
               <Link
-                href="/shop"
+                href={lp('/shop')}
                 className="text-[10px] font-mono tracking-widest uppercase text-court-blue hover:text-ink transition-colors gap-1.5 flex items-center font-bold"
               >
-                <span>ALL PRODUCTS</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <span>{t.shop.allProducts}</span>
+                <ChevronRight className="w-3.5 h-3.5 rtl:-scale-x-100" />
               </Link>
             </div>
 
@@ -526,7 +530,7 @@ export default function ProductClient() {
                   className="group bg-white rounded-[20px] p-5 border border-ink/10 hover:border-court-blue/20 transition-colors flex flex-col justify-between shadow-xs hover:shadow-md"
                 >
                   <div className="space-y-4">
-                    <Link href={`/shop/${rel.id}`} className="block relative aspect-square rounded-[12px] bg-sand overflow-hidden">
+                    <Link href={lp(`/shop/${rel.id}`)} className="block relative aspect-square rounded-[12px] bg-sand overflow-hidden">
                       <img
                         src={rel.image}
                         alt={rel.name}
@@ -535,9 +539,9 @@ export default function ProductClient() {
                       />
                     </Link>
 
-                    <div className="space-y-1 text-left">
+                    <div className="space-y-1 text-start">
                       <span className="text-[9px] font-mono text-stone-400 uppercase tracking-widest font-semibold">{rel.brand}</span>
-                      <Link href={`/shop/${rel.id}`} className="block">
+                      <Link href={lp(`/shop/${rel.id}`)} className="block">
                         <h4 className="font-display font-black text-sm uppercase tracking-tight text-ink line-clamp-1 group-hover:text-court-blue transition-colors">
                           {rel.name}
                         </h4>
@@ -549,10 +553,10 @@ export default function ProductClient() {
                   <div className="pt-4 mt-4 border-t border-ink/5 flex items-center justify-between">
                     <span className="text-sm font-display font-black text-court-blue">AED {rel.price}</span>
                     <Link
-                      href={`/shop/${rel.id}`}
+                      href={lp(`/shop/${rel.id}`)}
                       className="px-3.5 py-1.5 bg-sand/60 group-hover:bg-court-blue text-ink group-hover:text-white text-[8px] font-mono uppercase tracking-widest rounded-full font-bold transition-all"
                     >
-                      SPECS →
+                      {t.shop.specsCta}
                     </Link>
                   </div>
                 </motion.div>

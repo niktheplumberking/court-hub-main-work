@@ -2,8 +2,8 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Division, LeaderboardRow } from '@/lib/tournaments/data';
-import { TIER_WEIGHTING_NOTE } from '@/lib/tournaments/points';
-import { money, btn, FmtIcon } from './ui';
+import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
+import { money, btn, FmtIcon, divisionLabel } from './ui';
 
 type DivFilter = 'all' | Division;
 const CHIPS: DivFilter[] = ['all', 'Men', 'Women', 'Mixed'];
@@ -16,6 +16,8 @@ function MvBadge({ mv }: { mv: number }) {
 }
 
 export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
+  const T = useT().tournaments;
+  const lp = useLocalePath();
   const [div, setDiv] = useState<DivFilter>('all');
 
   const list = useMemo(
@@ -34,12 +36,12 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
       {/* Hero */}
       <section className="relative overflow-hidden bg-[radial-gradient(130%_150%_at_100%_-10%,#1c1c18,#0E0E0C_55%)] px-6 pb-10 pt-28 text-white md:pt-32">
         <div className="mx-auto max-w-[1320px]">
-          <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">2026 Season · Cumulative Points</p>
+          <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">{T.seasonKicker('2026')}</p>
           <h1 className="font-display text-[clamp(38px,6vw,76px)] font-black uppercase leading-[0.95] tracking-[-0.03em]">
-            Season <span className="text-lime">Leaderboard</span>
+            {T.lbHeroA} <span className="text-lime">{T.lbHeroB}</span>
           </h1>
           <p className="mt-3.5 max-w-[520px] text-[15px] leading-relaxed text-white/60">
-            Points accumulate across every Court Hub event, weighted by category. A P250 title carries far more than a P25. Standings update as each tournament completes.
+            {T.leaderboardIntro}
           </p>
         </div>
       </section>
@@ -48,7 +50,7 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
       <div className="mx-auto max-w-[1320px] px-6">
         <div className="-mt-7 flex flex-wrap items-end justify-between gap-4 rounded-[22px] border border-ink/10 bg-sand-card p-[18px]">
           <div>
-            <label className="mb-[7px] block font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-ink/45">Division</label>
+            <label className="mb-[7px] block font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-ink/45">{T.division}</label>
             <div className="flex flex-wrap gap-[7px]">
               {CHIPS.map((c) => {
                 const on = div === c;
@@ -60,13 +62,13 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
                     onClick={() => setDiv(c)}
                     className={`rounded-[10px] border px-[14px] py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] transition-colors ${on ? 'border-ink bg-ink text-white' : 'border-ink/10 bg-white text-ink/60 hover:border-ink/40'}`}
                   >
-                    {c === 'all' ? 'All' : c}
+                    {c === 'all' ? T.all : divisionLabel(T, c)}
                   </button>
                 );
               })}
             </div>
           </div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-ink/45">{TIER_WEIGHTING_NOTE}</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.tierWeightingNote}</span>
         </div>
       </div>
 
@@ -76,9 +78,9 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
           {list.length === 0 ? (
             <div className="py-[70px] text-center text-ink/40">
               <span className="mx-auto mb-3.5 flex w-11 justify-center text-ink/20"><FmtIcon className="h-11 w-11" /></span>
-              <b className="block font-display text-[17px] font-extrabold uppercase text-ink/55">No pairs in this division yet</b>
-              <p className="mt-2">Standings fill as division events complete.</p>
-              <Link href="/tournaments" className={btn('lime', 'mt-[18px]')}>Browse tournaments</Link>
+              <b className="block font-display text-[17px] font-extrabold uppercase text-ink/55">{T.noDivisionPairs}</b>
+              <p className="mt-2">{T.divisionFills}</p>
+              <Link href={lp('/tournaments')} className={btn('lime', 'mt-[18px]')}>{T.browseTournaments}</Link>
             </div>
           ) : (
             <>
@@ -86,10 +88,10 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
               <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {top.map((r, i) => (
                   <div key={r.name} className={`relative flex min-h-[150px] flex-col justify-end gap-1.5 overflow-hidden rounded-[22px] p-6 ${PODIUM[i]}`}>
-                    <div className="absolute right-[18px] top-4 font-display text-[44px] font-black opacity-35">{i + 1}</div>
+                    <div className="absolute end-[18px] top-4 font-display text-[44px] font-black opacity-35">{i + 1}</div>
                     <div className="font-display text-[19px] font-extrabold tracking-[-0.02em]">{r.name}</div>
-                    <div className="font-mono text-[10px] font-bold tracking-[0.1em] opacity-80">{r.nat} · {r.ev} events · {r.titles} title{r.titles !== 1 ? 's' : ''}</div>
-                    <div className="mt-1.5 font-display text-[26px] font-black">{money(r.pts)}<span className="ml-1 font-mono text-[11px] opacity-75">PTS</span></div>
+                    <div className="font-mono text-[10px] font-bold tracking-[0.1em] opacity-80">{r.nat} · {T.events(r.ev)} · {T.titlesCount(r.titles)}</div>
+                    <div className="mt-1.5 font-display text-[26px] font-black">{money(r.pts)}<span className="ms-1 font-mono text-[11px] opacity-75">{T.pts.toUpperCase()}</span></div>
                   </div>
                 ))}
               </div>
@@ -99,12 +101,12 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
                 <table className="w-full min-w-[560px] border-collapse overflow-hidden rounded-[22px] border border-ink/10 bg-sand-card">
                   <thead>
                     <tr>
-                      <th className="border-b border-ink/10 p-[14px_12px] text-left font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Rank</th>
-                      <th className="border-b border-ink/10 p-[14px_12px] text-left font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Pair</th>
-                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Div</th>
-                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Events</th>
-                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Titles</th>
-                      <th className="border-b border-ink/10 p-[14px_16px_14px_12px] text-right font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">Points</th>
+                      <th className="border-b border-ink/10 p-[14px_12px] text-start font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.rank}</th>
+                      <th className="border-b border-ink/10 p-[14px_12px] text-start font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.pair}</th>
+                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.division}</th>
+                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.eventsCol}</th>
+                      <th className="border-b border-ink/10 p-[14px_12px] text-center font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.titles}</th>
+                      <th className="border-b border-ink/10 p-[14px_16px_14px_12px] text-end font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-ink/45">{T.points}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -120,12 +122,12 @@ export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
                           </td>
                           <td className={`${b} p-[14px_12px]`}>
                             <b className="font-display text-[14px] font-bold tracking-[-0.01em]">{r.name}</b>
-                            <span className="ml-[7px] font-mono text-[10px] text-ink/40">{r.nat}</span>
+                            <span className="ms-[7px] font-mono text-[10px] text-ink/40">{r.nat}</span>
                           </td>
-                          <td className={`${b} p-[14px_12px] text-center font-mono text-[10px] font-bold text-ink/50`}>{r.div.toUpperCase()}</td>
+                          <td className={`${b} p-[14px_12px] text-center font-mono text-[10px] font-bold text-ink/50`}>{divisionLabel(T, r.div).toUpperCase()}</td>
                           <td className={`${b} p-[14px_12px] text-center text-[13.5px] font-semibold`}>{r.ev}</td>
                           <td className={`${b} p-[14px_12px] text-center text-[13.5px] font-semibold`}>{r.titles}</td>
-                          <td className={`${b} p-[14px_16px_14px_12px] text-right`}><span className="font-display text-[16px] font-extrabold text-court-blue">{money(r.pts)}</span></td>
+                          <td className={`${b} p-[14px_16px_14px_12px] text-end`}><span className="font-display text-[16px] font-extrabold text-court-blue">{money(r.pts)}</span></td>
                         </tr>
                       );
                     })}

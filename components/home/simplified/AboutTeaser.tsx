@@ -2,11 +2,18 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Reveal from './Reveal';
+import { localePath, type Locale } from '@/lib/i18n/locale';
 import type { ContentMap } from '@/lib/content/get';
 
 // Blurb condensed from the About page story copy (Al Quoz foundry origin,
 // Spanish glass + alloy engineering) — same source as the approved demo.
-export default function AboutTeaser({ content }: { content: ContentMap }) {
+export default function AboutTeaser({
+  content,
+  locale = 'en',
+}: {
+  content: ContentMap;
+  locale?: Locale;
+}) {
   return (
     <section id="about" data-cms="home:about_teaser" className="py-[88px]">
       <div className="mx-auto max-w-[1280px] px-6">
@@ -20,7 +27,7 @@ export default function AboutTeaser({ content }: { content: ContentMap }) {
                 sizes="(max-width: 900px) 100vw, 616px"
                 className="object-cover"
               />
-              <div className="ch-on-dark absolute bottom-4 left-4 flex items-center gap-3.5 rounded-[16px] bg-ink/80 px-[18px] py-3.5 text-white backdrop-blur-md">
+              <div className="ch-on-dark absolute bottom-4 start-4 flex items-center gap-3.5 rounded-[16px] bg-ink/80 px-[18px] py-3.5 text-white backdrop-blur-md">
                 <b className="font-display text-[22px] font-black text-lime">
                   {content['home.about_teaser.badge_value']}
                 </b>
@@ -52,11 +59,11 @@ export default function AboutTeaser({ content }: { content: ContentMap }) {
               {content['home.about_teaser.paragraph']}
             </p>
             <Link
-              href="/about"
+              href={localePath(locale, '/about')}
               className="inline-flex items-center gap-2.5 rounded-full border-[1.5px] border-ink/25 px-7 py-[15px] font-display text-sm font-bold text-ink transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
             >
               {content['home.about_teaser.cta']}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[15px] w-[15px]" aria-hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-[15px] w-[15px] rtl:-scale-x-100" aria-hidden>
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </Link>

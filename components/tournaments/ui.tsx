@@ -1,3 +1,4 @@
+'use client';
 // Shared presentational primitives for the Tournaments feature: status pills,
 // tier badges, division chips, small line icons, and the money formatter.
 // Colors use brand Tailwind tokens (sand / ink / court-blue / lime / green /
@@ -5,6 +6,8 @@
 // P250 gold gradient — are the only literal values here, since neither is a
 // brand token.
 import type { Tier, TournamentStatus, Division } from '@/lib/tournaments/data';
+import { useT } from '@/lib/i18n/LocaleProvider';
+import type { Dict } from '@/lib/i18n/dict';
 
 export const money = (n: number): string => n.toLocaleString('en-US');
 
@@ -27,21 +30,35 @@ export function btn(variant: BtnVariant = 'lime', extra = '', sm = false): strin
   return `${btnBase} ${sm ? btnSm : btnPad} ${btnVariant[variant]} ${extra}`.trim();
 }
 
-const STATUS_META: Record<TournamentStatus, { label: string; className: string; dot?: string }> = {
-  live: { label: 'Live', className: 'bg-fire text-white', dot: 'bg-white ch-blink' },
-  open: { label: 'Registration Open', className: 'bg-green text-white', dot: 'bg-white' },
-  soon: { label: 'Upcoming', className: 'bg-ink text-lime' },
-  done: { label: 'Completed', className: 'bg-sand-2 text-ink/50' },
+const STATUS_META: Record<
+  TournamentStatus,
+  { label: (d: Dict['tournaments']) => string; className: string; dot?: string }
+> = {
+  live: { label: (d) => d.statusLive, className: 'bg-fire text-white', dot: 'bg-white ch-blink' },
+  open: { label: (d) => d.registrationOpen, className: 'bg-green text-white', dot: 'bg-white' },
+  soon: { label: (d) => d.statusUpcoming, className: 'bg-ink text-lime' },
+  done: { label: (d) => d.statusCompleted, className: 'bg-sand-2 text-ink/50' },
 };
 
+/** Localized display label for a data division value ('Men' | 'Women' | 'Mixed'). */
+export function divisionLabel(d: Dict['tournaments'], division: Division): string {
+  return division === 'Men' ? d.men : division === 'Women' ? d.women : d.mixed;
+}
+
+/** Localized display label for a data format value; unknown values pass through. */
+export function formatLabel(d: Dict['tournaments'], format: string): string {
+  return format === 'Round Robin' ? d.roundRobin : format === 'Groups + Knockout' ? d.groupsKnockout : format;
+}
+
 export function StatusPill({ status }: { status: TournamentStatus }) {
+  const t = useT();
   const m = STATUS_META[status];
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full px-[11px] py-[5px] font-mono text-[9.5px] font-bold uppercase tracking-[0.13em] ${m.className}`}
     >
       {m.dot && <span className={`h-1.5 w-1.5 rounded-full ${m.dot}`} />}
-      {m.label}
+      {m.label(t.tournaments)}
     </span>
   );
 }

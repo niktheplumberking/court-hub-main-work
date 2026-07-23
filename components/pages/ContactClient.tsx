@@ -19,6 +19,7 @@ import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
+import { useT, useDirSign } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
 
 const MotionLink = motion.create(Link);
@@ -33,6 +34,8 @@ interface ContactRoute {
 
 export default function ContactClient({ content }: { content: ContentMap }) {
   const heroCovered = useHeroCovered();
+  const t = useT();
+  const dirSign = useDirSign();
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
   const [selectedRouteId, setSelectedRouteId] = useState<string>('construction');
   const [inquirerName, setInquirerName] = useState<string>('');
@@ -93,7 +96,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
   const handleSubmitPersonalForm = (e: FormEvent) => {
     e.preventDefault();
     if (!personalName || !personalEmail) {
-      alert("Please fill in your name and email address.");
+      alert(t.pages.formValidation);
       return;
     }
     setFormSubmitted(true);
@@ -107,7 +110,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
         {/* ================= SECTION 1: RECREATED "COURT HUB" MOCK-UP HERO ================= */}
         {/* Exactly viewport-height (no min-h) so the frame bottom is never cut
             off; `invisible` once covered stops paint/composite cost. */}
-        <div className={`fixed top-0 left-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
+        <div className={`fixed top-0 start-0 w-full h-[100dvh] md:h-screen z-0 pointer-events-auto${heroCovered ? ' invisible' : ''}`}>
           <section data-cms="contact:hero" className="ch-rail-exempt relative h-full w-full p-3 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
 
           {/* Edge-to-Edge full screen background cinematic video / image fallback */}
@@ -176,7 +179,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
               >
 
                 {/* Left Bottom Block - Piles */}
-                <div className="space-y-4 max-w-md text-left w-full lg:w-auto">
+                <div className="space-y-4 max-w-md text-start w-full lg:w-auto">
                   <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-md">
                     {content['contact.hero.copy']}
                   </p>
@@ -192,14 +195,14 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                 </div>
 
                 {/* Right Bottom Block - Spec details mimicking about stats */}
-                <div className="max-w-xs space-y-2 text-left flex flex-col items-start lg:items-end w-full lg:w-auto">
+                <div className="max-w-xs space-y-2 text-start flex flex-col items-start lg:items-end w-full lg:w-auto">
                   <span className="font-sans text-[10px] text-lime uppercase tracking-widest font-black py-1 px-2.5 bg-lime/10 border border-lime/20 rounded">
                     {content['contact.hero.response_badge']}
                   </span>
-                  <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-right">
+                  <p className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-none mt-1 lg:text-end">
                     {content['contact.hero.stat_title']}
                   </p>
-                  <p className="text-white/60 text-[11px] font-sans lg:text-right">{content['contact.hero.stat_caption']}</p>
+                  <p className="text-white/60 text-[11px] font-sans lg:text-end">{content['contact.hero.stat_caption']}</p>
                 </div>
 
               </motion.div>
@@ -223,7 +226,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
 
             {/* Left Box: Route Selector Options */}
             <div className="lg:col-span-6 space-y-8 flex flex-col justify-between">
-              <div className="space-y-3 text-left">
+              <div className="space-y-3 text-start">
                 <span className="font-sans text-xs uppercase bg-white/10 px-3 py-1 border border-white/10 rounded-full inline-block">
                   {content['contact.routing.eyebrow']}
                 </span>
@@ -243,10 +246,10 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                     <motion.div
                       key={route.id}
                       onClick={() => setSelectedRouteId(route.id)}
-                      whileHover={{ scale: 1.02, x: 6 }}
+                      whileHover={{ scale: 1.02, x: 6 * dirSign }}
                       whileTap={{ scale: 0.995 }}
                       transition={{ type: "spring", stiffness: 450, damping: 25 }}
-                      className={`p-6 rounded-2xl border text-left cursor-pointer transition-colors select-none flex-1 flex flex-col justify-between ${
+                      className={`p-6 rounded-2xl border text-start cursor-pointer transition-colors select-none flex-1 flex flex-col justify-between ${
                         isSelected
                           ? 'bg-white text-ink border-white shadow-2xl shadow-white/5'
                           : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
@@ -273,7 +276,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
 
                       <div className="pt-3 mt-3 border-t border-white/10 flex justify-between items-center text-[10px] font-sans uppercase tracking-wider">
                         <span className={isSelected ? 'text-court-blue font-bold animate-pulse' : 'text-white/40'}>
-                          Recipient: {route.recipientDesk}
+                          {t.pages.recipient}: {route.recipientDesk}
                         </span>
                       </div>
                     </motion.div>
@@ -283,7 +286,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
             </div>
 
             {/* Right Box: Custom Metadata Input & Instant Dispatch Card */}
-            <div className="lg:col-span-6 bg-ink p-8 md:p-10 rounded-[32px] border border-white/10 shadow-2xl text-left flex flex-col justify-between h-full">
+            <div className="lg:col-span-6 bg-ink p-8 md:p-10 rounded-[32px] border border-white/10 shadow-2xl text-start flex flex-col justify-between h-full">
               <div className="space-y-6">
                 <div className="space-y-2">
                   <div className="inline-flex items-center gap-1.5 font-sans text-lime text-[11px] uppercase tracking-wider font-bold">
@@ -301,25 +304,27 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                 {/* Informative form fields */}
                 <div className="space-y-4 pt-4 border-t border-white/5 font-sans">
                   <div className="space-y-1.5">
-                    <label className="font-sans text-[10px] text-white/40 uppercase tracking-widest block">Your Full Name</label>
+                    <label className="font-sans text-[10px] text-white/40 uppercase tracking-widest block">{t.pages.yourFullName}</label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                      <User className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                       <input
                         type="text"
+                        dir="auto"
                         value={inquirerName}
                         onChange={(e) => setInquirerName(e.target.value)}
-                        placeholder="e.g. Nicolas K."
-                        className="w-full bg-ink-2 border border-white/15 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:border-lime/40 outline-none transition-all"
+                        placeholder={t.pages.namePlaceholder}
+                        className="w-full bg-ink-2 border border-white/15 rounded-xl ps-11 pe-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:border-lime/40 outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="font-sans text-[10px] text-white/40 uppercase tracking-widest block">Specific Requests or Remarks (Optional)</label>
+                    <label className="font-sans text-[10px] text-white/40 uppercase tracking-widest block">{t.pages.remarksLabel}</label>
                     <textarea
+                      dir="auto"
                       value={customSnippet}
                       onChange={(e) => setCustomSnippet(e.target.value)}
-                      placeholder="e.g. Near coastal front in Dubai Marina, or looking for 30 composite bats..."
+                      placeholder={t.pages.remarksPlaceholder}
                       rows={2}
                       className="w-full bg-ink-2 border border-white/15 rounded-xl p-4 text-sm text-white placeholder:text-white/20 focus:border-lime/40 outline-none transition-all resize-none"
                     />
@@ -349,7 +354,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                 >
                   <MessageSquare className="w-4 h-4 text-ink" />
                   <span>{content['contact.dispatch.cta_label']}</span>
-                  <ArrowUpRight className="w-4 h-4" />
+                  <ArrowUpRight className="w-4 h-4 rtl:-scale-x-100" />
                 </motion.a>
 
                 <div className="flex justify-center items-center gap-2 font-sans text-[9px] text-white/30 uppercase tracking-widest">
@@ -377,7 +382,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-display font-black tracking-tight text-ink uppercase leading-none">
                 {content['contact.details.title']}
               </h2>
-              <p className="text-ink/60 font-sans text-sm sm:text-base max-w-lg leading-relaxed md:text-right">
+              <p className="text-ink/60 font-sans text-sm sm:text-base max-w-lg leading-relaxed md:text-end">
                 {content['contact.details.intro']}
               </p>
             </div>
@@ -386,7 +391,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start lg:items-stretch">
 
               {/* Left Column (7/12 cols): GET IN TOUCH Form card */}
-              <div className="lg:col-span-7 bg-[#FFFFFF] p-8 md:p-10 rounded-[28px] border border-slate-200/60 shadow-sm text-left">
+              <div className="lg:col-span-7 bg-[#FFFFFF] p-8 md:p-10 rounded-[28px] border border-slate-200/60 shadow-sm text-start">
                 <div className="pb-4 mb-8 border-b border-slate-200">
                   <h3 className="font-display font-bold text-lg text-ink uppercase tracking-wider">
                     {content['contact.form.title']}
@@ -408,14 +413,15 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                         {/* Name Input */}
                         <div className="space-y-2">
                           <label className="font-sans text-xs font-bold text-ink uppercase tracking-wider block">
-                            NAME
+                            {t.pages.formName}
                           </label>
                           <input
                             type="text"
+                            dir="auto"
                             required
                             value={personalName}
                             onChange={(e) => setPersonalName(e.target.value)}
-                            placeholder="Enter your name*"
+                            placeholder={t.pages.formNamePlaceholder}
                             className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:border-court-blue transition-all font-sans font-medium"
                           />
                         </div>
@@ -423,14 +429,14 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                         {/* Phone Input */}
                         <div className="space-y-2">
                           <label className="font-sans text-xs font-bold text-ink uppercase tracking-wider block">
-                            PHONE NUMBER
+                            {t.pages.formPhone}
                           </label>
                           <input
                             type="tel"
                             required
                             value={personalPhone}
                             onChange={(e) => setPersonalPhone(e.target.value)}
-                            placeholder="Enter your phone number*"
+                            placeholder={t.pages.formPhonePlaceholder}
                             className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:border-court-blue transition-all font-sans font-medium"
                           />
                         </div>
@@ -439,14 +445,14 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                       {/* Email Input */}
                       <div className="space-y-2">
                         <label className="font-sans text-xs font-bold text-ink uppercase tracking-wider block">
-                          EMAIL
+                          {t.pages.formEmail}
                         </label>
                         <input
                           type="email"
                           required
                           value={personalEmail}
                           onChange={(e) => setPersonalEmail(e.target.value)}
-                          placeholder="Enter your email*"
+                          placeholder={t.pages.formEmailPlaceholder}
                           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:border-court-blue transition-all font-sans font-medium"
                         />
                       </div>
@@ -454,14 +460,15 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                       {/* Message Input */}
                       <div className="space-y-2">
                         <label className="font-sans text-xs font-bold text-ink uppercase tracking-wider block">
-                          YOUR MESSAGE
+                          {t.pages.formMessage}
                         </label>
                         <textarea
                           rows={4}
+                          dir="auto"
                           required
                           value={personalMessage}
                           onChange={(e) => setPersonalMessage(e.target.value)}
-                          placeholder="Enter your message*"
+                          placeholder={t.pages.formMessagePlaceholder}
                           className="w-full bg-white border border-slate-200 rounded-xl p-4 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:border-court-blue transition-all font-sans font-medium resize-none min-h-[120px]"
                         />
                       </div>
@@ -493,10 +500,10 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                           {content['contact.form.success_title']}
                         </h4>
                         <p className="text-green text-sm font-semibold">
-                          Thank you, {personalName}.
+                          {t.pages.formThanks(personalName)}
                         </p>
                         <p className="text-ink/65 text-xs max-w-sm mx-auto leading-relaxed">
-                          Our team has received your request and will contact you via <strong className="text-ink">{personalEmail}</strong> shortly.
+                          {t.pages.formReceivedBefore} <strong className="text-ink ltr-island">{personalEmail}</strong> {t.pages.formReceivedAfter}
                         </p>
                       </div>
 
@@ -519,7 +526,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
               </div>
 
               {/* Right Column (5/12 cols): CONTACT INFORMATION & BUSINESS HOURS */}
-              <div className="lg:col-span-5 flex flex-col gap-8 lg:h-full justify-between text-left">
+              <div className="lg:col-span-5 flex flex-col gap-8 lg:h-full justify-between text-start">
 
                 {/* Card 1: CONTACT INFORMATION */}
                 <div className="bg-[#FFFFFF] p-8 md:p-10 rounded-[28px] border border-slate-200/60 shadow-sm flex-1 flex flex-col justify-between">
@@ -539,7 +546,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                         <div className="space-y-0.5">
                           <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">{content['contact.info.phone_label']}</p>
                           <a href={`tel:${content['contact.info.phone'].replace(/\s+/g, '')}`} className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
-                            {content['contact.info.phone']}
+                            <span className="ltr-island">{content['contact.info.phone']}</span>
                           </a>
                         </div>
                       </div>
@@ -565,7 +572,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                         <div className="space-y-0.5">
                           <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest font-sans">{content['contact.info.email_label']}</p>
                           <a href={`mailto:${content['contact.info.email']}`} className="text-[12px] sm:text-xs md:text-sm lg:text-base font-bold text-ink hover:text-court-blue transition-colors block leading-tight">
-                            {content['contact.info.email']}
+                            <span className="ltr-island">{content['contact.info.email']}</span>
                           </a>
                         </div>
                       </div>

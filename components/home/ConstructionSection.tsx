@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, ChevronDown, Mail, MapPin, Check, ShieldCheck, Sparkles } from 'lucide-react';
 import { waHref } from '@/lib/whatsapp';
+import { useT } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -46,9 +47,18 @@ export default function ConstructionSection({
   const canvasRef = externalCanvasRef || internalCanvasRef;
   const formRef = externalFormRef || internalFormRef;
 
+  const t = useT();
   const [contact, setContact] = useState('');
   const [location, setLocation] = useState('Dubai');
   const [courtModel, setCourtModel] = useState<'classic' | 'panoramic' | 'super'>('panoramic');
+
+  // Localized display copy for the spec lines. COURT_CONFIGS below stays
+  // English — it feeds the WhatsApp payload, which is machine/agent-facing.
+  const SPEC_LABELS: Record<'classic' | 'panoramic' | 'super', string[]> = {
+    classic: [t.pages.specClassic1, t.pages.specClassic2, t.pages.specClassic3, t.pages.specClassic4],
+    panoramic: [t.pages.specPanoramic1, t.pages.specPanoramic2, t.pages.specPanoramic3, t.pages.specPanoramic4],
+    super: [t.pages.specSuper1, t.pages.specSuper2, t.pages.specSuper3, t.pages.specSuper4],
+  };
 
   const COURT_CONFIGS = {
     classic: {
@@ -254,7 +264,7 @@ Configuration Details:
           {/* WhatsApp Request Panel Overlay (Appears on the right side once court finishes building) */}
           <div
             ref={formRef}
-            className={`${hideForm ? 'hidden ' : ''}absolute top-[46vh] bottom-2 left-4 right-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:left-auto md:right-16 lg:right-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto`}
+            className={`${hideForm ? 'hidden ' : ''}absolute top-[46vh] bottom-2 start-4 end-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:start-auto md:end-16 lg:end-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto`}
           >
             {/* System telemetry header - Hidden on mobile to save space */}
             <div className="hidden md:flex items-center justify-between border-b border-white/5 pb-2 md:pb-3">
@@ -285,7 +295,7 @@ Configuration Details:
               {/* Interactive Tabs for Court Model */}
               <div className="space-y-1">
                 <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">
-                  1. Select Court Model <span className="md:hidden text-lime">({COURT_CONFIGS[courtModel].name})</span>
+                  {t.pages.buildStep1} <span className="md:hidden text-lime">({COURT_CONFIGS[courtModel].name})</span>
                 </label>
                 <div className="grid grid-cols-3 gap-1.5 md:gap-2">
                   {[
@@ -316,7 +326,7 @@ Configuration Details:
               <div className="hidden md:block bg-white/[0.03] border border-white/5 rounded-xl md:rounded-2xl p-2.5 md:p-4 space-y-1.5 md:space-y-2.5">
                 <div className="flex items-center justify-between border-b border-white/5 pb-1 md:pb-1.5">
                   <span className="font-mono text-[8px] md:text-[9px] text-white/40 uppercase tracking-widest">
-                    Specifications Details
+                    {t.pages.specsDetails}
                   </span>
                   <span className="font-mono text-[8px] md:text-[9px] text-lime uppercase tracking-widest font-bold flex items-center gap-1">
                     <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />
@@ -324,7 +334,7 @@ Configuration Details:
                   </span>
                 </div>
                 <div className="grid grid-cols-1 gap-1 md:gap-2">
-                  {COURT_CONFIGS[courtModel].specs.map((spec, i) => (
+                  {SPEC_LABELS[courtModel].map((spec, i) => (
                     <div key={i} className="flex items-start gap-1.5 md:gap-2.5 text-[9px] md:text-[11px] text-white/80">
                       <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-lime shrink-0 mt-0.5" />
                       <span className="leading-snug">{spec}</span>
@@ -335,43 +345,43 @@ Configuration Details:
 
               {/* Input for contact details */}
               <div className="space-y-1">
-                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">2. Contact Info</label>
+                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep2}</label>
                 <div className="relative flex items-center">
-                  <div className="absolute left-3 text-white/30 pointer-events-none">
+                  <div className="absolute start-3 text-white/30 pointer-events-none">
                     <Mail className="w-3 h-3 md:w-4 md:h-4" />
                   </div>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     value={contact}
                     onChange={(e) => setContact(e.target.value)}
-                    placeholder="Email or Phone Number"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl pl-9 pr-3 py-2 text-[10px] md:text-sm text-white placeholder:text-white/20 focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all"
+                    placeholder={t.pages.contactPlaceholder}
+                    className="ltr-island w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-3 py-2 text-[10px] md:text-sm text-white placeholder:text-white/20 focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Input for location select */}
               <div className="space-y-1">
-                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">3. Court Location</label>
+                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep3}</label>
                 <div className="relative flex items-center">
-                  <div className="absolute left-3 text-white/30 pointer-events-none">
+                  <div className="absolute start-3 text-white/30 pointer-events-none">
                     <MapPin className="w-3 h-3 md:w-4 md:h-4" />
                   </div>
-                  <select 
+                  <select
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl pl-9 pr-8 py-2 text-[10px] md:text-sm text-white appearance-none focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all cursor-pointer"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-8 py-2 text-[10px] md:text-sm text-white appearance-none focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all cursor-pointer"
                   >
-                    <option value="Dubai" className="bg-ink text-white">Dubai</option>
-                    <option value="Abu Dhabi" className="bg-ink text-white">Abu Dhabi</option>
-                    <option value="Sharjah" className="bg-ink text-white">Sharjah</option>
-                    <option value="Ras Al Khaimah" className="bg-ink text-white">Ras Al Khaimah</option>
-                    <option value="Fujairah" className="bg-ink text-white">Fujairah</option>
-                    <option value="Ajman" className="bg-ink text-white">Ajman</option>
-                    <option value="Umm Al Quwain" className="bg-ink text-white">Umm Al Quwain</option>
+                    <option value="Dubai" className="bg-ink text-white">{t.pages.cityDubai}</option>
+                    <option value="Abu Dhabi" className="bg-ink text-white">{t.pages.cityAbuDhabi}</option>
+                    <option value="Sharjah" className="bg-ink text-white">{t.pages.citySharjah}</option>
+                    <option value="Ras Al Khaimah" className="bg-ink text-white">{t.pages.cityRak}</option>
+                    <option value="Fujairah" className="bg-ink text-white">{t.pages.cityFujairah}</option>
+                    <option value="Ajman" className="bg-ink text-white">{t.pages.cityAjman}</option>
+                    <option value="Umm Al Quwain" className="bg-ink text-white">{t.pages.cityUaq}</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 md:w-4 md:h-4 text-white/40 pointer-events-none" />
+                  <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 md:w-4 md:h-4 text-white/40 pointer-events-none" />
                 </div>
               </div>
 

@@ -1,5 +1,6 @@
 import type { Product } from '@/lib/types';
 import type { ContentMap } from '@/lib/content/get';
+import type { Locale } from '@/lib/i18n/locale';
 import Footer from '@/components/home/Footer';
 import HomeHero from './HomeHero';
 import BrandRibbon from './BrandRibbon';
@@ -20,20 +21,22 @@ import AboutTeaser from './AboutTeaser';
 export default function SimplifiedHome({
   products,
   content,
+  locale = 'en',
 }: {
   products: Product[];
   content: ContentMap;
+  locale?: Locale;
 }) {
   return (
     <div className="ch-home ch-has-rail min-h-screen bg-ink text-ink">
       <HomeHero content={content} />
       <div className="relative overflow-x-clip bg-sand">
-        <BrandRibbon />
+        <BrandRibbon locale={locale} />
         <NumbersStrip content={content} />
-        <ServicesGrid content={content} />
+        <ServicesGrid content={content} locale={locale} />
         <TopSellersRail products={products} content={content} />
-        <ConstructPanel content={content} />
-        <AboutTeaser content={content} />
+        <ConstructPanel content={content} locale={locale} />
+        <AboutTeaser content={content} locale={locale} />
         <div className="ch-on-dark">
           <Footer />
         </div>

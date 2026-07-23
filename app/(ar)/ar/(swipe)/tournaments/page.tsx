@@ -3,15 +3,15 @@ import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getLiveFinal, listTournaments } from '@/lib/tournaments/server-store';
 
 export const metadata = {
-  title: 'Tournaments — Court Hub',
+  title: 'البطولات — Court Hub',
   description:
-    'Enter sanctioned P25 to P250 padel tournaments across the UAE, follow live groups and brackets, and track the Court Hub season leaderboard.',
+    'شارك في بطولات بادل معتمدة من P25 إلى P250 في الإمارات، وتابع المجموعات والجداول مباشرة، وراقب ترتيب موسم Court Hub.',
+  alternates: {
+    canonical: '/ar/tournaments',
+    languages: { en: '/tournaments', ar: '/ar/tournaments', 'x-default': '/tournaments' },
+  },
 };
 
-// No hero here — the MAIN project's fixed top navbar (same as Shop), not
-// the atif version's nav. Page content ships with pt-28 tops that clear it.
-// Reads the live server store (admin edits reflect immediately). Switch to ISR
-// (export const revalidate) once the Supabase data layer lands.
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {

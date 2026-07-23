@@ -4,6 +4,7 @@ import type { Bracket as BracketData, GroupStanding, Tournament } from '@/lib/to
 import Bracket from './Bracket';
 import FinalResultCard from './FinalResultCard';
 import GroupTable from './GroupTable';
+import { useT } from '@/lib/i18n/LocaleProvider';
 import { FmtIcon } from './ui';
 
 export default function StandingsBracket({
@@ -15,6 +16,7 @@ export default function StandingsBracket({
   groups: { label: string; rows: GroupStanding[] }[];
   bracket: BracketData | null;
 }) {
+  const T = useT().tournaments;
   const [gi, setGi] = useState(0);
   const active = groups[Math.min(gi, Math.max(0, groups.length - 1))];
 
@@ -24,7 +26,7 @@ export default function StandingsBracket({
       <div className="ch-fadein">
         {groups.length > 0 && (
           <>
-            <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">Group Stage</p>
+            <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">{T.groupStageHeading}</p>
             <div className="mb-[18px] flex flex-wrap gap-2">
               {groups.map((g, i) => (
                 <button
@@ -36,13 +38,13 @@ export default function StandingsBracket({
                     gi === i ? 'border-ink bg-ink text-white' : 'border-ink/10 bg-sand-card text-ink/50 hover:text-ink'
                   }`}
                 >
-                  Group {g.label}
+                  {T.group(g.label)}
                 </button>
               ))}
             </div>
             {active && <GroupTable rows={active.rows} />}
             <div className="mt-3 flex items-center gap-2 font-mono text-[10px] text-ink/45">
-              <i className="inline-block h-2.5 w-2.5 rounded-[3px] bg-court-blue" /> Top two advance to the knockout
+              <i className="inline-block h-2.5 w-2.5 rounded-[3px] bg-court-blue" /> {T.topTwoAdvance}
             </div>
           </>
         )}
@@ -50,7 +52,7 @@ export default function StandingsBracket({
         {bracket && (
           <div className={groups.length > 0 ? 'mt-11' : ''}>
             <p className="mb-4 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">
-              Knockout Bracket {t.status === 'live' && <span className="text-fire">· Final Live</span>}
+              {T.knockoutBracket} {t.status === 'live' && <span className="text-fire">· {T.finalLive}</span>}
             </p>
             <Bracket bracket={bracket} />
           </div>
@@ -68,8 +70,8 @@ export default function StandingsBracket({
   return (
     <div className="ch-fadein py-[70px] text-center text-ink/40">
       <span className="mx-auto mb-3.5 flex w-11 justify-center text-ink/20"><FmtIcon className="h-11 w-11" /></span>
-      <b className="block font-display text-[17px] font-extrabold uppercase text-ink/55">Standings appear once play begins</b>
-      <p className="mx-auto mt-2 max-w-[420px]">Group tables and the knockout bracket populate live during the event, then the final result is shown here.</p>
+      <b className="block font-display text-[17px] font-extrabold uppercase text-ink/55">{T.standingsAppear}</b>
+      <p className="mx-auto mt-2 max-w-[420px]">{T.standingsAppearBody}</p>
     </div>
   );
 }

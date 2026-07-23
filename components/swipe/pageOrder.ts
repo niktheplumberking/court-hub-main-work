@@ -1,5 +1,8 @@
+import { stripLocale } from '@/lib/i18n/locale';
+
 // The horizontal swipe cycle: Home → About → Construct → Shop → Contact (loops).
 // Product detail (/shop/[slug]) is a drill-down, not part of the swipe sequence.
+// Paths are locale-blind: /ar/about and /about share one identity via stripLocale.
 export const PAGE_ORDER = [
   '/',
   '/about',
@@ -12,7 +15,7 @@ export type SwipePath = (typeof PAGE_ORDER)[number];
 
 /** Index of a path in the swipe order, or -1 if it isn't a swipe page. */
 export function orderIndex(pathname: string): number {
-  return (PAGE_ORDER as readonly string[]).indexOf(pathname);
+  return (PAGE_ORDER as readonly string[]).indexOf(stripLocale(pathname));
 }
 
 /** The previous/next swipe targets (looping), given the current pathname. */

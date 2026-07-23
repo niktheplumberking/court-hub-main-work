@@ -4,6 +4,7 @@ import { getPageContent } from '@/lib/content/get';
 export const revalidate = 300;
 
 export const metadata = {
+  alternates: { canonical: '/shop', languages: { en: '/shop', ar: '/ar/shop', 'x-default': '/shop' } },
   title: 'Shop — Court Hub',
   description:
     'Premium and certified pre-owned padel rackets, gear and accessories — curated by Court Hub in the UAE. Secure checkout in AED.',
