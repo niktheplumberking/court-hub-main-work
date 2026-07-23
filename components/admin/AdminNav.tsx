@@ -8,6 +8,7 @@ const LINKS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/admin/products', label: 'Products' },
   { href: '/admin/categories', label: 'Categories' },
   { href: '/admin/orders', label: 'Orders' },
+  { href: '/admin/tournaments', label: 'Tournaments' },
   { href: '/admin/content', label: 'Site Content' },
 ];
 

@@ -1,5 +1,5 @@
 'use client';
-import { BRACKET, type Match } from '@/lib/tournaments/data';
+import type { Bracket as BracketData, Match } from '@/lib/tournaments/data';
 import { useTournamentStore } from '@/lib/tournaments/store';
 
 function setsWon(a: number[], b: number[]) {
@@ -57,22 +57,22 @@ function MatchCard({ m, champ = false }: { m: Match; champ?: boolean }) {
   );
 }
 
-export default function Bracket() {
+export default function Bracket({ bracket }: { bracket: BracketData }) {
   return (
     <div className="flex gap-9 overflow-x-auto px-0.5 pb-5 pt-2">
       <div className="flex min-w-[230px] flex-col justify-center gap-[22px]">
         <div className="mb-0.5 text-center font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-ink/40">Semifinals</div>
-        <MatchCard m={BRACKET.sf[0]} />
-        <MatchCard m={BRACKET.sf[1]} />
+        {bracket.sf[0] && <MatchCard m={bracket.sf[0]} />}
+        {bracket.sf[1] && <MatchCard m={bracket.sf[1]} />}
       </div>
       <div className="flex min-w-[230px] flex-col justify-center gap-[22px]">
         <div>
           <div className="mb-0.5 text-center font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-ink/40">Final</div>
-          <MatchCard m={BRACKET.final} champ />
+          <MatchCard m={bracket.final} champ />
         </div>
         <div>
           <div className="mb-0.5 text-center font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-ink/40">3rd Place</div>
-          <MatchCard m={BRACKET.third} />
+          <MatchCard m={bracket.third} />
         </div>
       </div>
     </div>

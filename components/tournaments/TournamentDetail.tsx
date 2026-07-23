@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { PointsTable, Tournament } from '@/lib/tournaments/data';
+import type { TournamentDetailData } from '@/lib/tournaments/admin-types';
 import { useTournamentStore } from '@/lib/tournaments/store';
 import ScheduleGrid from './ScheduleGrid';
 import StandingsBracket from './StandingsBracket';
@@ -130,10 +131,21 @@ function OverviewTab({ t, points }: { t: Tournament; points: PointsTable }) {
   );
 }
 
-export default function TournamentDetail({ slug, tab }: { slug: string; tab: DetailTab }) {
+export default function TournamentDetail({
+  slug,
+  tab,
+  data,
+}: {
+  slug: string;
+  tab: DetailTab;
+  data: TournamentDetailData | null;
+}) {
   const { getTournament, pointsFor } = useTournamentStore();
-  const t = getTournament(slug);
+  // Server store is the source of truth; session-created tournaments (public
+  // demo admin) resolve from the client store when the server knows nothing.
+  const t = data?.tournament ?? getTournament(slug);
   if (!t) notFound();
+  const points = data?.points ?? pointsFor(t);
 
   return (
     <div className="bg-sand text-ink">
@@ -197,10 +209,10 @@ export default function TournamentDetail({ slug, tab }: { slug: string; tab: Det
 
       {/* Body */}
       <div className="mx-auto max-w-[1320px] px-6 pb-16 pt-10">
-        {tab === 'overview' && <OverviewTab t={t} points={pointsFor(t)} />}
-        {tab === 'schedule' && <ScheduleGrid t={t} />}
-        {tab === 'teams' && <TeamList t={t} />}
-        {tab === 'standings' && <StandingsBracket t={t} />}
+        {tab === 'overview' && <OverviewTab t={t} points={points} />}
+        {tab === 'schedule' && <ScheduleGrid t={t} schedule={data?.schedule ?? []} />}
+        {tab === 'teams' && <TeamList t={t} groups={data?.groups ?? []} teams={data?.teams ?? []} />}
+        {tab === 'standings' && <StandingsBracket t={t} groups={data?.groups ?? []} bracket={data?.bracket ?? null} />}
       </div>
     </div>
   );

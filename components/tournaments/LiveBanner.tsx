@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { BRACKET, type Pair, type Tournament } from '@/lib/tournaments/data';
-import { StatusPill, TierBadge, money, btn } from './ui';
+import type { Match, Pair, Tournament } from '@/lib/tournaments/data';
+import { StatusPill, TierBadge, btn } from './ui';
 
 function ScoreRow({ team, my, opp }: { team: Pair; my: number[]; opp: number[] }) {
   const win = my.filter((s, i) => s > opp[i]).length > opp.filter((s, i) => s > my[i]).length;
@@ -29,9 +29,8 @@ function ScoreRow({ team, my, opp }: { team: Pair; my: number[]; opp: number[] }
   );
 }
 
-export default function LiveBanner({ t }: { t: Tournament }) {
-  const f = BRACKET.final;
-  if (!f.a || !f.b) return null;
+export default function LiveBanner({ t, final }: { t: Tournament; final: Match | null }) {
+  const showScore = !!(final && final.a && final.b);
   return (
     <section className="pb-0 pt-[34px]">
       <div className="mx-auto max-w-[1320px] px-6">
@@ -52,11 +51,15 @@ export default function LiveBanner({ t }: { t: Tournament }) {
             <h3 className="font-display text-[clamp(26px,3vw,40px)] font-black uppercase leading-[0.95] tracking-[-0.03em] text-white">
               {t.name}
             </h3>
-            <p className="-mt-1 text-[13px] text-white/60">Final in progress · {f.court}</p>
-            <div className="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-[16px_18px]">
-              <ScoreRow team={f.a} my={f.sa} opp={f.sb} />
-              <ScoreRow team={f.b} my={f.sb} opp={f.sa} />
-            </div>
+            {showScore && final && (
+              <>
+                <p className="-mt-1 text-[13px] text-white/60">Final in progress · {final.court}</p>
+                <div className="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-[16px_18px]">
+                  <ScoreRow team={final.a!} my={final.sa} opp={final.sb} />
+                  <ScoreRow team={final.b!} my={final.sb} opp={final.sa} />
+                </div>
+              </>
+            )}
             <div className="mt-1.5 flex gap-2.5">
               <Link href={`/tournaments/${t.slug}/standings`} className={btn('lime', '', true)}>View Bracket</Link>
               <Link href={`/tournaments/${t.slug}`} className={btn('ghostLight', '', true)}>Tournament Hub</Link>

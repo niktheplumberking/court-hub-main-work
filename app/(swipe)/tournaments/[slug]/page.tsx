@@ -1,17 +1,15 @@
 import type { Metadata } from 'next';
 import TournamentDetail from '@/components/tournaments/TournamentDetail';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import { TOURNAMENTS, getSeedTournament } from '@/lib/tournaments/data';
+import { getDetailData, getTournament } from '@/lib/tournaments/server-store';
 
-// Prerender the seed tournaments; session (admin-created) slugs still resolve
-// on the client via the store (soft navigation).
-export function generateStaticParams() {
-  return TOURNAMENTS.map((t) => ({ slug: t.slug }));
-}
+// Reads the live server store so admin edits show immediately; also lets
+// admin-created slugs resolve. Switch to ISR when Supabase lands.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const t = getSeedTournament(slug);
+  const t = await getTournament(slug);
   return {
     title: t ? `${t.name} — Court Hub` : 'Tournament — Court Hub',
     description: t?.blurb,
@@ -20,11 +18,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const data = await getDetailData(slug);
   // Bare route renders the default Overview tab (main project's fixed navbar).
+  // `data` is null for slugs that only exist in the client session store
+  // (public demo admin) - the client component falls back to that store
+  // before 404ing.
   return (
     <>
       <HeroFrameNav active="tournaments" fixedBar />
-      <TournamentDetail slug={slug} tab="overview" />
+      <TournamentDetail slug={slug} tab="overview" data={data} />
     </>
   );
 }

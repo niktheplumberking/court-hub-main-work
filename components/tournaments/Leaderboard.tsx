@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { LEADERBOARD, type Division } from '@/lib/tournaments/data';
+import type { Division, LeaderboardRow } from '@/lib/tournaments/data';
 import { TIER_WEIGHTING_NOTE } from '@/lib/tournaments/points';
 import { money, btn, FmtIcon } from './ui';
 
@@ -15,16 +15,17 @@ function MvBadge({ mv }: { mv: number }) {
   return <span className="inline-flex items-center gap-0.5 font-mono text-[10px] font-bold text-ink/30">–</span>;
 }
 
-export default function Leaderboard() {
+export default function Leaderboard({ rows }: { rows: LeaderboardRow[] }) {
   const [div, setDiv] = useState<DivFilter>('all');
 
   const list = useMemo(
     () =>
-      LEADERBOARD.filter((r) => div === 'all' || r.div === div)
+      rows
+        .filter((r) => div === 'all' || r.div === div)
         .slice()
         .sort((a, b) => b.pts - a.pts)
         .map((r, i) => ({ ...r, rank: i + 1 })),
-    [div],
+    [div, rows],
   );
   const top = list.slice(0, 3);
 

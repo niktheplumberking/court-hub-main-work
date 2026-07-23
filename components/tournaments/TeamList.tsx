@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { GROUP_A, GROUP_B, type Pair, type Tournament } from '@/lib/tournaments/data';
+import type { GroupStanding, Pair, Tournament } from '@/lib/tournaments/data';
 import { useTournamentStore } from '@/lib/tournaments/store';
 import { FmtIcon, btn } from './ui';
 
@@ -23,20 +23,15 @@ function TeamCard({ pair, seed, q = false }: { pair: Pick<Pair, 'name' | 'p1' | 
   );
 }
 
-function Group({ label, rows }: { label: string; rows: typeof GROUP_A }) {
-  return (
-    <div className="mb-[26px]">
-      <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">Group {label}</p>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {rows.map((r) => (
-          <TeamCard key={r.t.id} pair={r.t} seed={r.q ? 'Q' : ''} q={r.q} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function TeamList({ t }: { t: Tournament }) {
+export default function TeamList({
+  t,
+  groups,
+  teams,
+}: {
+  t: Tournament;
+  groups: { label: string; rows: GroupStanding[] }[];
+  teams: Pair[];
+}) {
   const { bookingsFor } = useTournamentStore();
 
   if (t.reg === 0) {
@@ -50,40 +45,53 @@ export default function TeamList({ t }: { t: Tournament }) {
     );
   }
 
-  if (t.slug === 'dubai-open') {
+  // Draw published: show the groups with Q markers on qualifiers.
+  if (groups.length > 0) {
     return (
       <div className="ch-fadein">
         <p className="mb-6 max-w-[600px] text-[14px] text-ink/60">
-          Eight pairs, drawn into two groups. <b>Q</b> marks the pairs that advanced to the knockout.
+          {groups.reduce((n, g) => n + g.rows.length, 0)} pairs, drawn into {groups.length} group{groups.length !== 1 ? 's' : ''}. <b>Q</b> marks the pairs that advanced to the knockout.
         </p>
-        <Group label="A" rows={GROUP_A} />
-        <Group label="B" rows={GROUP_B} />
+        {groups.map((g) => (
+          <div key={g.label} className="mb-[26px]">
+            <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">Group {g.label}</p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {g.rows.map((r) => (
+                <TeamCard key={r.t.id} pair={r.t} seed={r.q ? 'Q' : ''} q={r.q} />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     );
   }
 
-  // Generic: session bookings first, then placeholder pairs up to the reg count.
-  const booked = bookingsFor(t.slug);
-  const bookedPairs = booked.map((b) => ({
-    name: `${b.captain.split(' ').pop()} / ${b.partner.split(' ').pop()}`,
-    p1: b.captain,
-    p2: b.partner,
-    nat: b.nat || '–',
-  }));
-  const fillerCount = Math.max(0, t.reg - bookedPairs.length);
+  // No draw yet: registered pairs (server) + this session's bookings (client
+  // fallback for session-only tournaments) + placeholders up to the reg count.
+  const last = (s: string) => s.trim().split(' ').pop() ?? '';
+  const sessionPairs = bookingsFor(t.slug)
+    .filter((b) => !teams.some((sv) => sv.p1 === b.captain && sv.p2 === b.partner))
+    .map((b) => ({
+      name: `${last(b.captain)} / ${last(b.partner)}`,
+      p1: b.captain,
+      p2: b.partner,
+      nat: b.nat || '–',
+    }));
+  const named = [...teams, ...sessionPairs];
+  const fillerCount = Math.max(0, t.reg - named.length);
   const filler = Array.from({ length: fillerCount }, (_, i) => ({
-    name: `Pair ${bookedPairs.length + i + 1}`,
+    name: `Pair ${named.length + i + 1}`,
     p1: 'Registered',
     p2: 'pair',
     nat: '–',
   }));
-  const teams = [...bookedPairs, ...filler];
+  const rows = [...named, ...filler];
 
   return (
     <div className="ch-fadein">
       <p className="mb-4 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">{t.reg} pairs registered</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {teams.map((tm, i) => (
+        {rows.map((tm, i) => (
           <TeamCard key={i} pair={tm} seed={String(i + 1)} />
         ))}
       </div>

@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, useRouter } from 'next/navigation';
+import type { Tournament } from '@/lib/tournaments/data';
+import type { StripeReturn } from '@/lib/tournaments/admin-types';
+import { createRegistration } from '@/lib/actions/tournaments';
 import { useTournamentStore } from '@/lib/tournaments/store';
 import { TierBadge, money, btn } from './ui';
 
@@ -27,26 +30,45 @@ const METHODS: { id: string; name: string; sub: string; icon: string }[] = [
 ];
 const last = (s: string) => s.trim().split(' ').pop() ?? '';
 
-export default function BookingFlow({ slug }: { slug: string }) {
+export default function BookingFlow({
+  slug,
+  tournament,
+  stripeEnabled,
+  stripeReturn,
+}: {
+  slug: string;
+  /** Server-store tournament, or null when the slug only lives in the client session store. */
+  tournament: Tournament | null;
+  stripeEnabled: boolean;
+  stripeReturn: StripeReturn | null;
+}) {
   const { getTournament, addBooking, toast } = useTournamentStore();
   const router = useRouter();
-  const t = getTournament(slug);
+  const t = tournament ?? getTournament(slug);
 
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState<TeamData>(EMPTY);
+  const [step, setStep] = useState(stripeReturn ? 4 : 1);
+  const [data, setData] = useState<TeamData>(
+    stripeReturn?.reg
+      ? { ...EMPTY, captain: stripeReturn.reg.captain, partner: stripeReturn.reg.partner, email: stripeReturn.reg.email }
+      : EMPTY,
+  );
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [method, setMethod] = useState('card');
   const [card, setCard] = useState({ num: '', exp: '', cvc: '', name: '' });
   const [paying, setPaying] = useState(false);
-  const [refCode, setRefCode] = useState('');
+  const [refCode, setRefCode] = useState(stripeReturn?.reg?.ref ?? '');
 
-  // Only reachable for open events; redirect otherwise (matches the demo).
+  // Real Stripe checkout only exists for tournaments the server knows about.
+  const useStripe = stripeEnabled && !!tournament;
+
+  // Only reachable for open events; redirect otherwise, but never bounce a
+  // returning payer landing back with a session_id confirmation.
   useEffect(() => {
-    if (t && t.status !== 'open') router.replace(`/tournaments/${slug}`);
-  }, [t?.status, slug, router, t]);
+    if (t && t.status !== 'open' && !stripeReturn) router.replace(`/tournaments/${slug}`);
+  }, [t?.status, slug, router, t, stripeReturn]);
 
   if (!t) notFound();
-  if (t.status !== 'open') return null; // redirecting
+  if (t.status !== 'open' && !stripeReturn) return null; // redirecting
 
   const set = (k: keyof TeamData, v: string) => setData((d) => ({ ...d, [k]: v }));
 
@@ -64,16 +86,54 @@ export default function BookingFlow({ slug }: { slug: string }) {
     return true;
   }
 
-  function pay() {
-    if (method === 'card' && card.num.replace(/\s/g, '').length < 15) {
+  async function pay() {
+    if (!useStripe && method === 'card' && card.num.replace(/\s/g, '').length < 15) {
       toast('Enter any demo card number to continue');
       return;
     }
     setPaying(true);
+
+    // 1. Real Stripe Checkout (active once real keys are configured).
+    if (useStripe) {
+      try {
+        const res = await fetch('/api/tournament-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, team: data }),
+        });
+        const json = await res.json();
+        if (res.ok && json.url) {
+          window.location.href = json.url;
+          return;
+        }
+        toast(json.error || 'Checkout failed. Please try again.');
+      } catch {
+        toast('Checkout failed. Please try again.');
+      }
+      setPaying(false);
+      return;
+    }
+
+    // 2. Demo payment recorded in the backend (tournament exists server-side).
+    if (tournament) {
+      const res = await createRegistration({ slug, ...data, method });
+      setPaying(false);
+      if (res.ok && res.ref) {
+        setRefCode(res.ref);
+        setStep(4);
+        toast(<>Spot booked · <b>{res.ref}</b></>);
+        router.refresh();
+      } else {
+        toast(res.error ?? 'Booking failed. Please try again.');
+      }
+      return;
+    }
+
+    // 3. Session-only tournament (public demo admin): client store fallback.
     setTimeout(() => {
       const ref = 'CH-' + Math.random().toString(36).slice(2, 8).toUpperCase();
       setRefCode(ref);
-      addBooking({ slug: t!.slug, captain: data.captain, partner: data.partner, email: data.email, nat: data.nat, ref });
+      addBooking({ slug, captain: data.captain, partner: data.partner, email: data.email, nat: data.nat, ref });
       setPaying(false);
       setStep(4);
       toast(<>Spot booked · <b>{ref}</b></>);
@@ -133,6 +193,7 @@ export default function BookingFlow({ slug }: { slug: string }) {
                 <StepPayment
                   fee={t.fee}
                   captain={data.captain}
+                  useStripe={useStripe}
                   method={method}
                   setMethod={setMethod}
                   card={card}
@@ -142,7 +203,16 @@ export default function BookingFlow({ slug }: { slug: string }) {
                   onPay={pay}
                 />
               )}
-              {step === 4 && <StepDone t={t} data={data} refCode={refCode} />}
+              {step === 4 && (
+                <StepDone
+                  t={t}
+                  captain={data.captain}
+                  partner={data.partner}
+                  email={data.email}
+                  refCode={refCode}
+                  processing={!!stripeReturn && !stripeReturn.reg && !refCode}
+                />
+              )}
             </div>
           </div>
 
@@ -265,10 +335,11 @@ function StepReview({ t, data, onBack, onNext }: { t: { name: string; tier: stri
   );
 }
 
-// ---- Step 3: Demo payment ----
+// ---- Step 3: Payment (Stripe when configured, demo otherwise) ----
 function StepPayment({
   fee,
   captain,
+  useStripe,
   method,
   setMethod,
   card,
@@ -279,6 +350,7 @@ function StepPayment({
 }: {
   fee: number;
   captain: string;
+  useStripe: boolean;
   method: string;
   setMethod: (m: string) => void;
   card: { num: string; exp: string; cvc: string; name: string };
@@ -293,6 +365,21 @@ function StepPayment({
     return d.length > 2 ? `${d.slice(0, 2)} / ${d.slice(2)}` : d;
   };
   const fmtCvc = (v: string) => v.replace(/\D/g, '').slice(0, 4);
+
+  if (useStripe) {
+    return (
+      <div>
+        <div className="mb-[22px] flex items-center gap-[11px] rounded-xl border border-ink/10 bg-sand-card px-4 py-3 text-[12.5px] text-ink/70">
+          <b className="font-display text-[11px] font-extrabold uppercase tracking-[0.04em]">Secure checkout</b>
+          You will be redirected to our payment partner to complete the entry fee. Card, Apple Pay and local options are available there.
+        </div>
+        <div className="mt-5 flex gap-3">
+          <button type="button" onClick={onBack} disabled={paying} className={btn('ghost')}>Back</button>
+          <button type="button" onClick={onPay} disabled={paying} className={btn('lime', 'flex-1')}>{paying ? 'Redirecting…' : `Pay AED ${money(fee)}`}</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -345,21 +432,48 @@ function StepPayment({
 }
 
 // ---- Step 4: Confirmation ----
-function StepDone({ t, data, refCode }: { t: { slug: string; name: string }; data: TeamData; refCode: string }) {
+function StepDone({
+  t,
+  captain,
+  partner,
+  email,
+  refCode,
+  processing,
+}: {
+  t: { slug: string; name: string };
+  captain: string;
+  partner: string;
+  email: string;
+  refCode: string;
+  processing: boolean;
+}) {
   const { toast } = useTournamentStore();
+
+  if (processing) {
+    return (
+      <div className="mx-auto max-w-[560px] rounded-[36px] border border-ink/10 bg-sand-card p-[48px_36px] text-center">
+        <h2 className="mb-2.5 font-display text-[30px] font-black uppercase">Payment received</h2>
+        <p className="text-[14.5px] leading-[1.6] text-ink/60">Your registration is being confirmed. Refresh this page in a moment for your booking reference.</p>
+        <div className="mt-[26px] flex flex-wrap justify-center gap-2.5">
+          <Link href={`/tournaments/${t.slug}`} className={btn('ink')}>Back to Tournament</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-[560px] rounded-[36px] border border-ink/10 bg-sand-card p-[48px_36px] text-center">
       <div className="mx-auto mb-[22px] flex h-[72px] w-[72px] items-center justify-center rounded-full bg-green">
         <svg viewBox="0 0 24 24" className="h-[34px] w-[34px]" fill="none" stroke="#fff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
       </div>
       <h2 className="mb-2.5 font-display text-[30px] font-black uppercase">You&apos;re in!</h2>
-      <p className="text-[14.5px] leading-[1.6] text-ink/60"><b className="text-ink">{last(data.captain)} / {last(data.partner)}</b> is registered for</p>
+      <p className="text-[14.5px] leading-[1.6] text-ink/60"><b className="text-ink">{last(captain)} / {last(partner)}</b> is registered for</p>
       <p className="mt-1.5 font-display text-[18px] font-extrabold uppercase text-ink">{t.name}</p>
       <div className="my-6 rounded-[14px] bg-ink p-4 font-mono text-white">
         <div className="text-[9px] uppercase tracking-[0.16em] text-white/50">Booking reference</div>
         <div className="mt-1 text-[22px] font-bold tracking-[0.05em]">{refCode}</div>
       </div>
-      <p className="text-[13px] text-ink/60">A confirmation would be sent to {data.email}. Your pair now appears in the tournament&apos;s registered teams.</p>
+      <p className="text-[13px] text-ink/60">A confirmation would be sent to {email}. Your pair now appears in the tournament&apos;s registered teams.</p>
       <div className="mt-[26px] flex flex-wrap justify-center gap-2.5">
         <Link href={`/tournaments/${t.slug}/teams`} className={btn('ink')}>View Registered Teams</Link>
         <button type="button" onClick={() => toast('Calendar invite downloaded (demo)')} className={btn('ghost')}>Add to Calendar</button>

@@ -1,5 +1,6 @@
 import TournamentHub from '@/components/tournaments/TournamentHub';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
+import { getLiveFinal, listTournaments } from '@/lib/tournaments/server-store';
 
 export const metadata = {
   title: 'Tournaments — Court Hub',
@@ -9,11 +10,16 @@ export const metadata = {
 
 // No hero here — the MAIN project's fixed top navbar (same as Shop), not
 // the atif version's nav. Page content ships with pt-28 tops that clear it.
-export default function Page() {
+// Reads the live server store (admin edits reflect immediately). Switch to ISR
+// (export const revalidate) once the Supabase data layer lands.
+export const dynamic = 'force-dynamic';
+
+export default async function Page() {
+  const [tournaments, liveFinal] = await Promise.all([listTournaments(), getLiveFinal()]);
   return (
     <>
       <HeroFrameNav active="tournaments" fixedBar />
-      <TournamentHub />
+      <TournamentHub tournaments={tournaments} liveFinal={liveFinal} />
     </>
   );
 }

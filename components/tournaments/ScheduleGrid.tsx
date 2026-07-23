@@ -1,4 +1,4 @@
-import { SCHEDULE_DXB, type Tournament } from '@/lib/tournaments/data';
+import type { ScheduleDay, Tournament } from '@/lib/tournaments/data';
 import { CalIcon } from './ui';
 
 const GROUPS_KNOCKOUT =
@@ -6,8 +6,8 @@ const GROUPS_KNOCKOUT =
 const ROUND_ROBIN =
   'This event runs as a single round-robin. Every pair plays every other pair once, and the pair with the best record tops the table. Matches are single sets to keep the evening moving.';
 
-export default function ScheduleGrid({ t }: { t: Tournament }) {
-  const hasSched = t.slug === 'dubai-open';
+export default function ScheduleGrid({ t, schedule }: { t: Tournament; schedule: ScheduleDay[] }) {
+  const hasSched = schedule.length > 0;
   const evState = (s: string) =>
     s === 'live' ? 'border-l-fire' : s === 'done' ? 'border-l-court-blue opacity-60' : 'border-l-court-blue';
 
@@ -29,11 +29,12 @@ export default function ScheduleGrid({ t }: { t: Tournament }) {
           <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-ink/45">Order of play</p>
           <div className="overflow-hidden rounded-[22px] border border-ink/10 bg-sand-card">
             <div className="grid auto-cols-[minmax(150px,1fr)] grid-flow-col overflow-x-auto">
-              {SCHEDULE_DXB.map((d) => (
+              {schedule.map((d) => (
                 <div key={d.d} className="min-h-[230px] border-l border-ink/10 first:border-l-0">
                   <div className="sticky top-0 border-b border-ink/10 bg-sand-card p-3.5">
                     <b className="font-display text-[22px] font-black text-ink">{d.d}</b>
-                    <span className="mt-0.5 block font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-ink/45">Jul {d.dow}</span>
+                    {/* Full sublabel from the data (e.g. "Jul Thu") so any month renders correctly */}
+                    <span className="mt-0.5 block font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-ink/45">{d.dow}</span>
                   </div>
                   {d.evs.map((e, i) => (
                     <div key={i} className={`m-2.5 rounded-xl border border-ink/10 border-l-[3px] bg-white p-3 ${evState(e.s)}`}>

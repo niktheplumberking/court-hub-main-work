@@ -48,6 +48,8 @@ interface TournamentStore {
   addBooking: (b: Booking) => void;
   setPoints: (tier: Tier, table: PointsTable) => void;
   allTournaments: () => Tournament[];
+  /** Session-created tournaments only (public demo admin), for merging on top of server data. */
+  sessionTournaments: () => Tournament[];
   getTournament: (slug: string) => Tournament | undefined;
   bookingsFor: (slug: string) => Booking[];
   pointsFor: (t: Tournament) => PointsTable;
@@ -101,6 +103,8 @@ export function TournamentStoreProvider({ children }: { children: ReactNode }) {
     [extra, withReg],
   );
 
+  const sessionTournaments = useCallback(() => extra.map(withReg), [extra, withReg]);
+
   const getTournament = useCallback(
     (slug: string) => {
       const base = [...extra, ...TOURNAMENTS].find((t) => t.slug === slug);
@@ -132,13 +136,14 @@ export function TournamentStoreProvider({ children }: { children: ReactNode }) {
       addBooking,
       setPoints,
       allTournaments,
+      sessionTournaments,
       getTournament,
       bookingsFor,
       pointsFor,
       pointsForTier,
       toast,
     }),
-    [addTournament, addBooking, setPoints, allTournaments, getTournament, bookingsFor, pointsFor, pointsForTier, toast],
+    [addTournament, addBooking, setPoints, allTournaments, sessionTournaments, getTournament, bookingsFor, pointsFor, pointsForTier, toast],
   );
 
   return (

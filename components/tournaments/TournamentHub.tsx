@@ -1,17 +1,29 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { STATUS_ORDER } from '@/lib/tournaments/data';
+import { STATUS_ORDER, type Match, type Tournament } from '@/lib/tournaments/data';
 import { useTournamentStore } from '@/lib/tournaments/store';
 import FilterBar, { type Filters } from './FilterBar';
 import LiveBanner from './LiveBanner';
 import TournamentCard from './TournamentCard';
 import { CalIcon } from './ui';
 
-export default function TournamentHub() {
-  const { allTournaments } = useTournamentStore();
+export default function TournamentHub({
+  tournaments,
+  liveFinal,
+}: {
+  tournaments: Tournament[];
+  liveFinal: Match | null;
+}) {
+  const { sessionTournaments } = useTournamentStore();
   const [filters, setFilters] = useState<Filters>({ tier: 'all', div: 'all', status: 'all' });
 
-  const all = allTournaments();
+  // Server data is the source of truth; session-created tournaments from the
+  // public demo admin render on top (deduped by slug).
+  const all = useMemo(() => {
+    const extras = sessionTournaments().filter((e) => !tournaments.some((s) => s.slug === e.slug));
+    return [...extras, ...tournaments];
+  }, [sessionTournaments, tournaments]);
+
   const live = all.find((t) => t.status === 'live');
 
   const list = useMemo(() => {
@@ -46,7 +58,7 @@ export default function TournamentHub() {
       </div>
 
       {/* Live banner */}
-      {live && <LiveBanner t={live} />}
+      {live && <LiveBanner t={live} final={liveFinal} />}
 
       {/* Grid */}
       <section className="px-6 py-[52px]">

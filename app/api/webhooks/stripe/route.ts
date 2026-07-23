@@ -25,6 +25,15 @@ export async function POST(req: Request) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
+
+    // Tournament entries are NOT shop orders. They are recorded on the booking
+    // success-return page for now (in-memory stage); when the tournaments
+    // Supabase project lands, durable recording moves here. Without this guard
+    // the fallthrough below would insert an empty order for every entry fee.
+    if (session.metadata?.type === 'tournament_registration') {
+      return NextResponse.json({ received: true });
+    }
+
     const supabase = supabaseAdmin();
 
     // Idempotency: skip if this session was already processed

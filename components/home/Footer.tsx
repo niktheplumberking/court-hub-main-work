@@ -22,7 +22,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-12 md:gap-16">
         
         {/* Brand & Mission */}
-        <div className="md:col-span-4 space-y-6 md:space-y-8">
+        <div className="md:col-span-3 space-y-6 md:space-y-8">
           <div className="flex items-center gap-1.5 font-sans font-bold text-2xl md:text-3xl tracking-wide">
             <span>COURT</span>
             <span className="text-lime">HUB</span>
@@ -76,6 +76,28 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
           </nav>
         </div>
 
+        {/* Compete — Tournaments section */}
+        <div className="md:col-span-2 space-y-4 md:space-y-6">
+          <h4 className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">Compete</h4>
+          <nav className="flex flex-col gap-3 md:gap-4">
+            {[
+              { label: 'Tournaments', href: '/tournaments' },
+              { label: 'Leaderboards', href: '/leaderboards' },
+              { label: 'Admin (demo)', href: '/tournaments/admin' },
+            ].map((item) => (
+              <MotionLink
+                key={item.label}
+                href={item.href}
+                whileHover={{ scale: 1.08, originX: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="text-white font-display font-bold md:text-lg hover:text-lime transition-colors w-fit block"
+              >
+                {item.label}
+              </MotionLink>
+            ))}
+          </nav>
+        </div>
+
         <div className="md:col-span-2 space-y-4 md:space-y-6">
           <h4 className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">Company</h4>
           <nav className="flex flex-col gap-3 md:gap-4">
@@ -97,7 +119,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
         </div>
 
         {/* Community / Contact — honest WhatsApp CTA (newsletter form had no backend) */}
-        <div className="md:col-span-4 space-y-6 md:space-y-8">
+        <div className="md:col-span-3 space-y-6 md:space-y-8">
           <h4 className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">{COMMUNITY.label}</h4>
           <div className="space-y-4">
             <p className="text-xs md:text-sm text-white/60">{COMMUNITY.blurb}</p>
