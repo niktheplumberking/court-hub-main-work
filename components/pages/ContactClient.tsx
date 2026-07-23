@@ -181,41 +181,13 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                     {content['contact.hero.copy']}
                   </p>
                   <div className="flex flex-wrap items-center gap-4">
-                    {/* Pulsating Attention CTA Button wrapper */}
-                    <div className="relative inline-flex group">
-                      {/* Dynamic Sonar Shockwave */}
-                      <motion.span
-                        animate={{
-                          scale: [1, 1.35, 1],
-                          opacity: [0.45, 0, 0.45]
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        className="absolute inset-0 bg-[#C8FF3D] rounded-full blur-md -z-10"
-                      />
-                      <motion.div
-                        animate={{
-                          rotate: [0, 1.2, -1.2, 0.8, -0.8, 0],
-                          scale: [1, 1.025, 0.985, 1.025, 1]
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          repeatDelay: 3.5,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <a
-                          href="#selection"
-                          className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-sans text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-md cursor-pointer block relative z-10"
-                        >
-                          {content['contact.hero.cta_label']}
-                        </a>
-                      </motion.div>
-                    </div>
+                    {/* Primary CTA (static) */}
+                    <a
+                      href="#selection"
+                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-sans text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md cursor-pointer"
+                    >
+                      {content['contact.hero.cta_label']}
+                    </a>
                   </div>
                 </div>
 
@@ -371,14 +343,6 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  animate={{
-                    scale: [1, 1.025, 1],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 2.2,
-                    ease: "easeInOut"
-                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-4.5 bg-[#C8FF3D] hover:bg-white text-ink transition-all font-sans font-bold text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2.5 shadow-xl shadow-[#C8FF3D]/10 cursor-pointer"

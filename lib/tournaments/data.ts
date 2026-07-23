@@ -124,13 +124,17 @@ export interface LeaderboardRow {
 // can serve them. Keys mirror the demo (tcrowd / tcourt / tdetail / poster /
 // about / construct) so the tournament -> cover assignments stay identical.
 // ---------------------------------------------------------------------------
+// Seven UNIQUE tournament covers (fresh Higgsfield padel imagery) — every
+// event card gets its own visual and none repeats imagery used elsewhere
+// on the site (heroes, topics, panels).
 export const COVERS = {
-  tcrowd: '/images/tournament_crowd_night_1779707031611.webp',
-  tcourt: '/images/court_action_landscape_1779705580138.webp',
-  tdetail: '/images/faq_padel_detail_1779708774500.webp',
-  poster: '/images/hero_padel_night_view_1779713624496.png',
-  about: '/images/hero_court_background_1779705118750.png',
-  construct: '/images/dubai_court_night_construction_1779706759259.webp',
+  tcrowd: '/images/cover_final_arena.webp',
+  tcourt: '/images/cover_club_rally.webp',
+  tdetail: '/images/cover_racket_macro.webp',
+  poster: '/images/cover_night_poster.webp',
+  about: '/images/cover_sunset_skyline.webp',
+  construct: '/images/cover_indoor_stadium.webp',
+  finals: '/images/cover_trophy_ceremony.webp',
 } as const;
 
 /** Pool of covers the demo admin randomly assigns to newly created events. */
@@ -251,7 +255,7 @@ export const TOURNAMENTS: Tournament[] = [
   {
     slug: 'abudhabi-p100', name: 'Abu Dhabi Open P100', tier: 'P100', division: 'Men', status: 'done',
     dates: '6–7 Jun 2026', venue: 'Zayed Sports City', format: 'Groups + Knockout',
-    cap: 16, reg: 16, fee: 350, prize: 15000, cover: COVERS.tcourt,
+    cap: 16, reg: 16, fee: 350, prize: 15000, cover: COVERS.finals,
     blurb: 'A completed regional P100. Results contribute to season standings across the men\'s division.',
     result: { champion: { name: 'Al-Otaibi / Al-Ghamdi', nat: 'KSA' }, runnerUp: { name: 'Ferrari / Rossi', nat: 'ARG' }, third: { name: 'Fernández / Vidal', nat: 'ESP' }, score: '6-3, 7-6(5)' },
   },

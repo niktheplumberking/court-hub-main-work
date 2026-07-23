@@ -207,7 +207,7 @@
     "page": "home",
     "label": "Construct Panel · Feature image",
     "type": "image",
-    "value": "/assets/images/dubai_court_night_construction_1779706759259.png"
+    "value": "/assets/images/construct_glass_install.webp"
   },
   "home.construct.eyebrow": {
     "page": "home",
@@ -495,7 +495,7 @@
     "page": "about",
     "label": "Topic 1 · Image",
     "type": "image",
-    "value": "/assets/images/dubai_court_night_construction_1779706759259.png"
+    "value": "/assets/images/championship_arena_interior.webp"
   },
   "about.topic2.title": {
     "page": "about",
@@ -525,7 +525,7 @@
     "page": "about",
     "label": "Topic 2 · Image",
     "type": "image",
-    "value": "/assets/images/hero_court_background_1779705118750.png"
+    "value": "/assets/images/smart_court_tech.webp"
   },
   "about.topic3.title": {
     "page": "about",
@@ -651,7 +651,7 @@
     "page": "about",
     "label": "Positioning · Landscape image",
     "type": "image",
-    "value": "/assets/images/court_action_landscape_1779705580138.png"
+    "value": "/assets/images/padel_club_aerial.webp"
   },
   "about.positioning.landscape_badge": {
     "page": "about",

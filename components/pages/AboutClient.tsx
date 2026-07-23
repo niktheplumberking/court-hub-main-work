@@ -769,19 +769,6 @@ export default function AboutClient({ content }: { content: ContentMap }) {
             <div className="flex flex-wrap justify-center gap-4 pt-2">
               <MotionLink
                 href="/construct-your-court"
-                animate={{
-                  boxShadow: [
-                    "0 4px 14px 0px rgba(200,255,61,0.25)",
-                    "0 6px 30px 6px rgba(200,255,61,0.65)",
-                    "0 4px 14px 0px rgba(200,255,61,0.25)"
-                  ],
-                  scale: [1, 1.03, 1]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
                 whileHover={{ scale: 1.08 }}
                 className="px-8 py-4 bg-lime text-ink rounded-full font-mono font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-1.5 shadow-lg shadow-lime/15"
               >
