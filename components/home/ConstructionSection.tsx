@@ -245,7 +245,11 @@ Configuration Details:
       <section 
         ref={containerRef}
         id="construction"
-        className={`relative w-full bg-sand ${isDesktop ? 'h-screen' : 'h-[400vh]'}`}
+        // Mobile: pb-48 keeps the sticky frame's resting position 192px above the
+        // section end, so the bottom sand fade (h-32, absolute at bottom-0) washes
+        // over empty sand only — never the form card or its WhatsApp button
+        // (client request via Atif, Jul 2026).
+        className={`relative w-full bg-sand ${isDesktop ? 'h-screen' : 'h-[400vh] pb-48'}`}
       >
         {/* Bottom Gradient Transition to FAQ Section (Transparent to Sand) */}
         {!isDesktop && (
