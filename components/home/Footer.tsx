@@ -45,7 +45,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
           </p>
           <div className="flex gap-3 md:gap-4">
             <motion.a
-              href="https://www.instagram.com/used_rackets" // confirm handle with client
+              href="https://www.instagram.com/used_rackets" // confirmed with client (Jul 2026)
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.footer.instagramAria}

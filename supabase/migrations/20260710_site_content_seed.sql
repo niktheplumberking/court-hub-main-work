@@ -158,7 +158,7 @@ insert into site_content (key, value, page, label, type) values
   ('contact.dispatch.preview_label', '"Live Message Payload Draft:"'::jsonb, 'contact', 'Dispatch Card · Live preview label', 'text'),
   ('contact.dispatch.cta_label', '"ROUTE QUERY TO WHATSAPP"'::jsonb, 'contact', 'Dispatch Card · WhatsApp CTA label', 'text'),
   ('contact.dispatch.footnote', '"Instant response desk dispatcher online"'::jsonb, 'contact', 'Dispatch Card · Footnote', 'text'),
-  ('contact.dispatch.whatsapp_phone', '"971500000000"'::jsonb, 'contact', 'Dispatch Card · WhatsApp number', 'text'),
+  ('contact.dispatch.whatsapp_phone', '"971558833836"'::jsonb, 'contact', 'Dispatch Card · WhatsApp number', 'text'),
   ('contact.details.title', '"Contact us"'::jsonb, 'contact', 'Contact Details · Heading', 'text'),
   ('contact.details.intro', '"If you have any questions, please feel free to get in touch with us via phone, text, email, the form below, or even on social media!"'::jsonb, 'contact', 'Contact Details · Intro copy', 'richtext'),
   ('contact.form.title', '"GET IN TOUCH"'::jsonb, 'contact', 'Form Card · Heading', 'text'),
