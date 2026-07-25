@@ -167,7 +167,7 @@ insert into site_content (key, value, page, label, type) values
   ('contact.form.success_cta', '"Send another message"'::jsonb, 'contact', 'Form Card · Success reset button label', 'text'),
   ('contact.info.title', '"CONTACT INFORMATION"'::jsonb, 'contact', 'Contact Information · Heading', 'text'),
   ('contact.info.phone_label', '"PHONE"'::jsonb, 'contact', 'Contact Information · Phone label', 'text'),
-  ('contact.info.phone', '"+971 4 456 7890"'::jsonb, 'contact', 'Contact Information · Phone number', 'text'),
+  ('contact.info.phone', '"+971 55 883 3836"'::jsonb, 'contact', 'Contact Information · Phone number', 'text'),
   ('contact.info.address_label', '"ADDRESS"'::jsonb, 'contact', 'Contact Information · Address label', 'text'),
   ('contact.info.address', '"Plot 124-A, Al Quoz 3 Road, Dubai, UAE"'::jsonb, 'contact', 'Contact Information · Address', 'text'),
   ('contact.info.email_label', '"EMAIL"'::jsonb, 'contact', 'Contact Information · Email label', 'text'),

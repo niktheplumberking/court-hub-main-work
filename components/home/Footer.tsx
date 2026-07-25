@@ -134,7 +134,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
             </div>
             <div className="flex items-center gap-3 text-white/40 text-[11px] md:text-xs">
               <Phone className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              <span className="ltr-island">+971 4 000 0000</span>
+              <span className="ltr-island">+971 55 883 3836</span>
             </div>
             <div className="flex items-center gap-3 text-white/40 text-[11px] md:text-xs">
               <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4" />
