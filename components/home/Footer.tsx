@@ -130,7 +130,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
           <div className="pt-6 md:pt-8 space-y-3 md:space-y-4 border-t border-white/5">
             <div className="flex items-center gap-3 text-white/40 text-[11px] md:text-xs">
               <Mail className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              <span className="ltr-island">contact@courthub.com</span>
+              <span className="ltr-island">support@courthub.ae</span>
             </div>
             <div className="flex items-center gap-3 text-white/40 text-[11px] md:text-xs">
               <Phone className="w-3.5 h-3.5 md:w-4 md:h-4" />
@@ -138,7 +138,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
             </div>
             <div className="flex items-center gap-3 text-white/40 text-[11px] md:text-xs">
               <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              <span className="leading-snug">Al Quoz Industrial 3, Dubai, UAE</span>
+              <span className="leading-snug">51A Street, Al Warqa 3, Dubai, UAE</span>
             </div>
           </div>
         </div>

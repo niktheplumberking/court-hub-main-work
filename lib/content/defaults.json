@@ -975,7 +975,7 @@
     "page": "contact",
     "label": "Contact Information · Address",
     "type": "text",
-    "value": "Plot 124-A, Al Quoz 3 Road, Dubai, UAE"
+    "value": "51A Street, Al Warqa 3, Dubai, UAE"
   },
   "contact.info.email_label": {
     "page": "contact",
@@ -987,7 +987,7 @@
     "page": "contact",
     "label": "Contact Information · Email address",
     "type": "text",
-    "value": "contact@courthub.ae"
+    "value": "support@courthub.ae"
   },
   "contact.hours.title": {
     "page": "contact",
@@ -1005,7 +1005,7 @@
     "page": "contact",
     "label": "Business Hours · Weekday hours",
     "type": "text",
-    "value": "9:00 am - 8:00 pm"
+    "value": "9:00 am - 5:00 pm"
   },
   "contact.hours.saturday_label": {
     "page": "contact",
@@ -1017,7 +1017,7 @@
     "page": "contact",
     "label": "Business Hours · Saturday hours",
     "type": "text",
-    "value": "9:00 am - 6:00 pm"
+    "value": "Closed"
   },
   "contact.hours.sunday_label": {
     "page": "contact",
@@ -1029,7 +1029,7 @@
     "page": "contact",
     "label": "Business Hours · Sunday hours",
     "type": "text",
-    "value": "9:00 am - 5:00 pm"
+    "value": "Closed"
   },
   "contact.map.image": {
     "page": "contact",
