@@ -127,7 +127,7 @@ Card payments land in your **Stripe** account and are paid out to your bank on S
 
 ## 6. Site Content — changing the website's words and pictures
 
-Click **Site Content**. This is your editing studio for Home, About, Contact, Construct Your Court, and the Shop page headers — over 200 editable pieces of text and imagery.
+Click **Site Content**. This is your editing studio for Home, About, Contact, Construct Your Court, the Shop page headers, **and your legal pages (Terms of Service + Privacy Policy)** — over 250 editable pieces of text and imagery.
 
 - **Left**: the editable fields, grouped by page and section. The search box finds any text instantly — type a few words you saw on the site.
 - **Right**: a live preview of the real page.
@@ -136,6 +136,8 @@ Click **Site Content**. This is your editing studio for Home, About, Contact, Co
 - Every field has **Reset** to restore the original professional copy. You cannot permanently break anything.
 - **Images**: image fields accept JPG/PNG/WebP uploads. Same photo rules as products.
 - Things you can change yourself that you'll likely need on day one: the **WhatsApp number on the Contact page**, business hours, address, email, and every headline/paragraph on the main pages.
+
+**Legal pages (Terms & Privacy):** each has a header block plus six section slots (heading + text). Empty slots stay invisible — fill a spare slot to add a new clause, empty it to remove one. The lime "DRAFT" badge at the top: once your final legal text is in, type a single dash (`-`) in the badge field to hide it.
 
 > **Arabic pages:** the Arabic site (`/ar`) is a professional translation mirroring the English content. Editing here changes the **English** site. To change specific Arabic wording, send the new Arabic text to your developer — small task, quick turnaround.
 
