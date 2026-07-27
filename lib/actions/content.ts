@@ -32,6 +32,8 @@ const PAGE_PATHS: Record<ContentPage, string> = {
   construct: '/construct-your-court',
   shop: '/shop',
   faq: '/', // FAQ section is not currently mounted; home is its historic host
+  terms: '/terms',
+  privacy: '/privacy',
 };
 
 const MAX_TEXT = 500;

@@ -25,7 +25,7 @@ import type { Locale } from '@/lib/i18n/locale';
 // the live (possibly DB-pinned) English imagery unless an ar row overrides.
 // ============================================================================
 
-export type ContentPage = 'home' | 'about' | 'contact' | 'construct' | 'shop' | 'faq';
+export type ContentPage = 'home' | 'about' | 'contact' | 'construct' | 'shop' | 'faq' | 'terms' | 'privacy';
 export type ContentType = 'text' | 'richtext' | 'image';
 
 export interface ContentField {

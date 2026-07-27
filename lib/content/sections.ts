@@ -90,6 +90,24 @@ export const STUDIO_PAGES: StudioPage[] = [
       { id: 'header', title: 'Collection header', hint: 'The eyebrow, big heading and intro line above the products. (Products, prices and photos update automatically from your Products list — only this wording is editable.)', prefixes: ['header'] },
     ],
   },
+  {
+    page: 'terms',
+    title: 'Terms of Service',
+    path: '/terms',
+    sections: [
+      { id: 'header', title: 'Page header', hint: 'The badge line, page title and intro paragraph. Type a single dash (-) in the badge to hide it once real legal copy is in.', prefixes: ['header'] },
+      { id: 'sections', title: 'Terms sections', hint: 'Each numbered section is one heading + one text block. Sections 5–6 are spare: fill them to add more, empty them to hide.', prefixes: ['section1', 'section2', 'section3', 'section4', 'section5', 'section6'] },
+    ],
+  },
+  {
+    page: 'privacy',
+    title: 'Privacy Policy',
+    path: '/privacy',
+    sections: [
+      { id: 'header', title: 'Page header', hint: 'The badge line, page title and intro paragraph. Type a single dash (-) in the badge to hide it once real legal copy is in.', prefixes: ['header'] },
+      { id: 'sections', title: 'Policy sections', hint: 'Each numbered section is one heading + one text block. Sections 4–6 are spare: fill them to add more, empty them to hide.', prefixes: ['section1', 'section2', 'section3', 'section4', 'section5', 'section6'] },
+    ],
+  },
 ];
 
 /** Section a key belongs to on its page (fallback: last section). */
