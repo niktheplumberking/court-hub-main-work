@@ -49,7 +49,7 @@ Vercel already builds and runs this exact site perfectly, deploys automatically 
 2. Vercel shows you 1–2 DNS records (an `A` record `76.76.21.21` and/or a `CNAME` to `cname.vercel-dns.com`).
 3. Hostinger → **Domains → Manage → DNS / Name Servers → DNS records**: add exactly those records (delete conflicting default A/CNAME records for `@` and `www`).
 4. Wait up to an hour. Vercel shows a green check and issues SSL automatically. Done — the site is on the real domain.
-5. Vercel → Settings → Environment Variables → set `NEXT_PUBLIC_SITE_URL` = `https://your-domain.com` → **Redeploy** (Deployments → ⋯ → Redeploy). This makes Stripe receipts/redirects and the sitemap use the real domain.
+5. Vercel → Settings → Environment Variables → set `NEXT_PUBLIC_SITE_URL` = `https://courthub.ae` → **Redeploy** (Deployments → ⋯ → Redeploy). This makes Stripe receipts/redirects and the sitemap use the real domain.
 
 ### Option B — Hostinger VPS (only if you insist on hosting at Hostinger)
 Requires a **VPS plan** (KVM 1 or higher) and comfort with a Linux terminal. Summary (a developer should do this): install Node 20+, `git clone` the repo, create `.env.local` with all variables from the table in Phase 7, `npm ci && npm run build`, run with `pm2 start npm -- start`, put Nginx or Hostinger's proxy in front on ports 80/443 with a Let's Encrypt certificate, point the domain's A record at the VPS IP. You also become responsible for OS updates, restarts, and SSL renewals. The site is fully compatible with this (`next start` on any Node host) — but Option A removes all of that work.
@@ -62,7 +62,7 @@ Do this AFTER the domain is live (Stripe needs the final URL).
 
 1. **Get the live keys**: Stripe dashboard (client's account) → **Developers → API keys** → copy the **Secret key** (`sk_live_…`).
 2. **Create the webhook**: Developers → **Webhooks → Add endpoint**.
-   - Endpoint URL: `https://your-domain.com/api/webhooks/stripe`
+   - Endpoint URL: `https://courthub.ae/api/webhooks/stripe`
    - Events: select **`checkout.session.completed`** (that's the only one the site uses).
    - After saving, click the endpoint → **Reveal signing secret** (`whsec_…`).
 3. **Add both to the hosting env vars** (Vercel → Settings → Environment Variables):
@@ -104,7 +104,7 @@ Until then: schedule tournament edits right after a deploy, and treat the tourna
 | `STRIPE_SECRET_KEY` | Live payments key (`sk_live_…`) | **YES** | Stripe → Developers → API keys |
 | `STRIPE_WEBHOOK_SECRET` | Webhook signature (`whsec_…`) | **YES** | Stripe → Developers → Webhooks |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Business WhatsApp, digits only | No | The client's phone |
-| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.com` | No | You set it |
+| `NEXT_PUBLIC_SITE_URL` | `https://courthub.ae` | No | You set it |
 
 All seven must exist in the hosting dashboard (Vercel: Settings → Environment Variables, environment = Production). After ANY change: Redeploy.
 
@@ -113,7 +113,7 @@ All seven must exist in the hosting dashboard (Vercel: Settings → Environment 
 ## Phase 8 — Go-live checklist (tick every box)
 
 - [ ] Domain opens the site with a padlock (SSL) on desktop AND phone
-- [ ] `https://your-domain.com/ar` shows the Arabic site right-to-left
+- [ ] `https://courthub.ae/ar` shows the Arabic site right-to-left
 - [ ] Real AED 5 purchase → order in Admin → Orders → refund issued
 - [ ] Tournament demo booking shows a CH- reference and appears in Admin → Tournaments → (event) → Registrations
 - [ ] Every WhatsApp button opens the client's WhatsApp Business

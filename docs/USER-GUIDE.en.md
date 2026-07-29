@@ -3,8 +3,8 @@
 Welcome! This guide teaches you, the site owner, how to run everything yourself — no technical knowledge needed. Everything is written as "click this, then this," with real examples. Keep it next to you during the first weeks.
 
 Your website has two sides:
-- **The public site** — what customers see: `https://your-domain.com` (English) and `https://your-domain.com/ar` (Arabic).
-- **Your admin console** — where you manage everything: `https://your-domain.com/admin`.
+- **The public site** — what customers see: `https://courthub.ae` (English) and `https://courthub.ae/ar` (Arabic).
+- **Your admin console** — where you manage everything: `https://courthub.ae/admin`.
 
 > 🔑 Your login email and password will be written on the separate credentials sheet you receive at handover. Never share them in chat or email.
 
@@ -12,7 +12,7 @@ Your website has two sides:
 
 ## 1. Logging in
 
-1. Open `/admin` (e.g. `https://your-domain.com/admin`). You'll see the Court Hub login screen.
+1. Open `/admin` (e.g. `https://courthub.ae/admin`). You'll see the Court Hub login screen.
 2. Enter your admin email and password → **Sign in**.
 3. Forgot the password? It cannot be emailed automatically — contact your developer, who resets it from the database dashboard in one minute. Then store the new one in your phone's password manager.
 4. Always **Sign out** (top-right) on shared computers.
@@ -31,6 +31,21 @@ After login you land on the dashboard. The top bar is your menu:
 | **Tournaments** | Everything on the public tournament pages |
 | **Site Content** | The words and pictures on the website's pages |
 | **View site ↗** | Opens the public website in a new tab — use it after every change |
+
+### What you change yourself vs. what needs your developer
+
+**You will never need to touch a "terminal", a server, or any code.** Everything below in the left column is done from the admin console in your browser, and goes live on the real website within moments of clicking Save.
+
+| ✅ You do this yourself, any time | 🔧 Ask your developer (rare) |
+|---|---|
+| All website text and photos (Site Content) | New features, design changes, bug fixes |
+| Products: add, edit, price, discount, photos, stock | Adding or removing an admin account, password resets |
+| Categories: add, remove | Changing the WhatsApp number or connecting Stripe |
+| Orders: mark Fulfilled / Cancelled | Changing wording on the **Arabic** pages |
+| Tournaments: everything — events, scores, brackets, schedule, points, leaderboard, registrations | Anything about the domain, server, or email hosting |
+| Terms of Service & Privacy Policy text | |
+
+There is **no "publish" button and no waiting**: in this website, saving *is* publishing.
 
 ---
 
