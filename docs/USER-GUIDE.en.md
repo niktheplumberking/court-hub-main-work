@@ -14,8 +14,9 @@ Your website has two sides:
 
 1. Open `/admin` (e.g. `https://courthub.ae/admin`). You'll see the Court Hub login screen.
 2. Enter your admin email and password → **Sign in**.
-3. Forgot the password? It cannot be emailed automatically — contact your developer, who resets it from the database dashboard in one minute. Then store the new one in your phone's password manager.
-4. Always **Sign out** (top-right) on shared computers.
+3. **On your very first login, change the password.** You were given a temporary one — make it yours: click **Account** (top-right) → type your new password twice → **Change password**. Now nobody else knows it. Save it in your phone's password manager.
+4. Forgot the password? It cannot be emailed automatically — contact your developer, who resets it from the database dashboard in one minute.
+5. Always **Sign out** (top-right) on shared computers.
 
 > Only accounts on the approved admins list can change anything — even if a stranger somehow created a login, the system rejects them.
 
