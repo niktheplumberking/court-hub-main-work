@@ -32,6 +32,8 @@ After login you land on the dashboard. The top bar is your menu:
 | **Tournaments** | Everything on the public tournament pages |
 | **Site Content** | The words and pictures on the website's pages |
 | **View site ↗** | Opens the public website in a new tab — use it after every change |
+| **Account** (top right) | Change your own password |
+| **☀ / ☾ button** | Switches the console between dark and light. Your choice is remembered on this device. It changes ONLY the admin, never the public website. |
 
 ### What you change yourself vs. what needs your developer
 
@@ -162,6 +164,8 @@ Click **Site Content**. This is your editing studio for Home, About, Contact, Co
 ## 7. Tournaments — running your competitions
 
 Click **Tournaments**. You control everything the public sees on the tournament pages.
+
+> 🔒 **The tournaments section is currently hidden from the public.** Visitors to Tournaments/Leaderboards see a branded "Coming Soon" page with a WhatsApp button, while you build your first events in private. When you are ready to go public, ask your developer to switch it on (a one-line change on the server, about a minute).
 
 > ⚠️ **Important — read once:** for now, tournament edits and registrations live in temporary storage and can reset when the website is updated. This is a known, planned stage — the permanent tournaments database is the next upgrade. Until then: enter tournament data after site updates, and write down important registrations.
 
