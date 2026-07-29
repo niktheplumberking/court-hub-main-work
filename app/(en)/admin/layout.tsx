@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { UserCog } from 'lucide-react';
 import LogoutButton from '@/components/admin/LogoutButton';
 import AdminNav from '@/components/admin/AdminNav';
 
@@ -22,6 +23,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="adm-live-dot" />
             live
           </span>
+          <Link
+            href="/admin/account"
+            title="My account — change password"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 text-white/50 text-sm hover:border-lime hover:text-lime transition-colors"
+          >
+            <UserCog className="w-4 h-4" />
+            <span className="hidden md:inline">Account</span>
+          </Link>
           <LogoutButton />
         </div>
       </nav>
