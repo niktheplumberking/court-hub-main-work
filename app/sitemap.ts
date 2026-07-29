@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3005';
 
@@ -12,8 +13,14 @@ const CORE_PATHS: { path: string; changeFrequency: 'weekly' | 'daily' | 'monthly
   { path: '/construct-your-court', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/contact', changeFrequency: 'monthly', priority: 0.6 },
-  { path: '/tournaments', changeFrequency: 'daily', priority: 0.8 },
-  { path: '/leaderboards', changeFrequency: 'daily', priority: 0.6 },
+  // Listed only once the section is public (lib/tournaments/flags.ts) — no
+  // point sending Google to a Coming Soon screen.
+  ...(tournamentsArePublic()
+    ? ([
+        { path: '/tournaments', changeFrequency: 'daily' as const, priority: 0.8 },
+        { path: '/leaderboards', changeFrequency: 'daily' as const, priority: 0.6 },
+      ])
+    : []),
 ];
 
 const STATIC_ROUTES: MetadataRoute.Sitemap = CORE_PATHS.flatMap(({ path, ...rest }) => [

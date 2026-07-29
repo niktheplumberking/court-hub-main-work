@@ -27,63 +27,45 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="min-h-screen bg-ink flex">
-      {/* LEFT — brand cover panel */}
-      <section className="relative hidden md:flex md:w-[55%] flex-col justify-between overflow-hidden">
-        <img
-          src="/assets/images/hero_padel_night_view_1779713624496.png"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/40 to-ink/90" />
-        <div className="relative z-10 p-10 lg:p-14">
-          <p className="adm-eyebrow">/// COURT HUB ADMIN</p>
-          <h1 className="mt-6 font-display font-black uppercase italic text-white text-5xl lg:text-7xl leading-[0.95]">
-            RUN THE <span className="text-lime">CLUB</span>
-          </h1>
-        </div>
-        <div className="relative z-10 p-10 lg:p-14 flex items-center gap-3">
-          <span className="adm-live-dot" />
-          <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
-            Console online
-          </span>
-        </div>
-      </section>
-
-      {/* RIGHT — login panel */}
-      <section className="adm-grid-bg flex flex-1 flex-col items-center justify-center px-6 py-12">
-        <form
-          onSubmit={submit}
-          className="adm-card adm-fade-up w-full max-w-sm p-8 space-y-5"
-        >
-          <h2 className="font-display font-black uppercase italic tracking-[0.15em] text-white text-center text-xl">
+    // Deliberately plain: one centered card, no cover imagery. The console is a
+    // tool, not a landing page — and it loads instantly on any connection.
+    <main className="min-h-[80vh] flex flex-col items-center justify-center px-6 py-12">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <p className="font-display font-black uppercase italic tracking-[0.15em] text-white text-2xl">
             COURT <span className="text-lime">HUB</span>
-          </h2>
-          <p className="text-white/40 text-[10px] text-center font-mono uppercase tracking-widest">
+          </p>
+          <p className="text-white/40 text-[10px] mt-2 font-mono uppercase tracking-widest">
             Admin Console
           </p>
+        </div>
 
+        <form onSubmit={submit} className="adm-card adm-fade-up w-full p-8 space-y-5">
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+            <Mail className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
             <input
               type="email"
               required
+              autoComplete="email"
               placeholder="Email"
+              aria-label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="adm-input w-full pl-10"
+              className="adm-input adm-input-icon w-full"
             />
           </div>
 
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+            <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
             <input
               type="password"
               required
+              autoComplete="current-password"
               placeholder="Password"
+              aria-label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="adm-input w-full pl-10"
+              className="adm-input adm-input-icon w-full"
             />
           </div>
 
@@ -95,7 +77,7 @@ export default function AdminLogin() {
 
           <button
             disabled={loading}
-            className="adm-pulse w-full rounded-full bg-lime py-3 font-bold text-ink transition-colors hover:bg-white disabled:opacity-50"
+            className="w-full rounded-full bg-lime py-3 font-bold text-ink transition-colors hover:brightness-110 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <span className="inline-flex items-center justify-center gap-2">
@@ -108,10 +90,10 @@ export default function AdminLogin() {
           </button>
         </form>
 
-        <p className="mt-6 text-[10px] font-mono uppercase tracking-widest text-white/25">
+        <p className="mt-6 text-center text-[10px] font-mono uppercase tracking-widest text-white/25">
           Court Hub · Premium Padel · Admin
         </p>
-      </section>
+      </div>
     </main>
   );
 }

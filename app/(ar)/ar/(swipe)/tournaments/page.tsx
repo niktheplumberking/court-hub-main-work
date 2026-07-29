@@ -1,4 +1,6 @@
 import TournamentHub from '@/components/tournaments/TournamentHub';
+import ComingSoon from '@/components/tournaments/ComingSoon';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getLiveFinal, listTournaments } from '@/lib/tournaments/server-store';
 
@@ -15,6 +17,8 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
+  if (!tournamentsArePublic()) return <ComingSoon />;
+
   const [tournaments, liveFinal] = await Promise.all([listTournaments(), getLiveFinal()]);
   return (
     <>

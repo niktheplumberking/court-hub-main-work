@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import ComingSoon from '@/components/tournaments/ComingSoon';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import { notFound } from 'next/navigation';
 import TournamentDetail, { type DetailTab } from '@/components/tournaments/TournamentDetail';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
@@ -18,6 +20,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string; tab: string }> }) {
+  // Section not public yet (lib/tournaments/flags.ts) — ComingSoon is
+  // locale-aware, so /ar visitors get the Arabic version automatically.
+  if (!tournamentsArePublic()) return <ComingSoon />;
+
   const { slug, tab } = await params;
   if (!(VALID_TABS as readonly string[]).includes(tab)) notFound();
   const data = await getDetailData(slug);

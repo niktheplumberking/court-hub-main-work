@@ -1,4 +1,6 @@
 import Leaderboard from '@/components/tournaments/Leaderboard';
+import ComingSoon from '@/components/tournaments/ComingSoon';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getLeaderboardRows } from '@/lib/tournaments/server-store';
 
@@ -15,6 +17,8 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
+  if (!tournamentsArePublic()) return <ComingSoon />;
+
   const rows = await getLeaderboardRows();
   return (
     <>

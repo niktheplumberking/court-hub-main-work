@@ -170,6 +170,12 @@ const en = {
   },
   tournaments: {
     kicker: 'Court Hub · Compete',
+    comingSoonHeadline: 'Coming Soon',
+    comingSoonBody:
+      'We are putting the finishing touches on the Court Hub circuit: sanctioned P25 to P250 events, live groups and brackets, and a season leaderboard. Message us and we will tell you the moment registration opens.',
+    comingSoonCta: 'Notify me on WhatsApp',
+    comingSoonWa: 'Hi Court Hub! Please let me know when tournament registration opens.',
+    comingSoonBack: 'Back to home',
     hubTitle: 'Tournaments',
     allTournaments: 'All Tournaments',
     events: (n: number) => plural('en', n, { one: '# event', other: '# events' }),
@@ -540,6 +546,12 @@ const ar: Dict = {
   },
   tournaments: {
     kicker: 'Court Hub · نافس',
+    comingSoonHeadline: 'قريبًا',
+    comingSoonBody:
+      'نضع اللمسات الأخيرة على دوري Court Hub: بطولات معتمدة من P25 إلى P250، ومجموعات وجداول مباشرة، وترتيب للموسم. راسلنا وسنخبرك فور فتح التسجيل.',
+    comingSoonCta: 'أبلغني عبر واتساب',
+    comingSoonWa: 'مرحبًا Court Hub! أرجو إبلاغي عند فتح التسجيل في البطولات.',
+    comingSoonBack: 'العودة إلى الرئيسية',
     hubTitle: 'البطولات',
     allTournaments: 'جميع البطولات',
     events: (n: number) =>

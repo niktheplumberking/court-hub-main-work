@@ -48,6 +48,9 @@ export default function CartDrawer() {
   // everywhere else it's a WhatsApp contact button (the primary lead channel).
   const path = stripLocale(usePathname());
   const isShopArea = path === '/shop' || path.startsWith('/shop/');
+  // The admin console is a work tool, not a storefront — no customer-facing
+  // cart bag or WhatsApp widget there.
+  const isAdminArea = path === '/admin' || path.startsWith('/admin/');
 
   // Lock body scroll while the drawer is open.
   useEffect(() => {
@@ -88,10 +91,15 @@ export default function CartDrawer() {
     }
   };
 
+  // Nothing customer-facing inside the console. Placed after every hook so the
+  // hook order stays identical on admin and public routes.
+  if (isAdminArea) return null;
+
   return (
     <>
-      {/* Floating widget — cart bag in the shop, WhatsApp elsewhere. Fades/shrinks
-          away while the cart drawer is open (only reachable on shop pages). */}
+      {/* Floating widget — cart bag in the shop, WhatsApp elsewhere, nothing in
+          the admin. Fades/shrinks away while the cart drawer is open (only
+          reachable on shop pages). */}
       <div
         style={{
           transform: drawerOpen ? 'scale(0)' : 'scale(1)',

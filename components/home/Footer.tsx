@@ -19,11 +19,11 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
     { label: t.nav.shop, href: lp('/shop') },
     { label: t.nav.contact, href: lp('/contact') },
   ];
+  // The unprotected demo admin is deliberately NOT linked from a live business
+  // site; it stays reachable by URL for internal showcases only.
   const competeLinks = [
     { label: t.nav.tournaments, href: lp('/tournaments') },
     { label: t.footer.leaderboards, href: lp('/leaderboards') },
-    // Demo admin exists only under the English tree.
-    { label: t.footer.adminDemo, href: '/tournaments/admin' },
   ];
   const companyLinks = [
     { label: t.footer.terms, href: '/terms' },

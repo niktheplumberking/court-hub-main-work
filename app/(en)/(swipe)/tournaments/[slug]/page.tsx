@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import ComingSoon from '@/components/tournaments/ComingSoon';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import TournamentDetail from '@/components/tournaments/TournamentDetail';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getDetailData, getTournament } from '@/lib/tournaments/server-store';
@@ -17,6 +19,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  // Section not public yet (lib/tournaments/flags.ts) — ComingSoon is
+  // locale-aware, so /ar visitors get the Arabic version automatically.
+  if (!tournamentsArePublic()) return <ComingSoon />;
+
   const { slug } = await params;
   const data = await getDetailData(slug);
   // Bare route renders the default Overview tab (main project's fixed navbar).

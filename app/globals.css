@@ -436,6 +436,13 @@ html.lenis body {
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Inputs with a leading icon. MUST live after .adm-input: that rule sets the
+   `padding` SHORTHAND, which would otherwise beat a Tailwind ps-10 utility and
+   drop the text underneath the icon. */
+.adm-input-icon {
+  padding-inline-start: 2.5rem;
+}
+
 /* Primary action pulse — soft lime sonar, CSS loop (runs under reduce-motion
    like the site's Book-a-Court pulse). */
 @keyframes adm-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(200, 255, 61, 0.35); } 55% { box-shadow: 0 0 0 9px rgba(200, 255, 61, 0); } }
@@ -518,4 +525,97 @@ html[dir='rtl'] .ltr-island {
 [dir='rtl'] .rtl-mirror {
   transform: scaleX(-1);
 }
+/* ── Admin light mode ───────────────────────────────────────────────────────
+   Opt-in daylight skin for the console. Scoped to `.adm-root` (the admin
+   wrapper), which the server stamps from a cookie — so there is no flash, and
+   the public site can never be affected.
 
+   Approach: the admin markup uses fixed Tailwind color utilities, and Tailwind
+   v4 compiles those to `var(--color-*)` reads. So instead of fighting the
+   cascade utility by utility, we simply REDEFINE the tokens inside the admin
+   subtree: every text-white, border-white/NN, bg-ink… resolves against the new
+   values automatically, including every opacity variant. Only the handful of
+   tokens that must NOT invert (ink text on lime buttons, true-white hovers,
+   lime as text) get an explicit exception below. */
+.adm-root[data-admin-theme='light'] {
+  --color-white: #0E0E0C; /* "white" text/borders become ink */
+  --color-ink: #F7F5F1;   /* ink surfaces become warm paper */
+  --color-ink-2: #FFFFFF;
+  background: #F7F5F1;
+  color: #0E0E0C;
+}
+
+/* Exceptions — tokens that must keep their original meaning on light. */
+.adm-root[data-admin-theme='light'] .text-ink { color: #0E0E0C; }        /* label on a lime button */
+.adm-root[data-admin-theme='light'] .bg-white { background-color: #FFFFFF; }
+.adm-root[data-admin-theme='light'] .hover\:bg-white:hover { background-color: #FFFFFF; }
+/* Lime is unreadable as TEXT on paper; backgrounds keep the real brand lime. */
+.adm-root[data-admin-theme='light'] .text-lime,
+.adm-root[data-admin-theme='light'] .adm-eyebrow { color: #4A7300; }
+.adm-root[data-admin-theme='light'] .hover\:text-lime:hover { color: #4A7300; }
+.adm-root[data-admin-theme='light'] .text-green { color: #05803F; }
+
+/* Console components use literal rgba(), so they need real overrides. */
+.adm-root[data-admin-theme='light'] .adm-card {
+  background: #FFFFFF;
+  border-color: rgba(14, 14, 12, 0.10);
+  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.04), 0 8px 24px rgba(14, 14, 12, 0.05);
+}
+.adm-root[data-admin-theme='light'] .adm-card:hover {
+  border-color: rgba(74, 115, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(14, 14, 12, 0.10);
+}
+.adm-root[data-admin-theme='light'] .adm-input,
+.adm-root[data-admin-theme='light'] .adm-textarea {
+  background: #FFFFFF;
+  border-color: rgba(14, 14, 12, 0.16);
+  color: #0E0E0C;
+}
+.adm-root[data-admin-theme='light'] .adm-input:focus,
+.adm-root[data-admin-theme='light'] .adm-textarea:focus {
+  border-color: #4A7300;
+  box-shadow: 0 0 0 3px rgba(74, 115, 0, 0.14);
+  background: #FFFFFF;
+}
+.adm-root[data-admin-theme='light'] .adm-input::placeholder,
+.adm-root[data-admin-theme='light'] .adm-textarea::placeholder {
+  color: rgba(14, 14, 12, 0.38);
+}
+.adm-root[data-admin-theme='light'] .adm-grid-bg::before {
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(74, 115, 0, 0.06), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(30, 90, 232, 0.05), transparent 60%),
+    linear-gradient(to right, rgba(14, 14, 12, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 14, 12, 0.04) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+}
+
+/* Opacity variants (text-white/40, border-white/10, bg-white/5 …) are the one
+   gap in the token approach: Tailwind v4 inlines the literal `#fff` inside
+   color-mix() for them instead of reading --color-white, so they cannot be
+   re-pointed by redefining the token and need real overrides. Values are
+   nudged darker because muted text needs more weight on paper than on black. */
+.adm-root[data-admin-theme='light'] .text-white\/90 { color: rgba(14, 14, 12, 0.92); }
+.adm-root[data-admin-theme='light'] .text-white\/80 { color: rgba(14, 14, 12, 0.84); }
+.adm-root[data-admin-theme='light'] .text-white\/70 { color: rgba(14, 14, 12, 0.76); }
+.adm-root[data-admin-theme='light'] .text-white\/60 { color: rgba(14, 14, 12, 0.68); }
+.adm-root[data-admin-theme='light'] .text-white\/55 { color: rgba(14, 14, 12, 0.64); }
+.adm-root[data-admin-theme='light'] .text-white\/50 { color: rgba(14, 14, 12, 0.60); }
+.adm-root[data-admin-theme='light'] .text-white\/45 { color: rgba(14, 14, 12, 0.56); }
+.adm-root[data-admin-theme='light'] .text-white\/40 { color: rgba(14, 14, 12, 0.54); }
+.adm-root[data-admin-theme='light'] .text-white\/35 { color: rgba(14, 14, 12, 0.50); }
+.adm-root[data-admin-theme='light'] .text-white\/30 { color: rgba(14, 14, 12, 0.46); }
+.adm-root[data-admin-theme='light'] .text-white\/25 { color: rgba(14, 14, 12, 0.42); }
+.adm-root[data-admin-theme='light'] .text-white\/20 { color: rgba(14, 14, 12, 0.38); }
+.adm-root[data-admin-theme='light'] .border-white\/5 { border-color: rgba(14, 14, 12, 0.07); }
+.adm-root[data-admin-theme='light'] .border-white\/10 { border-color: rgba(14, 14, 12, 0.11); }
+.adm-root[data-admin-theme='light'] .border-white\/15 { border-color: rgba(14, 14, 12, 0.15); }
+.adm-root[data-admin-theme='light'] .border-white\/20 { border-color: rgba(14, 14, 12, 0.19); }
+.adm-root[data-admin-theme='light'] .border-white\/30 { border-color: rgba(14, 14, 12, 0.26); }
+.adm-root[data-admin-theme='light'] .border-white\/40 { border-color: rgba(14, 14, 12, 0.32); }
+.adm-root[data-admin-theme='light'] .bg-white\/5 { background-color: rgba(14, 14, 12, 0.04); }
+.adm-root[data-admin-theme='light'] .bg-white\/10 { background-color: rgba(14, 14, 12, 0.06); }
+.adm-root[data-admin-theme='light'] .bg-white\/15 { background-color: rgba(14, 14, 12, 0.09); }
+.adm-root[data-admin-theme='light'] .bg-black\/40 { background-color: rgba(14, 14, 12, 0.05); }
+.adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(247, 245, 241, 0.9); }
+.adm-root[data-admin-theme='light'] .hover\:bg-white\/10:hover { background-color: rgba(14, 14, 12, 0.06); }

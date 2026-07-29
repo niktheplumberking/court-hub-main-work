@@ -1,4 +1,6 @@
 import { redirect } from 'next/navigation';
+import ComingSoon from '@/components/tournaments/ComingSoon';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import BookingFlow from '@/components/tournaments/BookingFlow';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getStripe } from '@/lib/stripe';
@@ -70,6 +72,10 @@ export default async function Page({
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ session_id?: string }>;
 }) {
+  // Section not public yet (lib/tournaments/flags.ts) — ComingSoon is
+  // locale-aware, so /ar visitors get the Arabic version automatically.
+  if (!tournamentsArePublic()) return <ComingSoon />;
+
   const { slug } = await params;
   const { session_id } = await searchParams;
 
