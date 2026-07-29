@@ -59,6 +59,7 @@ echo "==> [6/6] nginx reverse proxy for ${DOMAIN}"
 cat > /etc/nginx/sites-available/courthub <<EOF
 server {
     listen 80;
+    listen [::]:80;
     server_name ${DOMAIN} www.${DOMAIN};
     client_max_body_size 30m;
     location / {
