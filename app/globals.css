@@ -526,44 +526,55 @@ html[dir='rtl'] .ltr-island {
   transform: scaleX(-1);
 }
 /* ── Admin light mode ───────────────────────────────────────────────────────
-   Opt-in daylight skin for the console. Scoped to `.adm-root` (the admin
-   wrapper), which the server stamps from a cookie — so there is no flash, and
-   the public site can never be affected.
+   Opt-in daylight skin for the console, built ONLY from brand colors:
+   ink #0E0E0C, sand #EDE8E1 / #F5F2EC, court blue #1E5AE8, green #07C66A,
+   lime #C8FF3D. Scoped to `.adm-root` (the admin wrapper, stamped from a
+   cookie server-side) so it renders pre-themed and can never reach the
+   public site.
 
-   Approach: the admin markup uses fixed Tailwind color utilities, and Tailwind
-   v4 compiles those to `var(--color-*)` reads. So instead of fighting the
-   cascade utility by utility, we simply REDEFINE the tokens inside the admin
-   subtree: every text-white, border-white/NN, bg-ink… resolves against the new
-   values automatically, including every opacity variant. Only the handful of
-   tokens that must NOT invert (ink text on lime buttons, true-white hovers,
-   lime as text) get an explicit exception below. */
+   Approach: Tailwind v4 compiles plain utilities to `var(--color-*)` reads,
+   so redefining the tokens inside the admin subtree re-points them all at
+   once. Only tokens that must NOT invert get exceptions below.
+
+   Accent policy on light: LIME IS THE DARK-MODE ACCENT — on paper it is
+   nearly invisible, so accent TEXT becomes court blue (the brand's other
+   primary) while lime stays on button BACKGROUNDS with ink text. */
 .adm-root[data-admin-theme='light'] {
-  --color-white: #0E0E0C; /* "white" text/borders become ink */
-  --color-ink: #F7F5F1;   /* ink surfaces become warm paper */
+  --color-white: #0E0E0C;  /* "white" text/borders become ink */
+  --color-ink: #EDE8E1;    /* ink surfaces become brand sand */
   --color-ink-2: #FFFFFF;
-  background: #F7F5F1;
+  background: #EDE8E1;
   color: #0E0E0C;
 }
 
-/* Exceptions — tokens that must keep their original meaning on light. */
+/* Tokens that keep their original meaning on light. */
 .adm-root[data-admin-theme='light'] .text-ink { color: #0E0E0C; }        /* label on a lime button */
 .adm-root[data-admin-theme='light'] .bg-white { background-color: #FFFFFF; }
 .adm-root[data-admin-theme='light'] .hover\:bg-white:hover { background-color: #FFFFFF; }
-/* Lime is unreadable as TEXT on paper; backgrounds keep the real brand lime. */
+/* Accent text -> court blue; accent surfaces stay lime. */
 .adm-root[data-admin-theme='light'] .text-lime,
-.adm-root[data-admin-theme='light'] .adm-eyebrow { color: #4A7300; }
-.adm-root[data-admin-theme='light'] .hover\:text-lime:hover { color: #4A7300; }
-.adm-root[data-admin-theme='light'] .text-green { color: #05803F; }
+.adm-root[data-admin-theme='light'] .adm-eyebrow { color: #1E5AE8; }
+.adm-root[data-admin-theme='light'] .hover\:text-lime:hover { color: #1E5AE8; }
+.adm-root[data-admin-theme='light'] .hover\:border-lime:hover { border-color: #1E5AE8; }
+.adm-root[data-admin-theme='light'] .border-lime\/30 { border-color: rgba(30, 90, 232, 0.3); }
+.adm-root[data-admin-theme='light'] .bg-lime\/10 { background-color: rgba(30, 90, 232, 0.08); }
+/* Brand green, darkened just enough to stay legible as text on sand. */
+.adm-root[data-admin-theme='light'] .text-green { color: #05955A; }
+/* Live indicator: brand green reads on paper where lime does not. */
+.adm-root[data-admin-theme='light'] .adm-live-dot {
+  background: #07C66A;
+  box-shadow: 0 0 10px rgba(7, 198, 106, 0.55);
+}
 
 /* Console components use literal rgba(), so they need real overrides. */
 .adm-root[data-admin-theme='light'] .adm-card {
   background: #FFFFFF;
   border-color: rgba(14, 14, 12, 0.10);
-  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.04), 0 8px 24px rgba(14, 14, 12, 0.05);
+  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.04), 0 8px 24px rgba(14, 14, 12, 0.06);
 }
 .adm-root[data-admin-theme='light'] .adm-card:hover {
-  border-color: rgba(74, 115, 0, 0.35);
-  box-shadow: 0 10px 30px rgba(14, 14, 12, 0.10);
+  border-color: rgba(30, 90, 232, 0.40);
+  box-shadow: 0 10px 30px rgba(30, 90, 232, 0.12);
 }
 .adm-root[data-admin-theme='light'] .adm-input,
 .adm-root[data-admin-theme='light'] .adm-textarea {
@@ -573,28 +584,31 @@ html[dir='rtl'] .ltr-island {
 }
 .adm-root[data-admin-theme='light'] .adm-input:focus,
 .adm-root[data-admin-theme='light'] .adm-textarea:focus {
-  border-color: #4A7300;
-  box-shadow: 0 0 0 3px rgba(74, 115, 0, 0.14);
+  border-color: #1E5AE8;
+  box-shadow: 0 0 0 3px rgba(30, 90, 232, 0.16);
   background: #FFFFFF;
 }
 .adm-root[data-admin-theme='light'] .adm-input::placeholder,
 .adm-root[data-admin-theme='light'] .adm-textarea::placeholder {
   color: rgba(14, 14, 12, 0.38);
 }
+/* Blueprint backdrop: same court-grid idea as dark, drawn in brand blue and
+   strong enough to actually read against sand (the previous grey mix was so
+   faint it looked absent on content-heavy pages). */
+.adm-root[data-admin-theme='light'].adm-grid-bg::before,
 .adm-root[data-admin-theme='light'] .adm-grid-bg::before {
   background:
-    radial-gradient(900px 500px at 85% -10%, rgba(74, 115, 0, 0.06), transparent 60%),
-    radial-gradient(700px 500px at -10% 110%, rgba(30, 90, 232, 0.05), transparent 60%),
-    linear-gradient(to right, rgba(14, 14, 12, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(14, 14, 12, 0.04) 1px, transparent 1px);
+    radial-gradient(900px 500px at 85% -10%, rgba(30, 90, 232, 0.10), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(7, 198, 106, 0.08), transparent 60%),
+    linear-gradient(to right, rgba(30, 90, 232, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 90, 232, 0.09) 1px, transparent 1px);
   background-size: auto, auto, 44px 44px, 44px 44px;
 }
 
 /* Opacity variants (text-white/40, border-white/10, bg-white/5 …) are the one
-   gap in the token approach: Tailwind v4 inlines the literal `#fff` inside
-   color-mix() for them instead of reading --color-white, so they cannot be
-   re-pointed by redefining the token and need real overrides. Values are
-   nudged darker because muted text needs more weight on paper than on black. */
+   gap in the token approach: Tailwind v4 inlines a literal `#fff` inside
+   color-mix() for them instead of reading --color-white, so they need real
+   rules. Values run darker because muted text needs more weight on paper. */
 .adm-root[data-admin-theme='light'] .text-white\/90 { color: rgba(14, 14, 12, 0.92); }
 .adm-root[data-admin-theme='light'] .text-white\/80 { color: rgba(14, 14, 12, 0.84); }
 .adm-root[data-admin-theme='light'] .text-white\/70 { color: rgba(14, 14, 12, 0.76); }
@@ -607,15 +621,16 @@ html[dir='rtl'] .ltr-island {
 .adm-root[data-admin-theme='light'] .text-white\/30 { color: rgba(14, 14, 12, 0.46); }
 .adm-root[data-admin-theme='light'] .text-white\/25 { color: rgba(14, 14, 12, 0.42); }
 .adm-root[data-admin-theme='light'] .text-white\/20 { color: rgba(14, 14, 12, 0.38); }
-.adm-root[data-admin-theme='light'] .border-white\/5 { border-color: rgba(14, 14, 12, 0.07); }
-.adm-root[data-admin-theme='light'] .border-white\/10 { border-color: rgba(14, 14, 12, 0.11); }
-.adm-root[data-admin-theme='light'] .border-white\/15 { border-color: rgba(14, 14, 12, 0.15); }
-.adm-root[data-admin-theme='light'] .border-white\/20 { border-color: rgba(14, 14, 12, 0.19); }
+.adm-root[data-admin-theme='light'] .border-white\/5 { border-color: rgba(14, 14, 12, 0.08); }
+.adm-root[data-admin-theme='light'] .border-white\/10 { border-color: rgba(14, 14, 12, 0.12); }
+.adm-root[data-admin-theme='light'] .border-white\/15 { border-color: rgba(14, 14, 12, 0.16); }
+.adm-root[data-admin-theme='light'] .border-white\/20 { border-color: rgba(14, 14, 12, 0.20); }
 .adm-root[data-admin-theme='light'] .border-white\/30 { border-color: rgba(14, 14, 12, 0.26); }
 .adm-root[data-admin-theme='light'] .border-white\/40 { border-color: rgba(14, 14, 12, 0.32); }
-.adm-root[data-admin-theme='light'] .bg-white\/5 { background-color: rgba(14, 14, 12, 0.04); }
-.adm-root[data-admin-theme='light'] .bg-white\/10 { background-color: rgba(14, 14, 12, 0.06); }
-.adm-root[data-admin-theme='light'] .bg-white\/15 { background-color: rgba(14, 14, 12, 0.09); }
+.adm-root[data-admin-theme='light'] .bg-white\/5 { background-color: rgba(14, 14, 12, 0.035); }
+.adm-root[data-admin-theme='light'] .bg-white\/10 { background-color: rgba(14, 14, 12, 0.055); }
+.adm-root[data-admin-theme='light'] .bg-white\/15 { background-color: rgba(14, 14, 12, 0.08); }
+.adm-root[data-admin-theme='light'] .hover\:bg-white\/10:hover { background-color: rgba(30, 90, 232, 0.08); }
 .adm-root[data-admin-theme='light'] .bg-black\/40 { background-color: rgba(14, 14, 12, 0.05); }
-.adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(247, 245, 241, 0.9); }
-.adm-root[data-admin-theme='light'] .hover\:bg-white\/10:hover { background-color: rgba(14, 14, 12, 0.06); }
+/* Sticky top bar glass */
+.adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(237, 232, 225, 0.9); }
