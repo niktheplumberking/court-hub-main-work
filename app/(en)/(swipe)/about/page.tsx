@@ -1,5 +1,6 @@
 import AboutClient from '@/components/pages/AboutClient';
 import { getPageContent } from '@/lib/content/get';
+import { getShopProducts } from '@/lib/shop/catalog';
 
 export const revalidate = 300;
 
@@ -10,6 +11,6 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const content = await getPageContent('about');
-  return <AboutClient content={content} />;
+  const [content, products] = await Promise.all([getPageContent('about'), getShopProducts()]);
+  return <AboutClient content={content} products={products} />;
 }

@@ -5,6 +5,15 @@ import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { slugify } from '@/lib/utils';
 
+// Every storefront surface that renders products, in both languages: the shop
+// grid, each product page, and the homepage top-sellers rail.
+function revalidateStorefront() {
+  for (const path of ['/', '/ar', '/shop', '/ar/shop']) revalidatePath(path);
+  revalidatePath('/shop/[slug]', 'page');
+  revalidatePath('/ar/shop/[slug]', 'page');
+  revalidatePath('/admin/products');
+}
+
 async function requireAdmin() {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
@@ -78,8 +87,7 @@ export async function saveProduct(formData: FormData) {
     if (error) throw new Error(error.message);
   }
 
-  revalidatePath('/shop');
-  revalidatePath('/admin/products');
+  revalidateStorefront();
   redirect('/admin/products');
 }
 
@@ -87,8 +95,7 @@ export async function deleteProduct(id: string) {
   await requireAdmin();
   const { error } = await supabaseAdmin().from('products').delete().eq('id', id);
   if (error) throw new Error(error.message);
-  revalidatePath('/shop');
-  revalidatePath('/admin/products');
+  revalidateStorefront();
 }
 
 export async function updateOrderStatus(id: string, status: string) {

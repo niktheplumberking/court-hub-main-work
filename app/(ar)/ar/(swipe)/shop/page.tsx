@@ -1,5 +1,6 @@
 import ShopClient from '@/components/pages/ShopClient';
 import { getPageContent } from '@/lib/content/get';
+import { getShopCategories, getShopProducts } from '@/lib/shop/catalog';
 
 export const revalidate = 300;
 
@@ -11,6 +12,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const content = await getPageContent('shop', 'ar');
-  return <ShopClient content={content} />;
+  const [content, products] = await Promise.all([getPageContent('shop', 'ar'), getShopProducts()]);
+  const categories = await getShopCategories(products);
+  return <ShopClient content={content} products={products} categories={categories} />;
 }

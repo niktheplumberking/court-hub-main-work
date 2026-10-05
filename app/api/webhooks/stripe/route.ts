@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getStripe } from '@/lib/stripe';
 
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       return { id: c.id, title: p?.title ?? 'Unknown', qty: c.qty, price_aed: p?.price_aed ?? 0 };
     });
 
-    await supabase.from('orders').insert({
+    const { error: insertError } = await supabase.from('orders').insert({
       stripe_session_id: session.id,
       customer_email: session.customer_details?.email ?? null,
       customer_name: session.customer_details?.name ?? null,
@@ -60,6 +61,14 @@ export async function POST(req: Request) {
       amount_aed: (session.amount_total ?? 0) / 100,
       status: 'paid',
     });
+
+    // A failed write must NOT be acknowledged: returning 500 makes Stripe retry
+    // the event (the idempotency check above stops any double insert), instead
+    // of the order being silently lost with the customer already charged.
+    if (insertError) {
+      console.error('[stripe webhook] order insert failed', session.id, insertError);
+      return NextResponse.json({ error: 'Order could not be saved' }, { status: 500 });
+    }
 
     // Inventory: decrement + auto-sold for unique items
     for (const c of cart) {
@@ -71,6 +80,12 @@ export async function POST(req: Request) {
         .update({ quantity: newQty, status: newStatus })
         .eq('id', c.id);
     }
+
+    // Stock just changed — refresh every storefront surface so a sold-out or
+    // sold one-of-a-kind item disappears immediately, not after the ISR window.
+    for (const path of ['/', '/ar', '/shop', '/ar/shop']) revalidatePath(path);
+    revalidatePath('/shop/[slug]', 'page');
+    revalidatePath('/ar/shop/[slug]', 'page');
   }
 
   return NextResponse.json({ received: true });

@@ -11,7 +11,7 @@ import {
 import Footer from '@/components/home/Footer';
 import { AnimatedCounter } from '@/components/shared/AnimatedCounter';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
-import { PRODUCTS } from '@/components/shop/placeholder-products';
+import type { ShopProduct } from '@/lib/shop/catalog';
 import { useCart } from '@/lib/cart-context';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useHeroCovered } from '@/components/swipe/useHeroCovered';
@@ -38,7 +38,13 @@ function StatCounter({ raw }: { raw: string }) {
   return <AnimatedCounter value={value} decimals={decimals} suffix={m[2]} />;
 }
 
-export default function AboutClient({ content }: { content: ContentMap }) {
+export default function AboutClient({
+  content,
+  products = [],
+}: {
+  content: ContentMap;
+  products?: ShopProduct[];
+}) {
   const TOPICS = useMemo(() => [
     {
       id: '01',
@@ -77,8 +83,8 @@ export default function AboutClient({ content }: { content: ContentMap }) {
   const { add, openDrawer } = useCart();
   const lp = useLocalePath();
   const dirSign = useDirSign();
-  const racketBestSellers = PRODUCTS.filter(p => p.category === 'rackets').slice(0, 5);
-  const bestSellers = racketBestSellers.length >= 5 ? racketBestSellers : PRODUCTS.slice(0, 5);
+  // Real, buyable products only. The deck is hidden entirely if none are in stock.
+  const bestSellers = products.filter((p) => p.inStock).slice(0, 5);
   const [activeSection, setActiveSection] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -795,6 +801,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
             {/* Fanned "rainbow" deck — original arc arrangement, each card now a real
                 best-seller: placeholder image + Add-to-Bag + View-product. Hover lifts
                 and straightens a card to reveal it (matches the original interaction). */}
+            {bestSellers.length > 0 && (
             <div className="flex flex-nowrap justify-center items-center -space-x-10 sm:-space-x-16 md:-space-x-24 rtl:space-x-reverse w-full overflow-visible py-10 relative z-10 select-none">
               {bestSellers.map((p, index) => {
                 const cfg = [
@@ -831,7 +838,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                     <div className="flex flex-col gap-1.5 mt-auto">
                       <button
                         onClick={() => {
-                          add({ id: p.id, slug: p.id, title: p.name, price_aed: p.price, image: p.image, max_qty: 99 }, 1);
+                          add({ id: p.id, slug: p.slug, title: p.name, price_aed: p.price, image: p.image, max_qty: p.maxQty }, 1);
                           openDrawer();
                         }}
                         className="w-full py-2 rounded-full bg-lime text-ink text-[10px] font-bold uppercase tracking-wider hover:bg-ink hover:text-white transition-colors"
@@ -839,7 +846,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                         {content['about.bestsellers.add_to_bag_label']}
                       </button>
                       <Link
-                        href={lp(`/shop/${p.id}`)}
+                        href={lp(`/shop/${p.slug}`)}
                         className="w-full py-2 rounded-full border border-ink/15 text-ink/70 text-[10px] font-bold uppercase tracking-wider text-center hover:bg-ink/5 transition-colors"
                       >
                         {content['about.bestsellers.view_product_label']}
@@ -849,6 +856,7 @@ export default function AboutClient({ content }: { content: ContentMap }) {
                 );
               })}
             </div>
+            )}
 
             {/* Seamless Bottom Gradient Fade into Footers */}
             <div className="absolute bottom-0 left-0 w-full h-[60px] sm:h-[80px] bg-gradient-to-t from-ink via-ink/85 to-transparent pointer-events-none z-25" />

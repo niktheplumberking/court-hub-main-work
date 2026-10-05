@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -23,7 +22,7 @@ import {
   Star,
   Zap
 } from 'lucide-react';
-import { PRODUCTS } from '@/components/shop/placeholder-products';
+import type { ShopProduct } from '@/lib/shop/catalog';
 import { useCart } from '@/lib/cart-context';
 import { useT, useLocalePath, useDirSign } from '@/lib/i18n/LocaleProvider';
 import Footer from '@/components/home/Footer';
@@ -52,23 +51,23 @@ const sectionReveal = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: RISE_EASE } },
 };
 
-export default function ProductClient() {
-  const { slug } = useParams<{ slug: string }>();
+export default function ProductClient({
+  product,
+  related,
+}: {
+  product: ShopProduct | null;
+  related: ShopProduct[];
+}) {
   const { add, openDrawer } = useCart();
   const t = useT();
   const lp = useLocalePath();
   const dirSign = useDirSign();
 
-  // Find product by id
-  const product = PRODUCTS.find(p => p.id === slug);
-
   // Core Hooks for favorites syncing with localStorage (cart now handled globally)
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState('Standard');
-  const [selectedCore, setSelectedCore] = useState('Eva Elastic');
-  const [selectedWeight, setSelectedWeight] = useState('365 g');
+  const [activeImage, setActiveImage] = useState(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -93,11 +92,11 @@ export default function ProductClient() {
   // Reset quantity and options when switching between items
   useEffect(() => {
     setQuantity(1);
-    setSelectedSize('Standard');
+    setActiveImage(0);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
-  }, [slug]);
+  }, [product?.id]);
 
   if (!product) {
     return (
@@ -145,14 +144,15 @@ export default function ProductClient() {
   };
 
   const addToCart = () => {
+    if (!product.inStock) return;
     add(
       {
         id: product.id,
-        slug: product.id,
+        slug: product.slug,
         title: product.name,
         price_aed: product.price,
         image: product.image,
-        max_qty: 99,
+        max_qty: product.maxQty,
       },
       quantity
     );
@@ -169,15 +169,26 @@ export default function ProductClient() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  // Generate related products
-  const relatedProducts = PRODUCTS.filter(p => p.id !== product.id).slice(0, 4);
+  const relatedProducts = related;
 
-  // Preset size tags depending on category
-  const sizes = product.category === 'accessories'
-    ? ['Single Can', 'Box (12 Cans)', 'Master Box (24 Cans)']
-    : ['Standard', 'Extended Grip (Pro)', 'Oversized Control'];
-
-  const specsList = product.specs ? Object.entries(product.specs) : [];
+  // Real specs only, in a fixed readable order, with human labels.
+  const SPEC_LABELS: Record<string, string> = {
+    head_size: t.shop.specHeadSize,
+    weight: t.shop.specWeight,
+    grip_size: t.shop.specGripSize,
+    balance: t.shop.specBalance,
+    year: t.shop.specYear,
+  };
+  const specsList = Object.keys(SPEC_LABELS)
+    .filter((k) => product.specs[k])
+    .map((k) => [SPEC_LABELS[k], product.specs[k]] as const);
+  const conditionLabel: Record<string, string> = {
+    new: t.shop.condNew,
+    'like-new': t.shop.condLikeNew,
+    good: t.shop.condGood,
+    fair: t.shop.condFair,
+  };
+  const mainImage = product.images[activeImage] ?? product.image;
 
   // Helper to split the product name for styled stacking
   const nameParts = product.name.split(' ');
@@ -239,12 +250,14 @@ export default function ProductClient() {
                 {/* SALE badge — perched on the top-left corner, NO rotation. Hidden on load, then
                     pops in after ~2.4s with a springy entrance and a pulsing blue glow halo behind
                     it (pure CSS, see .ch-badge-pop / .ch-badge-glow in globals.css). */}
+                {product.compareAt && (
                 <div className="ch-badge-pop absolute -top-6 -start-6 z-20 pointer-events-none">
                   <span aria-hidden className="ch-badge-glow absolute inset-0 rounded-full bg-[#1E5AE8] blur-xl" />
                   <div className="relative w-[76px] h-[76px] bg-[#1E5AE8] rounded-full flex items-center justify-center select-none shadow-[0_8px_24px_rgba(30,90,232,0.45)] ring-1 ring-white/15">
                     <span className="text-[11px] font-sans font-extrabold tracking-[0.25em] text-white uppercase ms-0.5">{t.shop.sale}</span>
                   </div>
                 </div>
+                )}
 
                 {/* Product Showpiece Container (`isolate` scopes the image's blend to this card). */}
                 <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[4/5] bg-white rounded-[32px] overflow-hidden border border-ink/10 shadow-xs flex items-center justify-center p-8 lg:p-12 isolate">
@@ -258,7 +271,8 @@ export default function ProductClient() {
                       rectangle shows; the bob keeps the floating effect. */}
                   <div className="absolute inset-x-8 inset-y-12 flex items-center justify-center select-none pointer-events-none z-10">
                     <motion.img
-                      src={product.image}
+                      key={mainImage}
+                      src={mainImage}
                       alt={product.name}
                       animate={{ y: [0, -12, 0] }}
                       transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
@@ -271,55 +285,24 @@ export default function ProductClient() {
 
               </div>
 
-              {/* Variant Thumbnails Row beneath */}
-              <div className="grid grid-cols-3 gap-4 mt-4">
-
-                {/* Variant 1: Lime */}
-                <Link
-                  href={lp('/shop/finder-pro')}
-                  className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
-                    product.id === 'finder-pro' ? 'border-lime shadow-sm' : 'border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  <img
-                    src="/assets/images/premium_padel_racket_black_lime_1779706021226.png"
-                    alt="Lime setup variant"
-                    className="w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.08)] group-hover:scale-105 transition-transform"
-                    referrerPolicy="no-referrer" loading="lazy" decoding="async"
-                  />
-                </Link>
-
-                {/* Variant 2: Stealth Blue */}
-                <Link
-                  href={lp('/shop/stealth-blue')}
-                  className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
-                    product.id === 'stealth-blue' ? 'border-court-blue shadow-sm' : 'border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  <img
-                    src="/assets/images/premium_padel_racket_stealth_blue_1779706040552.png"
-                    alt="Stealth Blue setup variant"
-                    className="w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.08)] group-hover:scale-105 transition-transform"
-                    referrerPolicy="no-referrer" loading="lazy" decoding="async"
-                  />
-                </Link>
-
-                {/* Variant 3: Propulsion Carbon */}
-                <Link
-                  href={lp('/shop/propulsion-carbon')}
-                  className={`aspect-square rounded-[24px] bg-ink p-4 flex items-center justify-center relative group overflow-hidden border-2 transition-all hover:scale-[1.02] ${
-                    product.id === 'propulsion-carbon' ? 'border-lime shadow-sm' : 'border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  <img
-                    src="/assets/images/premium_padel_racket_black_lime_1779706021226.png"
-                    alt="Propulsion variant"
-                    className="w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.08)] group-hover:scale-105 transition-transform brightness-[0.96]"
-                    referrerPolicy="no-referrer" loading="lazy" decoding="async"
-                  />
-                </Link>
-
-              </div>
+              {/* Real gallery: one thumbnail per uploaded photo (hidden for a single photo). */}
+              {product.images.length > 1 && (
+                <div className="grid grid-cols-4 gap-3 mt-4">
+                  {product.images.map((src, i) => (
+                    <button
+                      key={src + i}
+                      type="button"
+                      onClick={() => setActiveImage(i)}
+                      aria-label={`${product.name} ${i + 1}`}
+                      className={`aspect-square rounded-[20px] bg-white p-3 flex items-center justify-center overflow-hidden border-2 transition-all cursor-pointer isolate ${
+                        i === activeImage ? 'border-court-blue shadow-sm' : 'border-ink/10 hover:border-ink/30'
+                      }`}
+                    >
+                      <img src={src} alt="" className="w-full h-full object-contain mix-blend-multiply" loading="lazy" decoding="async" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
             </motion.div>
 
@@ -341,22 +324,12 @@ export default function ProductClient() {
                 {product.name}
               </h1>
 
-              {/* Rating stars */}
-              <div className="flex items-center gap-1.5 text-xs font-sans font-bold pt-1">
-                <div className="flex items-center text-court-blue gap-0.5">
-                  <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
-                  <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
-                  <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
-                  <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
-                  <Star className="w-4 h-4 fill-current text-court-blue stroke-court-blue" />
-                </div>
-                <span className="text-ink ms-1">4.9</span>
-                <span className="text-stone-400">{t.shop.reviews(product.id === 'stealth-blue' ? 45 : 36)}</span>
-              </div>
-
               {/* Price display with excl notation */}
               <div className="flex items-baseline gap-3 pt-3">
                 <span className="text-4xl font-sans font-black text-ink tracking-tight">AED {product.price}</span>
+                {product.compareAt && (
+                  <span className="text-lg font-sans font-bold text-ink/30 line-through">AED {product.compareAt}</span>
+                )}
                 <span className="text-xs font-sans font-bold text-stone-400 uppercase tracking-widest leading-none">
                   {t.shop.vatNote}
                 </span>
@@ -367,51 +340,26 @@ export default function ProductClient() {
                 {product.desc}
               </p>
 
-              {/* Setup Flavor Options (Choose your taste equivalent) */}
-              <div className="space-y-3 pt-4">
-                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.chooseSetup}</h3>
-                <div className="flex flex-wrap gap-2.5">
-                  {['Eva Elastic', 'Pro Carbon', 'Gel Shock', 'Dynamic Core'].map((setup) => {
-                    const isSel = selectedCore === setup;
-                    return (
-                      <button
-                        key={setup}
-                        onClick={() => setSelectedCore(setup)}
-                        className={`py-2.5 px-4.5 rounded-full text-xs font-sans font-bold tracking-wider uppercase transition-all cursor-pointer ${
-                          isSel
-                            ? 'bg-lime text-ink shadow-xs scale-102 font-extrabold border-0'
-                            : 'bg-white/60 text-stone-500 hover:bg-white hover:text-ink border-0'
-                        }`}
-                      >
-                        {setup}
-                      </button>
-                    );
-                  })}
+              {/* Real attributes from the admin: condition (pre-owned only) and specs. */}
+              {(specsList.length > 0 || (product.condition && product.condition !== 'new')) && (
+                <div className="space-y-3 pt-4">
+                  <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.specsTitle}</h3>
+                  <dl className="grid grid-cols-2 gap-2.5">
+                    {product.condition && product.condition !== 'new' && (
+                      <div className="bg-white/60 rounded-2xl px-4 py-3">
+                        <dt className="text-[10px] font-bold uppercase tracking-wider text-stone-400">{t.shop.conditionTitle}</dt>
+                        <dd className="text-sm font-bold text-ink">{conditionLabel[product.condition]}</dd>
+                      </div>
+                    )}
+                    {specsList.map(([label, value]) => (
+                      <div key={label} className="bg-white/60 rounded-2xl px-4 py-3">
+                        <dt className="text-[10px] font-bold uppercase tracking-wider text-stone-400">{label}</dt>
+                        <dd className="text-sm font-bold text-ink">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
-              </div>
-
-              {/* Weight class / frame size option */}
-              <div className="space-y-3 pt-3">
-                <h3 className="text-xs font-sans font-bold text-ink uppercase tracking-wider">{t.shop.specLabel}</h3>
-                <div className="flex flex-wrap gap-2.5">
-                  {['350 g', '365 g', '375 g'].map((w) => {
-                    const isSel = selectedWeight === w;
-                    return (
-                      <button
-                        key={w}
-                        onClick={() => setSelectedWeight(w)}
-                        className={`py-2.5 px-5 rounded-full text-xs font-sans font-bold tracking-wider uppercase transition-all cursor-pointer ${
-                          isSel
-                            ? 'bg-lime text-ink shadow-xs font-extrabold border-0'
-                            : 'bg-white/60 text-stone-500 hover:bg-white hover:text-ink border-0'
-                        }`}
-                      >
-                        {w}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              )}
 
               {/* Quantity */}
               <div className="space-y-3 pt-3">
@@ -426,7 +374,7 @@ export default function ProductClient() {
                     </button>
                     <span className="font-sans font-extrabold text-xs text-ink px-4 w-10 text-center select-none">{quantity}</span>
                     <button
-                      onClick={() => setQuantity(prev => prev + 1)}
+                      onClick={() => setQuantity(prev => Math.min(product.maxQty, prev + 1))}
                       className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-base hover:bg-white text-ink/70 hover:text-ink cursor-pointer leading-none transition-all"
                     >
                       +
@@ -439,49 +387,21 @@ export default function ProductClient() {
               <div className="pt-2">
                 <button
                   onClick={addToCart}
-                  className="w-full py-4.5 bg-ink hover:bg-court-blue text-white hover:text-white font-sans text-xs md:text-[13px] font-extrabold uppercase tracking-[0.2em] rounded-full shadow-lg transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5 border border-white/5 active:scale-[0.98]"
+                  disabled={!product.inStock}
+                  className="w-full py-4.5 bg-ink hover:bg-court-blue text-white hover:text-white font-sans text-xs md:text-[13px] font-extrabold uppercase tracking-[0.2em] rounded-full shadow-lg transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5 border border-white/5 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
                 >
-                  <span>{t.shop.addToCart}</span>
+                  <span>{product.inStock ? t.shop.addToCart : t.shop.outOfStock}</span>
                 </button>
-              </div>
-
-              {/* Customer Overlapping Avatars Social Proof */}
-              <div className="flex items-center gap-3 pt-2">
-                <div className="flex -space-x-2.5 rtl:space-x-reverse select-none">
-                  <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150" alt="avatar" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150" alt="avatar" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="avatar" />
-                  <div className="w-8 h-8 rounded-full border-2 border-white bg-sand flex items-center justify-center text-[10px] font-bold text-ink shrink-0">
-                    +10
-                  </div>
-                </div>
-                <span className="text-xs font-sans text-stone-500 font-bold tracking-wide">
-                  {t.shop.purchasedToday(13)}
-                </span>
               </div>
 
               {/* Iconic USPs checkmarks with outline bullet icons */}
               <div className="space-y-3 pt-6 mt-6 border-t border-ink/10 font-sans text-xs font-extrabold tracking-wider text-stone-500 uppercase">
 
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-court-blue/10 border border-court-blue/20 flex items-center justify-center text-court-blue shrink-0">
-                    <Zap className="w-3 h-3 fill-current" />
-                  </div>
-                  <span>{t.shop.uspSweetSpot}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-lime/10 border border-lime/20 flex items-center justify-center text-ink shrink-0">
                     <Truck className="w-3 h-3" />
                   </div>
                   <span>{t.shop.shippedToDoor}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-court-blue/10 border border-court-blue/20 flex items-center justify-center text-court-blue shrink-0">
-                    <ShieldCheck className="w-3 h-3" />
-                  </div>
-                  <span>{t.shop.uspGuarantee}</span>
                 </div>
 
               </div>
@@ -530,7 +450,7 @@ export default function ProductClient() {
                   className="group bg-white rounded-[20px] p-5 border border-ink/10 hover:border-court-blue/20 transition-colors flex flex-col justify-between shadow-xs hover:shadow-md"
                 >
                   <div className="space-y-4">
-                    <Link href={lp(`/shop/${rel.id}`)} className="block relative aspect-square rounded-[12px] bg-sand overflow-hidden">
+                    <Link href={lp(`/shop/${rel.slug}`)} className="block relative aspect-square rounded-[12px] bg-sand overflow-hidden">
                       <img
                         src={rel.image}
                         alt={rel.name}
@@ -541,7 +461,7 @@ export default function ProductClient() {
 
                     <div className="space-y-1 text-start">
                       <span className="text-[9px] font-mono text-stone-400 uppercase tracking-widest font-semibold">{rel.brand}</span>
-                      <Link href={lp(`/shop/${rel.id}`)} className="block">
+                      <Link href={lp(`/shop/${rel.slug}`)} className="block">
                         <h4 className="font-display font-black text-sm uppercase tracking-tight text-ink line-clamp-1 group-hover:text-court-blue transition-colors">
                           {rel.name}
                         </h4>
@@ -553,7 +473,7 @@ export default function ProductClient() {
                   <div className="pt-4 mt-4 border-t border-ink/5 flex items-center justify-between">
                     <span className="text-sm font-display font-black text-court-blue">AED {rel.price}</span>
                     <Link
-                      href={lp(`/shop/${rel.id}`)}
+                      href={lp(`/shop/${rel.slug}`)}
                       className="px-3.5 py-1.5 bg-sand/60 group-hover:bg-court-blue text-ink group-hover:text-white text-[8px] font-mono uppercase tracking-widest rounded-full font-bold transition-all"
                     >
                       {t.shop.specsCta}

@@ -11,22 +11,37 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/home/Footer';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
-import { PRODUCTS } from '@/components/shop/placeholder-products';
 import { useCart } from '@/lib/cart-context';
 import { useT, useLocalePath } from '@/lib/i18n/LocaleProvider';
-import type { Product } from '@/components/shop/placeholder-products';
+import type { ShopCategory, ShopProduct } from '@/lib/shop/catalog';
+import { waHref } from '@/lib/whatsapp';
 import type { ContentMap } from '@/lib/content/get';
 
-export default function ShopClient({ content }: { content: ContentMap }) {
+export default function ShopClient({
+  content,
+  products,
+  categories,
+}: {
+  content: ContentMap;
+  products: ShopProduct[];
+  categories: ShopCategory[];
+}) {
   const { add, count, openDrawer } = useCart();
   const t = useT();
   const lp = useLocalePath();
-  const [activeBrand, setActiveBrand] = useState<'ALL' | 'STEALTH' | 'HEAD' | 'Wilson'>('ALL');
-  const [activeCategory, setActiveCategory] = useState<'ALL' | 'rackets' | 'used' | 'accessories'>('ALL');
+  const [activeBrand, setActiveBrand] = useState<string>('ALL');
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
+  // Brand chips come from the real catalog; the row only shows when there is a choice to make.
+  const brands = Array.from(new Set(products.map((p) => p.brand).filter(Boolean))).sort();
+  const conditionLabel: Record<string, string> = {
+    'like-new': t.shop.condLikeNew,
+    good: t.shop.condGood,
+    fair: t.shop.condFair,
+  };
 
   const [favorites, setFavorites] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [flyers, setFlyers] = useState<{ id: number; x: number; y: number; p: Product }[]>([]);
+  const [flyers, setFlyers] = useState<{ id: number; x: number; y: number; p: ShopProduct }[]>([]);
 
   const blanketRef = useRef<HTMLDivElement>(null);
 
@@ -59,7 +74,8 @@ export default function ShopClient({ content }: { content: ContentMap }) {
     }, 2500);
   };
 
-  const handleAdd = (p: Product, e: React.MouseEvent) => {
+  const handleAdd = (p: ShopProduct, e: React.MouseEvent) => {
+    if (!p.inStock) return;
     const id = Date.now() + Math.random();
     setFlyers(prev => [...prev, { id, x: e.clientX, y: e.clientY, p }]);
     showToast(t.shop.addedToBag(p.name));
@@ -68,15 +84,15 @@ export default function ShopClient({ content }: { content: ContentMap }) {
     // keyframe (the callback then never fires). After the ~0.7s flight: add the item
     // (FAB count ticks up), remove the flyer, then slide the drawer in.
     window.setTimeout(() => {
-      add({ id: p.id, slug: p.id, title: p.name, price_aed: p.price, image: p.image, max_qty: 99 }, 1);
+      add({ id: p.id, slug: p.slug, title: p.name, price_aed: p.price, image: p.image, max_qty: p.maxQty }, 1);
       setFlyers(prev => prev.filter(f => f.id !== id));
       window.setTimeout(() => openDrawer(), 260);
     }, 700);
   };
 
-  const filteredProducts = PRODUCTS.filter(prod => {
+  const filteredProducts = products.filter(prod => {
     const matchesBrand = activeBrand === 'ALL' || prod.brand === activeBrand;
-    const matchesCategory = activeCategory === 'ALL' || prod.category === activeCategory;
+    const matchesCategory = activeCategory === 'ALL' || prod.categorySlug === activeCategory;
     return matchesBrand && matchesCategory;
   });
 
@@ -155,8 +171,9 @@ export default function ShopClient({ content }: { content: ContentMap }) {
             {/* Sleek Custom-molded Filter Toolbar (Sleek Dark capsule on cream backdrop) */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-ink p-3 md:p-4 rounded-[28px] md:rounded-full border border-white/10 shadow-xl relative z-10 text-white">
               {/* Brand Filter Row */}
+              {brands.length > 1 ? (
               <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white/[0.03] rounded-full">
-                {(['ALL', 'STEALTH', 'HEAD', 'Wilson'] as const).map(brand => {
+                {['ALL', ...brands].map(brand => {
                   const isActive = activeBrand === brand;
                   const brandLabel = brand === 'ALL' ? t.shop.filterAll : brand;
                   return (
@@ -179,6 +196,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                   );
                 })}
               </div>
+              ) : <span />}
 
               {/* Category Filter Row */}
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto justify-end">
@@ -187,15 +205,13 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                   <div className="flex gap-1 bg-white/[0.03] p-1 rounded-full border border-white/5 relative">
                     {[
                       { id: 'ALL', label: t.shop.allItems },
-                      { id: 'rackets', label: t.shop.proRackets },
-                      { id: 'used', label: t.shop.preOwned },
-                      { id: 'accessories', label: t.shop.gearBalls }
+                      ...categories.map((c) => ({ id: c.slug, label: c.name })),
                     ].map(cat => {
                       const isActive = activeCategory === cat.id;
                       return (
                         <button
                           key={cat.id}
-                          onClick={() => setActiveCategory(cat.id as any)}
+                          onClick={() => setActiveCategory(cat.id)}
                           className={`relative px-4 py-2 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider transition-colors duration-300 outline-none cursor-pointer select-none font-bold ${
                             isActive ? 'text-white bg-white/15' : 'text-white/45 hover:text-white/75'
                           }`}
@@ -215,6 +231,21 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                 </div>
               </div>
             </div>
+
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-20 space-y-4">
+                <h3 className="text-2xl font-display font-black uppercase text-ink">{t.shop.emptyTitle}</h3>
+                <p className="text-ink/60 text-sm max-w-md mx-auto">{t.shop.emptyBody}</p>
+                <a
+                  href={waHref(t.cart.waMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex px-6 py-3 rounded-full bg-ink text-white text-[11px] font-bold uppercase tracking-widest hover:bg-lime hover:text-ink transition-colors"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            )}
 
             {/* Products Grid - Expanded up to 4 columns on large screens for space */}
             <AnimatePresence mode="wait">
@@ -241,7 +272,7 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                             rectangle ever shows. (racket-19/20 had their black bgs flood-filled
                             to white so they behave the same.) */}
                         <div className="relative w-full aspect-[4/3] rounded-[12px] bg-[#F5F4F0] overflow-hidden border border-ink/5 isolate">
-                          <Link href={lp(`/shop/${prod.id}`)} className="block w-full h-full cursor-pointer">
+                          <Link href={lp(`/shop/${prod.slug}`)} className="block w-full h-full cursor-pointer">
                             <img
                               src={prod.image}
                               alt={prod.name}
@@ -250,19 +281,17 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                             />
                           </Link>
 
-                          {/* Left Stacked badges like user screenshot */}
+                          {/* Badges reflect real data only: a discount badge exists only when the
+                              admin set a higher compare-at price; condition only for pre-owned. */}
                           <div className="absolute top-4 start-4 flex flex-col gap-1 items-start pointer-events-none">
-                            <span className="bg-[#1E5AE8] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                              {t.shop.bestSeller}
-                            </span>
-                            {prod.brand === 'STEALTH' && (
+                            {prod.compareAt && (
                               <span className="bg-[#E84525] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                                {t.shop.percentOff(10)}
+                                {t.shop.percentOff(Math.round((1 - prod.price / prod.compareAt) * 100))}
                               </span>
                             )}
-                            {prod.category === 'used' && (
-                              <span className="bg-[#E84525] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
-                                {t.shop.percentOff(15)}
+                            {prod.condition && prod.condition !== 'new' && (
+                              <span className="bg-[#1E5AE8] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
+                                {conditionLabel[prod.condition]}
                               </span>
                             )}
                           </div>
@@ -279,15 +308,22 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                         {/* Meta section: Brand and Stock status */}
                         <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.15em] font-bold text-ink/50">
                           <span>{prod.brand}</span>
-                          <span className="flex items-center gap-1 text-ink/70">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-                            {t.shop.inStock}
-                          </span>
+                          {prod.inStock ? (
+                            <span className="flex items-center gap-1 text-ink/70">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
+                              {prod.maxQty <= 2 ? t.shop.onlyLeft(prod.maxQty) : t.shop.inStock}
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-1 text-fire">
+                              <span className="w-1.5 h-1.5 rounded-full bg-fire" />
+                              {t.shop.outOfStock}
+                            </span>
+                          )}
                         </div>
 
                         {/* Title & brief description */}
                         <div className="space-y-1">
-                          <Link href={lp(`/shop/${prod.id}`)} className="block group/title">
+                          <Link href={lp(`/shop/${prod.slug}`)} className="block group/title">
                             <h3 className="text-base font-display font-black leading-tight text-ink uppercase tracking-tight group-hover/title:text-[#1E5AE8] transition-colors line-clamp-1">
                               {prod.name}
                             </h3>
@@ -301,17 +337,17 @@ export default function ShopClient({ content }: { content: ContentMap }) {
                       {/* Bottom row: Price and Add To Bag Button */}
                       <div className="relative z-10 pt-4 border-t border-ink/5 mt-4 flex items-center justify-between gap-4">
                         <div className="flex flex-col">
-                          {prod.originalPrice ? (
-                            <span className="text-ink/30 text-[10px] font-mono line-through leading-none">AED {prod.originalPrice}</span>
-                          ) : (
-                            <span className="text-ink/30 text-[10px] font-mono leading-none">AED {Math.round(prod.price * 1.15)}</span>
-                          )}
+                          {/* Struck-through price ONLY when a real compare-at price exists. */}
+                          {prod.compareAt ? (
+                            <span className="text-ink/30 text-[10px] font-mono line-through leading-none">AED {prod.compareAt}</span>
+                          ) : null}
                           <span className="text-lg font-display font-black text-ink">AED {prod.price}</span>
                         </div>
 
                         <button
                           onClick={(e) => handleAdd(prod, e)}
-                          className="px-4.5 py-2.5 bg-ink text-white hover:bg-lime hover:text-ink rounded-full font-bold uppercase text-[9px] tracking-widest transition-all cursor-pointer flex items-center gap-1.5 hover:-translate-y-0.5 shadow-md shadow-black/5"
+                          disabled={!prod.inStock}
+                          className="px-4.5 py-2.5 bg-ink text-white hover:bg-lime hover:text-ink rounded-full font-bold uppercase text-[9px] tracking-widest transition-all cursor-pointer flex items-center gap-1.5 hover:-translate-y-0.5 shadow-md shadow-black/5 disabled:opacity-40 disabled:pointer-events-none"
                         >
                           <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
                           <span>{t.shop.addToBag}</span>

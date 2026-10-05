@@ -6,9 +6,8 @@ import type { Product } from '@/lib/types';
 import type { ContentMap } from '@/lib/content/get';
 import { useCart } from '@/lib/cart-context';
 import { useT, useLocalePath, useDir } from '@/lib/i18n/LocaleProvider';
-import { PRODUCTS as PLACEHOLDER_PRODUCTS } from '@/components/shop/placeholder-products';
 
-/** Real Supabase products and the local-dev placeholder fallback share one card shape. */
+/** One card on the rail, built from a real Supabase product. */
 type RailItem = {
   key: string;
   href: string;
@@ -23,8 +22,11 @@ type RailItem = {
 const SCROLL_STEP = 296; // ~one card (264px) + gap per click, matching the approved demo
 
 function toRailItems(products: Product[], conditionLabel: Record<string, string>): RailItem[] {
-  if (products.length > 0) {
-    return products.slice(0, 8).map((p) => ({
+  // Only products a customer can actually buy: sold-out items are skipped.
+  return products
+    .filter((p) => p.quantity > 0)
+    .slice(0, 8)
+    .map((p) => ({
       key: p.id,
       href: `/shop/${p.slug}`,
       title: p.title,
@@ -38,22 +40,9 @@ function toRailItems(products: Product[], conditionLabel: Record<string, string>
         title: p.title,
         price_aed: p.price_aed,
         image: p.images?.[0] ?? null,
-        max_qty: p.is_unique ? 1 : Math.max(1, p.quantity),
+        max_qty: p.is_unique ? 1 : p.quantity,
       },
     }));
-  }
-  // Placeholder catalog fallback (same as AboutClient's best sellers) — these
-  // have real /shop/[slug] detail pages and are addable to the real cart.
-  return PLACEHOLDER_PRODUCTS.slice(0, 8).map((p) => ({
-    key: p.id,
-    href: `/shop/${p.id}`,
-    title: p.name,
-    brand: p.brand,
-    priceAed: p.price,
-    image: p.image,
-    tag: p.tag.split('·')[0].trim(),
-    cart: { id: p.id, slug: p.id, title: p.name, price_aed: p.price, image: p.image, max_qty: 99 },
-  }));
 }
 
 export default function TopSellersRail({
@@ -101,6 +90,10 @@ export default function TopSellersRail({
 
   const arrowClass =
     'flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-ink/20 text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-lime disabled:pointer-events-none disabled:opacity-25';
+
+  // No buyable products (empty shop or DB unreachable): hide the whole band
+  // rather than render an empty strip. After all hooks, so hook order is stable.
+  if (items.length === 0) return null;
 
   return (
     <section data-cms="home:top_sellers" className="border-y border-ink/[.08] bg-white py-[88px]">

@@ -17,7 +17,10 @@ type CartCtx = {
 };
 
 const Ctx = createContext<CartCtx | null>(null);
-const KEY = 'courthub_cart_v1';
+// v2: carts are keyed by real database product ids. v1 carts could hold demo-catalog
+// items that checkout (correctly) rejects, so they are discarded rather than migrated.
+const KEY = 'courthub_cart_v2';
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -27,7 +30,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setItems(JSON.parse(raw));
+      if (raw) setItems((JSON.parse(raw) as CartItem[]).filter((i) => UUID.test(i.id)));
+      localStorage.removeItem('courthub_cart_v1');
     } catch {}
     setHydrated(true);
   }, []);
