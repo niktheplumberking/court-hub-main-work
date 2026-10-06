@@ -5,6 +5,17 @@ import OrderStatusSelect from '@/components/admin/OrderStatusSelect';
 
 export const dynamic = 'force-dynamic';
 
+// Stripe stores the delivery address as { name, address: { line1, line2, city, state, postal_code, country } }.
+// Rendered defensively: older orders or odd shapes simply show no address instead of crashing the page.
+function formatShipping(raw: unknown): { name: string | null; lines: string } | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const s = raw as { name?: string; address?: Record<string, string | null> };
+  const a = s.address;
+  if (!a) return null;
+  const lines = [a.line1, a.line2, a.city, a.state, a.postal_code, a.country].filter(Boolean).join(', ');
+  return lines ? { name: s.name ?? null, lines } : null;
+}
+
 export default async function AdminOrders() {
   const supabase = await supabaseServer();
   const { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
@@ -35,6 +46,15 @@ export default async function AdminOrders() {
               <p className="text-white/50 text-sm mt-1">
                 {o.items.map((i) => `${i.title} ×${i.qty}`).join(' · ')}
               </p>
+              {(() => {
+                const ship = formatShipping(o.shipping);
+                return ship ? (
+                  <p className="text-white/70 text-sm mt-2">
+                    <span className="text-white/40 text-xs uppercase tracking-wider mr-2">Deliver to</span>
+                    {ship.name ? `${ship.name} · ` : ''}{ship.lines}
+                  </p>
+                ) : null;
+              })()}
               <p className="text-white/35 font-mono text-xs mt-2">
                 <span className="text-lime/60">#</span>{o.id.slice(0, 8).toUpperCase()} · {new Date(o.created_at).toLocaleString('en-AE')} {o.customer_phone ? `· ${o.customer_phone}` : ''}
               </p>

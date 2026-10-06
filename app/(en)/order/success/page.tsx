@@ -71,7 +71,7 @@ export default async function OrderSuccess({
                   <span className="text-lime">{formatAED(order.amount_aed)}</span>
                 </div>
                 {order.customer_email && (
-                  <p className="text-white/40 text-xs">A confirmation was sent to {order.customer_email}</p>
+                  <p className="text-white/40 text-xs">Payment received for {order.customer_email}. Keep this page for your records; we will contact you about delivery.</p>
                 )}
               </div>
             ) : (
