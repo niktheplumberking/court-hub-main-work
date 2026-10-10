@@ -634,3 +634,13 @@ html[dir='rtl'] .ltr-island {
 .adm-root[data-admin-theme='light'] .bg-black\/40 { background-color: rgba(14, 14, 12, 0.05); }
 /* Sticky top bar glass */
 .adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(237, 232, 225, 0.9); }
+
+/* Native <select> popups paint their own opaque background, but the options
+   inherit the admin's light-on-dark text colour, giving white-on-white (only
+   the hovered row was readable). Pin option colours to the themed tokens:
+   dark mode = ink-2 surface + white text, light mode = the redefined tokens
+   (white surface + ink text) automatically. */
+.adm-root select option {
+  background-color: var(--color-ink-2);
+  color: var(--color-white);
+}
