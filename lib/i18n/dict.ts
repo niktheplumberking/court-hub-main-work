@@ -97,6 +97,7 @@ const en = {
     width: '10 m',
     size: '20 × 10 m · FIP',
     scrollHint: 'Scroll position',
+    viewRacket: 'View this racket',
   },
   shop: {
     allProducts: 'ALL PRODUCTS',
@@ -502,6 +503,7 @@ const ar: Dict = {
     width: '10 م',
     size: '20 × 10 م · FIP',
     scrollHint: 'موضع التمرير',
+    viewRacket: 'شاهد المضرب',
   },
   shop: {
     allProducts: 'جميع المنتجات',

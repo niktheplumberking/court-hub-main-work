@@ -5,9 +5,9 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { useMouseParallax } from '@/components/shared/useMouseParallax';
-import { useLocalePath } from '@/lib/i18n/LocaleProvider';
+import { useLocalePath, useT } from '@/lib/i18n/LocaleProvider';
 import TennisBall from '@/components/shared/TennisBall';
-import CourtMap from './CourtMap';
+import HeroRackets from './HeroRackets';
 import type { ContentMap } from '@/lib/content/get';
 
 // Decorative balls floating over the turf: [inline-start %, top %, size px, float seconds, delay s]
@@ -43,6 +43,7 @@ function Racket({ className, style }: { className?: string; style?: React.CSSPro
 export default function HomeHero({ content }: { content: ContentMap }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(22);
   const lp = useLocalePath();
+  const t = useT();
 
   // Rotating headline (client request): the four promises of Court Hub cycle
   // in place. Every phrase is editable in the Studio (home.hero.*). Driven by
@@ -91,7 +92,7 @@ export default function HomeHero({ content }: { content: ContentMap }) {
         {BALLS.map(([s, top, size, dur, delay], i) => (
           <TennisBall
             key={i}
-            className="ch-floaty absolute drop-shadow-[0_8px_14px_rgba(6,26,68,0.35)]"
+            className={`ch-floaty absolute drop-shadow-[0_8px_14px_rgba(6,26,68,0.35)] ${i === 1 || i === 2 ? "hidden md:block" : ""}`}
             style={{ insetInlineStart: `${s}%`, top: `${top}%`, width: size, height: size, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
           />
         ))}
@@ -146,9 +147,9 @@ export default function HomeHero({ content }: { content: ContentMap }) {
               </div>
             </div>
 
-            {/* The court */}
+            {/* Best-selling rackets in 3D (client request, Oct 2026) */}
             <div className="flex justify-center lg:justify-end">
-              <CourtMap />
+              <HeroRackets viewLabel={t.courtMap.viewRacket} />
             </div>
           </div>
         </div>

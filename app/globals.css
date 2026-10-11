@@ -843,3 +843,17 @@ html[dir='rtl'] .ltr-island {
 .ch-ball-fill { background: linear-gradient(to bottom, #D8F03C, #A9C21A); transform-origin: top; transform: scaleY(var(--ch-ball-p, 0)); opacity: 0.85; }
 .ch-ball-tick { position: absolute; left: 50%; width: 12px; height: 3px; margin-left: -6px; border-radius: 999px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 0 1px rgba(31, 95, 214, 0.35); }
 .ch-ball-track:hover .ch-ball-line { background: rgba(31, 95, 214, 0.38); }
+
+/* ── Hero 3D rackets (HeroRackets.tsx) ── */
+.ch-rackets { width: 100%; }
+.ch-rackets-stage { width: min(84vw, 42vh, 400px); aspect-ratio: 1; }
+@media (min-width: 1024px) { .ch-rackets-stage { width: min(100%, 60vh, 540px); } }
+.ch-racket { opacity: 0; transform: scale(0.86); filter: blur(10px); pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease; }
+.ch-racket.is-active { opacity: 1; transform: none; filter: none; pointer-events: auto; }
+.ch-racket model-viewer { cursor: grab; outline: none; }
+.ch-racket model-viewer:active { cursor: grabbing; }
+@keyframes ch-ring-spin { to { transform: rotate(360deg); } }
+.ch-rackets-ring { animation: ch-ring-spin 40s linear infinite; }
+.ch-rackets-ring--2 { animation-duration: 28s; animation-direction: reverse; }
+.ch-racket-cap { animation: ch-rot-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
