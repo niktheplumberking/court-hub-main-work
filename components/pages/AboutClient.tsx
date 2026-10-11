@@ -257,7 +257,7 @@ export default function AboutClient({
                     {/* Primary CTA (static) */}
                     <Link
                       href={lp('/contact')}
-                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
+                      className="px-6 py-3 bg-lime hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                     >
                       {content['about.hero.cta_primary']}
                     </Link>
@@ -308,14 +308,14 @@ export default function AboutClient({
               className="text-start space-y-6"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#0E0E0C] text-[#C8FF3D] font-mono text-xs flex items-center justify-center font-black">
+                <div className="w-8 h-8 rounded-full bg-ink text-lime font-mono text-xs flex items-center justify-center font-black">
                   1
                 </div>
-                <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-ink/10 px-4 py-1.5 rounded-full bg-[#0E0E0C]/5 text-[#0E0E0C] shadow-sm">
+                <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-ink/10 px-4 py-1.5 rounded-full bg-ink/5 text-ink shadow-sm">
                   {content['about.story.eyebrow']}
                 </div>
               </div>
-              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-[#0E0E0C]">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-ink">
                 {content['about.story.headline_part1']} <span className="text-court-blue">{content['about.story.headline_part2']}</span> <br className="hidden sm:inline" />
                 <span className="relative inline-block text-ink">
                   {content['about.story.headline_part3']}
@@ -323,7 +323,7 @@ export default function AboutClient({
                       runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                   <span
                     aria-hidden
-                    className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
+                    className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-lime w-full -z-10 rounded-full opacity-80"
                   />
                 </span>.
               </h2>
@@ -347,9 +347,9 @@ export default function AboutClient({
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104 group-hover:rotate-0.5"
                     referrerPolicy="no-referrer" loading="lazy" decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/95 via-transparent to-transparent p-6 sm:p-8 flex flex-col justify-end" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-transparent to-transparent p-6 sm:p-8 flex flex-col justify-end" />
                   <div className="absolute bottom-6 start-6 text-white text-start me-6 space-y-2">
-                    <span className="font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black inline-block">{content['about.story.image_badge']}</span>
+                    <span className="font-mono text-[9px] uppercase tracking-wider bg-lime text-ink px-2.5 py-1 rounded font-black inline-block">{content['about.story.image_badge']}</span>
                     <p className="font-display text-sm sm:text-base md:text-lg font-bold italic uppercase text-white leading-tight">{content['about.story.image_caption']}</p>
                   </div>
                 </div>
@@ -372,7 +372,7 @@ export default function AboutClient({
                 <div className="grid grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-start">
                   <div className="group/stat cursor-pointer">
                     <motion.p
-                      whileHover={{ scale: 1.15, color: '#C8FF3D', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
+                      whileHover={{ scale: 1.15, color: '#1F5FD6', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
@@ -382,7 +382,7 @@ export default function AboutClient({
                   </div>
                   <div className="group/stat cursor-pointer">
                     <motion.p
-                      whileHover={{ scale: 1.15, color: '#C8FF3D', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
+                      whileHover={{ scale: 1.15, color: '#1F5FD6', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-ink tracking-tighter origin-left inline-block"
                     >
@@ -392,7 +392,7 @@ export default function AboutClient({
                   </div>
                   <div className="group/stat cursor-pointer">
                     <motion.p
-                      whileHover={{ scale: 1.15, color: '#C8FF3D', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
+                      whileHover={{ scale: 1.15, color: '#1F5FD6', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
@@ -507,13 +507,13 @@ export default function AboutClient({
                           <div className="absolute inset-0 bg-gradient-to-t from-[black]/95 via-[black]/20 to-transparent p-8 flex flex-col justify-end text-start" />
 
                           {/* Floating Indicator */}
-                          <div className="absolute top-6 end-6 font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-[#0E0E0C] px-3.5 py-1.5 rounded-full font-bold shadow-lg">
+                          <div className="absolute top-6 end-6 font-mono text-[9px] uppercase tracking-wider bg-lime text-ink px-3.5 py-1.5 rounded-full font-bold shadow-lg">
                             {topic.badge}
                           </div>
 
                           {/* Summary details on image */}
                           <div className="absolute bottom-6 start-6 end-6 text-white space-y-1 z-10 text-start">
-                            <span className="font-mono text-[10px] uppercase text-[#C8FF3D] tracking-widest font-semibold block">{content['about.blueprint.card_kicker']}</span>
+                            <span className="font-mono text-[10px] uppercase text-lime tracking-widest font-semibold block">{content['about.blueprint.card_kicker']}</span>
                             <h4 className="font-display text-lg font-bold italic uppercase tracking-tight text-white leading-tight">
                               {topic.title}
                             </h4>
@@ -530,7 +530,7 @@ export default function AboutClient({
 
                   {/* Simulated Badge matching the reference screenshot exactly with color contrast calibration */}
                   <div id="dna-strategy-trigger" className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#0E0E0C] text-[#C8FF3D] font-mono text-xs flex items-center justify-center font-black">
+                    <div className="w-8 h-8 rounded-full bg-ink text-lime font-mono text-xs flex items-center justify-center font-black">
                       2
                     </div>
                     <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-white/10 px-4 py-1.5 rounded-full bg-white/10 text-white shadow-sm">
@@ -541,7 +541,7 @@ export default function AboutClient({
                   {/* Subtitle / Main heading matching screenshot layout with vivid lime highlighted focus */}
                   <h2 className="text-xl md:text-5xl font-display font-black uppercase italic tracking-tight text-white leading-[1.05] md:leading-[0.95] mt-1 lg:mt-4">
                     {content['about.blueprint.headline_line1']} <br />
-                    <span className="text-[#C8FF3D]">{content['about.blueprint.headline_highlight']}</span>
+                    <span className="text-lime">{content['about.blueprint.headline_highlight']}</span>
                   </h2>
 
                   {/* Categories container */}
@@ -557,7 +557,7 @@ export default function AboutClient({
                         >
                           <div className="flex gap-3 lg:gap-6 items-start">
                             {/* Number index */}
-                            <span className={`font-mono text-xs font-bold transition-all duration-300 ${isActive ? 'text-[#C8FF3D]' : 'text-white/40'}`}>
+                            <span className={`font-mono text-xs font-bold transition-all duration-300 ${isActive ? 'text-lime' : 'text-white/40'}`}>
                               {topic.id}
                             </span>
 
@@ -584,7 +584,7 @@ export default function AboutClient({
 
                                 {/* SEO text — full copy on every breakpoint (no clamp); the
                                     shrunk inactive titles above buy back the space it needs. */}
-                                <p className="text-[10px] md:text-xs text-white/70 leading-snug md:leading-relaxed font-mono mt-1.5 mb-1 border-s-2 border-[#C8FF3D] ps-2.5 md:ps-3 italic bg-black/15 p-2 md:p-2.5 rounded-e-xl">
+                                <p className="text-[10px] md:text-xs text-white/70 leading-snug md:leading-relaxed font-mono mt-1.5 mb-1 border-s-2 border-lime ps-2.5 md:ps-3 italic bg-black/15 p-2 md:p-2.5 rounded-e-xl">
                                   {topic.seoText}
                                 </p>
 
@@ -597,7 +597,7 @@ export default function AboutClient({
                                     referrerPolicy="no-referrer" loading="lazy" decoding="async"
                                   />
                                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-                                    <span className="font-mono text-[9px] uppercase tracking-wider bg-[#C8FF3D] text-[#0E0E0C] px-2 py-0.5 rounded font-bold">
+                                    <span className="font-mono text-[9px] uppercase tracking-wider bg-lime text-ink px-2 py-0.5 rounded font-bold">
                                       {topic.badge}
                                     </span>
                                   </div>
@@ -618,7 +618,7 @@ export default function AboutClient({
           {/* The sliding Brand Positioning panel */}
           <motion.div
             style={{ x: `${percentX * dirSign}%` }}
-            className="absolute inset-0 bg-[#EDE8E1] text-[#0E0E0C] z-30 flex items-start sm:items-center overflow-y-auto lg:overflow-y-auto px-6 md:px-8 pt-[76px] pb-3 sm:py-8 lg:py-10 border-s border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
+            className="absolute inset-0 bg-sand text-ink z-30 flex items-start sm:items-center overflow-y-auto lg:overflow-y-auto px-6 md:px-8 pt-[76px] pb-3 sm:py-8 lg:py-10 border-s border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
           >
             {/* Grid Background with fine spacing for balanced quadrants and elegant reduced opacity (0.04) */}
             <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,rgba(10,13,24,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,13,24,0.04)_1px,transparent_1px)] bg-[size:5.0rem_5.0rem] pointer-events-none" />
@@ -632,12 +632,12 @@ export default function AboutClient({
                   transition={{ type: "spring", stiffness: 45, damping: 22, mass: 1.2 }}
                   className="lg:col-span-3 lg:sticky lg:top-24 space-y-3"
                 >
-                  <span className="font-mono text-xs uppercase tracking-widest text-[#0E0E0C]/60 font-semibold block">
+                  <span className="font-mono text-xs uppercase tracking-widest text-ink/60 font-semibold block">
                     {content['about.positioning.founded_label']}
                   </span>
 
                   {/* Highlight box matching reference screenshot layout exactly */}
-                  <div className="w-full max-w-[220px] aspect-[2.1/1] bg-[#C8FF3D] text-[#0E0E0C] flex items-center justify-center rounded-[24px] shadow-[0_12px_36px_rgba(212,255,62,0.18)] select-none border border-[#C8FF3D] hover:scale-[1.12] hover:-rotate-3 hover:shadow-[0_20px_48px_rgba(212,255,62,0.35)] transition-all duration-300 ease-out">
+                  <div className="w-full max-w-[220px] aspect-[2.1/1] bg-lime text-ink flex items-center justify-center rounded-[24px] shadow-[0_12px_36px_rgba(212,255,62,0.18)] select-none border border-lime hover:scale-[1.12] hover:-rotate-3 hover:shadow-[0_20px_48px_rgba(212,255,62,0.35)] transition-all duration-300 ease-out">
                     <span className="font-sans text-5xl md:text-6xl font-black italic tracking-tighter leading-none select-none">
                       {content['about.positioning.founded_year']}
                     </span>
@@ -654,7 +654,7 @@ export default function AboutClient({
                     className="space-y-4"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#0E0E0C] text-[#C8FF3D] font-mono text-xs flex items-center justify-center font-black">
+                      <div className="w-8 h-8 rounded-full bg-ink text-lime font-mono text-xs flex items-center justify-center font-black">
                         3
                       </div>
                       <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold border border-ink/10 px-4 py-1.5 rounded-full bg-white text-ink shadow-sm">
@@ -662,7 +662,7 @@ export default function AboutClient({
                       </div>
                     </div>
 
-                    <h2 className="text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-[#0E0E0C]">
+                    <h2 className="text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-ink">
                       {content['about.positioning.headline_part1']} <span className="text-court-blue">{content['about.positioning.headline_part2']}</span> <br className="hidden sm:inline" />
                       <span className="relative inline-block text-ink">
                         {content['about.positioning.headline_part3']}
@@ -670,12 +670,12 @@ export default function AboutClient({
                             runs regardless of OS reduce-motion, unlike the old Framer keyframe loop. */}
                         <span
                           aria-hidden
-                          className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-[#C8FF3D] w-full -z-10 rounded-full opacity-80"
+                          className="ch-underline-draw absolute start-0 bottom-1 sm:bottom-2 h-2 sm:h-3 bg-lime w-full -z-10 rounded-full opacity-80"
                         />
                       </span>.
                     </h2>
 
-                    <p className="text-xs sm:text-sm md:text-base lg:text-base font-sans font-medium text-[#0E0E0C]/80 leading-relaxed max-w-4xl pt-1">
+                    <p className="text-xs sm:text-sm md:text-base lg:text-base font-sans font-medium text-ink/80 leading-relaxed max-w-4xl pt-1">
                       {content['about.positioning.paragraph1']}
                     </p>
                   </motion.div>
@@ -700,7 +700,7 @@ export default function AboutClient({
                           referrerPolicy="no-referrer" loading="lazy" decoding="async"
                         />
                       </motion.div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-6 flex flex-col justify-end pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent p-6 flex flex-col justify-end pointer-events-none" />
                       <div className="absolute bottom-6 start-6 text-white text-start space-y-1.5 z-10 font-sans pointer-events-none">
                         <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-court-blue text-white px-2.5 py-1 rounded font-bold inline-block">{content['about.positioning.portrait_badge']}</span>
                         <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.portrait_caption']}</p>
@@ -723,9 +723,9 @@ export default function AboutClient({
                             referrerPolicy="no-referrer" loading="lazy" decoding="async"
                           />
                         </motion.div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C]/85 via-transparent to-transparent p-4 flex flex-col justify-end pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent p-4 flex flex-col justify-end pointer-events-none" />
                         <div className="absolute bottom-4 start-4 text-white text-start space-y-1 z-10 font-sans pointer-events-none">
-                          <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-[#C8FF3D] text-ink px-2.5 py-1 rounded font-black font-semibold inline-block">{content['about.positioning.landscape_badge']}</span>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.15em] bg-lime text-ink px-2.5 py-1 rounded font-black font-semibold inline-block">{content['about.positioning.landscape_badge']}</span>
                           <p className="font-display text-xs sm:text-sm font-bold italic uppercase tracking-wider text-white">{content['about.positioning.landscape_caption']}</p>
                         </div>
                       </div>
@@ -737,10 +737,10 @@ export default function AboutClient({
 
                         <Link
                           href={lp('/contact')}
-                          className="inline-flex items-center gap-2 group text-xs font-mono font-bold uppercase tracking-widest text-[#0E0E0C] hover:text-court-blue border border-ink/15 px-5 py-2.5 rounded-full bg-white hover:bg-white/80 transition-all shadow-md group shrink-0"
+                          className="inline-flex items-center gap-2 group text-xs font-mono font-bold uppercase tracking-widest text-ink hover:text-court-blue border border-ink/15 px-5 py-2.5 rounded-full bg-white hover:bg-white/80 transition-all shadow-md group shrink-0"
                         >
                           <span>{content['about.positioning.cta_label']}</span>
-                          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#0E0E0C] rtl:-scale-x-100" />
+                          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-ink rtl:-scale-x-100" />
                         </Link>
                       </div>
 
@@ -758,7 +758,7 @@ export default function AboutClient({
         {/* ================= SECTION 5: CALL TO ACTION (CTA - Dark Card Wheel Concept) ================= */}
         <section className="pt-16 sm:pt-20 px-6 md:px-8 text-center relative overflow-hidden bg-ink pb-0">
           {/* Symmetrical ambient radial light gradient matching the image */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(200,255,61,0.06)_0%,transparent_60%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.06)_0%,transparent_60%)] pointer-events-none" />
 
           <motion.div
             style={{ x: ctaParallaxX, y: ctaParallaxY }}
@@ -817,12 +817,12 @@ export default function AboutClient({
                     style={{ rotate: cfg.rotate, y: cfg.y, zIndex: cfg.zIndex, opacity: cfg.opacity }}
                     whileHover={{ scale: 1.12, rotate: 0, y: -18, zIndex: 100, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-                    className="group relative flex-shrink-0 w-[190px] sm:w-[230px] md:w-[260px] rounded-[24px] bg-white border border-ink/10 p-3 shadow-[0_18px_45px_-12px_rgba(14,14,12,0.3)] flex flex-col gap-2.5 cursor-pointer"
+                    className="group relative flex-shrink-0 w-[190px] sm:w-[230px] md:w-[260px] rounded-[24px] bg-white border border-ink/10 p-3 shadow-[0_18px_45px_-12px_rgba(10,42,102,0.3)] flex flex-col gap-2.5 cursor-pointer"
                   >
                     <span className="absolute top-4 start-4 z-20 text-[9px] bg-lime text-ink px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm">
                       {content['about.bestsellers.badge']}
                     </span>
-                    <div className="rounded-[16px] bg-[#F5F4F0] aspect-[4/3] flex items-center justify-center p-3 overflow-hidden">
+                    <div className="rounded-[16px] bg-[#EEF5FF] aspect-[4/3] flex items-center justify-center p-3 overflow-hidden">
                       <img
                         src={p.image}
                         alt={p.name}

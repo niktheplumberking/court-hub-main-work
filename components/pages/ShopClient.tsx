@@ -168,11 +168,12 @@ export default function ShopClient({
               </div>
             </div>
 
-            {/* Sleek Custom-molded Filter Toolbar (Sleek Dark capsule on cream backdrop) */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-ink p-3 md:p-4 rounded-[28px] md:rounded-full border border-white/10 shadow-xl relative z-10 text-white">
+            {/* Filter tray — client reference: light-blue tray, white pills, the
+                active pill solid royal blue. Brands + categories share one style. */}
+            <div className="ch-light flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-6 bg-[#DCEAFE]/70 p-2.5 sm:p-3 rounded-[22px] border border-court-blue/10 relative z-10">
               {/* Brand Filter Row */}
               {brands.length > 1 ? (
-              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white/[0.03] rounded-full">
+              <div className="flex flex-wrap items-center gap-2">
                 {['ALL', ...brands].map(brand => {
                   const isActive = activeBrand === brand;
                   const brandLabel = brand === 'ALL' ? t.shop.filterAll : brand;
@@ -180,15 +181,13 @@ export default function ShopClient({
                     <button
                       key={brand}
                       onClick={() => setActiveBrand(brand)}
-                      className={`relative px-5 py-2.5 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-widest transition-all duration-300 outline-none cursor-pointer select-none font-bold ${
-                        isActive ? 'text-ink' : 'text-white/60 hover:text-white'
-                      }`}
+                      className={`ch-pill ${isActive ? 'is-active' : ''}`}
                     >
                       {isActive && (
                         <motion.span
                           layoutId="activeBrandFilter"
                           transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                          className="absolute inset-0 bg-lime rounded-full -z-10"
+                          className="absolute inset-0 bg-court-blue rounded-full -z-10 shadow-[0_6px_16px_rgba(31,95,214,0.35)]"
                         />
                       )}
                       {brandLabel}
@@ -196,13 +195,13 @@ export default function ShopClient({
                   );
                 })}
               </div>
-              ) : <span />}
+              ) : null}
 
               {/* Category Filter Row */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto justify-end">
-                <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-white/40 shrink-0" />
-                  <div className="flex gap-1 bg-white/[0.03] p-1 rounded-full border border-white/5 relative">
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="flex items-center gap-2 min-w-0">
+                  <SlidersHorizontal className="w-4 h-4 text-court-blue/60 shrink-0 hidden sm:block" />
+                  <div className="flex flex-wrap gap-2 relative">
                     {[
                       { id: 'ALL', label: t.shop.allItems },
                       ...categories.map((c) => ({ id: c.slug, label: c.name })),
@@ -212,15 +211,13 @@ export default function ShopClient({
                         <button
                           key={cat.id}
                           onClick={() => setActiveCategory(cat.id)}
-                          className={`relative px-4 py-2 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider transition-colors duration-300 outline-none cursor-pointer select-none font-bold ${
-                            isActive ? 'text-white bg-white/15' : 'text-white/45 hover:text-white/75'
-                          }`}
+                          className={`ch-pill ${isActive ? 'is-active' : ''}`}
                         >
                           {isActive && (
                             <motion.span
                               layoutId="activeCategoryFilter"
                               transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                              className="absolute inset-0 bg-white/10 rounded-full -z-10"
+                              className="absolute inset-0 bg-court-blue rounded-full -z-10 shadow-[0_6px_16px_rgba(31,95,214,0.35)]"
                             />
                           )}
                           {cat.label}
@@ -255,35 +252,35 @@ export default function ShopClient({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.06 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8"
+                className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-8"
               >
                 {filteredProducts.map((prod) => {
                   const isFav = favorites.includes(prod.id);
                   return (
                     <motion.div
                       key={prod.id}
-                      className="group bg-white rounded-[20px] p-5 border border-ink/5 hover:border-ink/15 hover:shadow-[0_16px_48px_rgba(10,13,24,0.06)] flex flex-col justify-between transition-all duration-500 relative overflow-hidden text-start"
+                      className="ch-pcard group bg-white rounded-[18px] sm:rounded-[22px] p-2.5 sm:p-5 border border-court-blue/10 flex flex-col justify-between relative overflow-hidden text-start"
                     >
-                      <div className="relative z-10 space-y-4">
+                      <div className="relative z-10 space-y-2.5 sm:space-y-4">
                         {/* Soft premium grey-beige backplate for product photo. `isolate`
                             scopes the image's multiply blend so it composites only against
                             this box's cream — the product photos' white studio backgrounds
-                            multiply to EXACTLY #F5F4F0 (white × box = box), so no white/black
+                            multiply to EXACTLY #EEF5FF (white × box = box), so no white/black
                             rectangle ever shows. (racket-19/20 had their black bgs flood-filled
                             to white so they behave the same.) */}
-                        <div className="relative w-full aspect-[4/3] rounded-[12px] bg-[#F5F4F0] overflow-hidden border border-ink/5 isolate">
+                        <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-[12px] bg-gradient-to-b from-[#F1F7FF] to-[#E1EDFE] overflow-hidden isolate">
                           <Link href={lp(`/shop/${prod.slug}`)} className="block w-full h-full cursor-pointer">
                             <img
                               src={prod.image}
                               alt={prod.name}
-                              className="w-full h-full object-contain p-3 sm:p-4 mix-blend-multiply group-hover:scale-105 transition-transform duration-700 select-none"
+                              className="w-full h-full object-contain p-2 sm:p-4 mix-blend-multiply group-hover:scale-105 group-hover:-rotate-2 transition-transform duration-700 select-none"
                               referrerPolicy="no-referrer" loading="lazy" decoding="async"
                             />
                           </Link>
 
                           {/* Badges reflect real data only: a discount badge exists only when the
                               admin set a higher compare-at price; condition only for pre-owned. */}
-                          <div className="absolute top-4 start-4 flex flex-col gap-1 items-start pointer-events-none">
+                          <div className="absolute top-2 start-2 sm:top-4 sm:start-4 flex flex-col gap-1 items-start pointer-events-none">
                             {prod.compareAt && (
                               <span className="bg-[#E84525] text-white text-[9px] font-mono font-black tracking-widest px-2.5 py-1 rounded-sm uppercase leading-none">
                                 {t.shop.percentOff(Math.round((1 - prod.price / prod.compareAt) * 100))}
@@ -299,17 +296,17 @@ export default function ShopClient({
                           {/* Heart Icon Toggle */}
                           <button
                             onClick={() => toggleFavorite(prod.id)}
-                            className="absolute top-4 end-4 p-2 bg-white hover:bg-ink text-ink hover:text-white rounded-full transition-all cursor-pointer border border-ink/5 flex items-center justify-center shadow-sm"
+                            className="absolute top-2 end-2 sm:top-4 sm:end-4 p-1.5 sm:p-2 bg-white hover:bg-court-blue text-ink hover:text-white rounded-full transition-all cursor-pointer border border-ink/5 flex items-center justify-center shadow-sm"
                           >
                             <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-fire fill-[#E84525]' : 'text-ink/40 group-hover:text-ink'}`} />
                           </button>
                         </div>
 
                         {/* Meta section: Brand and Stock status */}
-                        <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.15em] font-bold text-ink/50">
+                        <div className="flex items-center justify-between gap-1 text-[8.5px] sm:text-[10px] font-mono uppercase tracking-[0.12em] sm:tracking-[0.15em] font-bold text-court-blue/70">
                           <span>{prod.brand}</span>
                           {prod.inStock ? (
-                            <span className="flex items-center gap-1 text-ink/70">
+                            <span className="flex items-center gap-1 text-ink/70 whitespace-nowrap">
                               <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
                               {prod.maxQty <= 2 ? t.shop.onlyLeft(prod.maxQty) : t.shop.inStock}
                             </span>
@@ -324,33 +321,34 @@ export default function ShopClient({
                         {/* Title & brief description */}
                         <div className="space-y-1">
                           <Link href={lp(`/shop/${prod.slug}`)} className="block group/title">
-                            <h3 className="text-base font-display font-black leading-tight text-ink uppercase tracking-tight group-hover/title:text-[#1E5AE8] transition-colors line-clamp-1">
+                            <h3 className="text-[13px] sm:text-base font-display font-black leading-tight text-ink uppercase tracking-tight group-hover/title:text-court-blue transition-colors line-clamp-2 sm:line-clamp-1 min-h-[2.5em] sm:min-h-0">
                               {prod.name}
                             </h3>
                           </Link>
-                          <p className="text-ink/60 text-xs leading-relaxed line-clamp-2 min-h-[32px]">
+                          <p className="hidden sm:block text-ink/60 text-xs leading-relaxed line-clamp-2 min-h-[32px]">
                             {prod.desc}
                           </p>
                         </div>
                       </div>
 
                       {/* Bottom row: Price and Add To Bag Button */}
-                      <div className="relative z-10 pt-4 border-t border-ink/5 mt-4 flex items-center justify-between gap-4">
+                      <div className="relative z-10 pt-2.5 sm:pt-4 border-t border-court-blue/10 mt-2.5 sm:mt-4 flex items-center justify-between gap-2 sm:gap-4">
                         <div className="flex flex-col">
                           {/* Struck-through price ONLY when a real compare-at price exists. */}
                           {prod.compareAt ? (
                             <span className="text-ink/30 text-[10px] font-mono line-through leading-none">AED {prod.compareAt}</span>
                           ) : null}
-                          <span className="text-lg font-display font-black text-ink">AED {prod.price}</span>
+                          <span className="text-[15px] sm:text-lg font-display font-black text-ink whitespace-nowrap">AED {prod.price}</span>
                         </div>
 
                         <button
                           onClick={(e) => handleAdd(prod, e)}
                           disabled={!prod.inStock}
-                          className="px-4.5 py-2.5 bg-ink text-white hover:bg-lime hover:text-ink rounded-full font-bold uppercase text-[9px] tracking-widest transition-all cursor-pointer flex items-center gap-1.5 hover:-translate-y-0.5 shadow-md shadow-black/5 disabled:opacity-40 disabled:pointer-events-none"
+                          aria-label={t.shop.addToBag}
+                          className="shrink-0 p-2.5 sm:px-4.5 sm:py-2.5 bg-court-blue text-white hover:bg-ink rounded-full font-bold uppercase text-[9px] tracking-widest transition-all cursor-pointer flex items-center gap-1.5 hover:-translate-y-0.5 shadow-[0_8px_18px_rgba(31,95,214,0.3)] disabled:opacity-40 disabled:pointer-events-none"
                         >
                           <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
-                          <span>{t.shop.addToBag}</span>
+                          <span className="hidden sm:inline">{t.shop.addToBag}</span>
                         </button>
                       </div>
                     </motion.div>

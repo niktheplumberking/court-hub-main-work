@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
@@ -18,6 +19,35 @@ import type { ContentMap } from '@/lib/content/get';
 export default function HomeHero({ content }: { content: ContentMap }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(26);
   const lp = useLocalePath();
+
+  // Rotating headline (client request): the four promises of Court Hub cycle
+  // in place. Every phrase is editable in the Studio (home.hero.*). Driven by
+  // CSS keyframes + a timer, not Framer, so it keeps running under the OS
+  // "reduce motion" setting (Framer freezes loops there).
+  const phrases = [
+    [content['home.hero.title_line1'], content['home.hero.title_line2']],
+    [content['home.hero.rotate2_line1'], content['home.hero.rotate2_line2']],
+    [content['home.hero.rotate3_line1'], content['home.hero.rotate3_line2']],
+    [content['home.hero.rotate4_line1'], content['home.hero.rotate4_line2']],
+  ].filter(([a, b]) => a || b);
+  const [idx, setIdx] = useState(0);
+  const [leaving, setLeaving] = useState(false);
+  useEffect(() => {
+    if (phrases.length < 2) return;
+    let swap: number | undefined;
+    const tick = window.setInterval(() => {
+      setLeaving(true);
+      swap = window.setTimeout(() => {
+        setIdx((i) => (i + 1) % phrases.length);
+        setLeaving(false);
+      }, 520);
+    }, 3600);
+    return () => {
+      window.clearInterval(tick);
+      window.clearTimeout(swap);
+    };
+  }, [phrases.length]);
+  const [line1, line2] = phrases[idx] ?? ['', ''];
 
   return (
     <section data-cms="home:hero" className="ch-rail-exempt relative h-[100dvh] md:h-screen min-h-[620px] w-full p-2 sm:p-5 md:p-6 lg:p-8 bg-ink overflow-hidden text-center flex items-center justify-center">
@@ -47,27 +77,27 @@ export default function HomeHero({ content }: { content: ContentMap }) {
           {/* Centered title with the breath-like float */}
           <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 z-10 select-none pointer-events-none">
             <div className="w-full flex flex-col items-center justify-center">
-              <motion.div className="w-full flex justify-center">
-                <motion.h1
-                  initial={{ y: -35, opacity: 0, scale: 0.98 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
-                >
-                  {content['home.hero.title_line1']}
-                </motion.h1>
-              </motion.div>
-
-              <motion.div className="w-full flex justify-center mt-1 sm:mt-2">
-                <motion.h1
-                  initial={{ y: 35, opacity: 0, scale: 0.98 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-                  className="font-display font-black text-white text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
-                >
-                  {content['home.hero.title_line2']}
-                </motion.h1>
-              </motion.div>
+              <h1
+                aria-label={phrases.map((p) => p.filter(Boolean).join(' ')).join(' · ')}
+                className="w-full flex flex-col items-center font-display font-black text-center text-[42px] sm:text-[68px] md:text-[88px] lg:text-[108px] xl:text-[124px] leading-[0.85] tracking-tighter uppercase select-none"
+              >
+                <span aria-hidden key={`a${idx}`} className={`ch-rot-line block text-white drop-shadow-[0_8px_16px_rgba(6,26,68,0.6)] ${leaving ? 'is-leaving' : ''}`}>
+                  {line1}
+                </span>
+                <span aria-hidden key={`b${idx}`} className={`ch-rot-line ch-rot-line--2 ch-rot-sky block mt-1 sm:mt-2 ${leaving ? 'is-leaving' : ''}`}>
+                  {line2}
+                </span>
+              </h1>
+              {/* Progress dashes: which promise is showing, and the timer to the next. */}
+              {phrases.length > 1 && (
+                <div aria-hidden className="mt-6 sm:mt-8 flex items-center gap-2">
+                  {phrases.map((_, i) => (
+                    <span key={i} className={`ch-rot-dash ${i === idx ? 'is-active' : ''}`}>
+                      {i === idx && <span key={idx} className="ch-rot-dash-fill" />}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -86,7 +116,7 @@ export default function HomeHero({ content }: { content: ContentMap }) {
                 {/* Primary CTA (static) */}
                 <Link
                   href={lp('/construct-your-court')}
-                  className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
+                  className="px-6 py-3 bg-lime hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                 >
                   {content['home.hero.cta_primary']}
                 </Link>

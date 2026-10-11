@@ -38,11 +38,11 @@ export default function LiveBanner({ t, final }: { t: Tournament; final: Match |
   return (
     <section className="pb-0 pt-[34px]">
       <div className="mx-auto max-w-[1320px] px-6">
-        <div className="relative grid overflow-hidden rounded-[36px] border border-white/[0.06] bg-[linear-gradient(120deg,#0E0E0C_0%,#161613_100%)] md:grid-cols-[1.15fr_1fr]">
+        <div className="relative grid overflow-hidden rounded-[36px] border border-white/[0.06] bg-[linear-gradient(120deg,#0A2A66_0%,#161613_100%)] md:grid-cols-[1.15fr_1fr]">
           <div className="relative min-h-[180px] md:min-h-[300px]">
             <Image src={t.cover} alt={t.name} fill sizes="(max-width:820px) 100vw, 55vw" className="object-cover brightness-[0.7] saturate-[1.1]" />
             {/* Fade into the body (bottom on mobile, inline-end side on desktop) */}
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,#0E0E0C_100%)] md:bg-[linear-gradient(90deg,transparent_40%,#0E0E0C_100%)] md:rtl:bg-[linear-gradient(270deg,transparent_40%,#0E0E0C_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,#0A2A66_100%)] md:bg-[linear-gradient(90deg,transparent_40%,#0A2A66_100%)] md:rtl:bg-[linear-gradient(270deg,transparent_40%,#0A2A66_100%)]" />
           </div>
           <div className="relative z-[2] flex flex-col justify-center gap-4 p-[38px_28px] md:p-[38px_40px]">
             <div className="flex flex-wrap items-center gap-2">

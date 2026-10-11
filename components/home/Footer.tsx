@@ -49,7 +49,7 @@ export default function Footer({ hideTopBorder = false }: { hideTopBorder?: bool
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.footer.instagramAria}
-              whileHover={{ y: -5, color: '#C8FF3D' }}
+              whileHover={{ y: -5, color: '#8EC5FF' }}
               className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors"
             >
               <Instagram className="w-5 h-5" />

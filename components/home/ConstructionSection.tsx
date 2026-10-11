@@ -245,15 +245,16 @@ Configuration Details:
       <section 
         ref={containerRef}
         id="construction"
-        // Mobile: pb-48 keeps the sticky frame's resting position 192px above the
+        // Runway trimmed 400vh → 220–240vh (client: "too much white space", Oct 2026).
+        // pb-24 keeps the sticky frame's resting position 192px above the
         // section end, so the bottom sand fade (h-32, absolute at bottom-0) washes
         // over empty sand only — never the form card or its WhatsApp button
         // (client request via Atif, Jul 2026).
-        className={`relative w-full bg-sand ${isDesktop ? 'h-screen' : 'h-[400vh] pb-48'}`}
+        className={`relative w-full bg-sand ${isDesktop ? 'h-screen' : 'h-[240vh] md:h-[220vh] pb-24'}`}
       >
         {/* Bottom Gradient Transition to FAQ Section (Transparent to Sand) */}
         {!isDesktop && (
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-sand to-transparent z-10 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-sand to-transparent z-10 pointer-events-none" />
         )}
 
         {/* Sticky Viewport Frame Wrapper */}
@@ -315,7 +316,7 @@ Configuration Details:
                         onClick={() => setCourtModel(model.id as any)}
                         className={`py-1.5 md:py-2 px-1 rounded-lg md:rounded-xl text-[9px] md:text-xs font-display font-bold uppercase tracking-wider transition-all duration-300 border text-center cursor-pointer ${
                           isActive
-                            ? 'bg-lime text-ink border-lime shadow-[0_0_15px_rgba(200,255,61,0.25)] font-extrabold'
+                            ? 'bg-lime text-ink border-lime shadow-[0_0_15px_rgba(59,130,246,0.25)] font-extrabold'
                             : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white'
                         }`}
                       >

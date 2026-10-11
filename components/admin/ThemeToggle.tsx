@@ -8,7 +8,7 @@ export type AdminTheme = 'dark' | 'light';
 /** Reads the console theme on the client (login screen has no server read). */
 export function readThemeCookie(): AdminTheme {
   const m = document.cookie.match(/(?:^|;\s*)ch-admin-theme=(light|dark)/);
-  return m?.[1] === 'light' ? 'light' : 'dark';
+  return m?.[1] === 'dark' ? 'dark' : 'light';
 }
 
 /**
@@ -17,7 +17,7 @@ export function readThemeCookie(): AdminTheme {
  * render — no flash, no inline boot script. Every light-mode rule in
  * globals.css is scoped to that wrapper, so the public site is untouchable.
  */
-export default function ThemeToggle({ initial = 'dark' }: { initial?: AdminTheme }) {
+export default function ThemeToggle({ initial = 'light' }: { initial?: AdminTheme }) {
   const [theme, setTheme] = useState<AdminTheme>(initial);
 
   useEffect(() => {

@@ -236,7 +236,7 @@ export default function ShopSection({ products = [] }: ShopSectionProps) {
             transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
             viewport={{ once: true }}
             whileHover={{ y: -5 }}
-            className="md:col-span-4 bg-ink-2 rounded-[30px] md:rounded-[40px] p-6 md:p-8 relative overflow-hidden flex flex-col justify-between border border-white/5 hover:border-lime/30 hover:shadow-[0_15px_30px_rgba(200,255,61,0.05)] transition-all duration-500 group min-h-[400px]"
+            className="md:col-span-4 bg-ink-2 rounded-[30px] md:rounded-[40px] p-6 md:p-8 relative overflow-hidden flex flex-col justify-between border border-white/5 hover:border-lime/30 hover:shadow-[0_15px_30px_rgba(59,130,246,0.05)] transition-all duration-500 group min-h-[400px]"
           >
             {/* Background Image Layer */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -263,7 +263,7 @@ export default function ShopSection({ products = [] }: ShopSectionProps) {
                <img loading="lazy" decoding="async"
                 src="/images/racket_lime_nobg.webp?v=6"
                 alt="Lime Padel Racket"
-                className="w-full h-full max-h-[300px] object-contain drop-shadow-[0_0_50px_rgba(200,255,61,0.35)] transition-transform duration-700 scale-[0.68] group-hover:scale-[0.76] group-hover:rotate-6"
+                className="w-full h-full max-h-[300px] object-contain drop-shadow-[0_0_50px_rgba(59,130,246,0.35)] transition-transform duration-700 scale-[0.68] group-hover:scale-[0.76] group-hover:rotate-6"
               />
             </div>
 
@@ -445,7 +445,7 @@ export default function ShopSection({ products = [] }: ShopSectionProps) {
                 data-product-card
                 key={card.key}
                 href={card.href}
-                className="group relative block bg-[#1A1A17] rounded-[20px] overflow-hidden border border-white/5 hover:border-lime/30 transition-colors duration-500"
+                className="group relative block bg-ink-2 rounded-[20px] overflow-hidden border border-white/5 hover:border-lime/30 transition-colors duration-500"
               >
                 {/* Product image — hover scale 1 → 1.06 over 700ms (bible hover density) */}
                 <div className="relative aspect-square overflow-hidden bg-ink-2">

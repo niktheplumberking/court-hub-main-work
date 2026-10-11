@@ -31,7 +31,7 @@ export default function SwipeChevrons() {
       <MotionLink
         href={n.prev}
         onClick={markSwipe}
-        whileHover={{ scale: 1.15, backgroundColor: '#C8FF3D', color: '#0E0E0C' }}
+        whileHover={{ scale: 1.15, backgroundColor: '#1F5FD6', color: '#FFFFFF' }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
         className={`${CHEVRON_CLASS} left-2.5 sm:left-4`}
@@ -43,7 +43,7 @@ export default function SwipeChevrons() {
       <MotionLink
         href={n.next}
         onClick={markSwipe}
-        whileHover={{ scale: 1.15, backgroundColor: '#C8FF3D', color: '#0E0E0C' }}
+        whileHover={{ scale: 1.15, backgroundColor: '#1F5FD6', color: '#FFFFFF' }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
         className={`${CHEVRON_CLASS} right-2.5 sm:right-4`}

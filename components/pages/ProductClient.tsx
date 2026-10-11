@@ -207,7 +207,7 @@ export default function ProductClient({
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#0E0E0C] text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 font-semibold text-xs tracking-wider uppercase border border-white/10"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-ink text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 font-semibold text-xs tracking-wider uppercase border border-white/10"
           >
             <Check className="w-5 h-5 text-lime" />
             <span>{toastMessage}</span>
@@ -218,7 +218,7 @@ export default function ProductClient({
       {/* Main content area on light sand background */}
       <div className="relative w-full z-10 bg-sand">
         {/* Fine background grid lines - ultra precise & subtle */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,14,12,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,14,12,0.015)_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,42,102,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,42,102,0.015)_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 md:px-8 pb-16 relative z-10">
 

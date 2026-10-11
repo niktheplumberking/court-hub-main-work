@@ -169,7 +169,7 @@ export default function BookingFlow({
       <div className="relative overflow-hidden bg-ink text-white">
         <div className="absolute inset-0">
           <Image src={t.cover} alt={t.name} fill sizes="100vw" className="object-cover brightness-[0.5] saturate-[1.05]" priority />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,14,12,0.55),rgba(14,14,12,0.9))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,42,102,0.55),rgba(10,42,102,0.9))]" />
         </div>
         <div className="relative z-[2] mx-auto max-w-[1320px] px-6 pb-6 pt-24 md:pt-28">
           <Link href={lp(`/tournaments/${slug}`)} className="mb-[22px] inline-flex items-center gap-[7px] font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/65 transition-colors hover:text-lime">

@@ -8,7 +8,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // .adm-root on any admin page — pages must not add their own, or nested
   // wrappers would each carry a theme and fight each other.
   const cookieStore = await cookies();
-  const theme: AdminTheme = cookieStore.get(ADMIN_THEME_COOKIE)?.value === 'light' ? 'light' : 'dark';
+  const theme: AdminTheme = cookieStore.get(ADMIN_THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light'; // light (baby blue) is the default
 
   return (
     <div className="adm-root adm-grid-bg min-h-screen bg-ink" data-admin-theme={theme}>

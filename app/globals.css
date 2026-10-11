@@ -14,16 +14,54 @@
   --font-display: "Outfit", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Brand Colors */
-  --color-ink: #0E0E0C;
-  --color-ink-2: #1A1A17;
+  /* ── Brand Colors · "Court Blue" rebrand (Oct 2026) ──────────────────
+     Client direction: no black — soft baby-blue backgrounds, deep blue for
+     everything else, royal blue (the logo blue) replaces the old lime.
+     Token NAMES are kept so every component recolours from here:
+       ink   = deep padel-court navy (dark sections + dark text on light)
+       lime  = the accent: royal blue on light, sky blue on dark (see zones)
+       sand  = baby blue (light sections)                                  */
+  --color-ink: #0A2A66;
+  --color-ink-2: #12387F;
   --color-court-blue: #1E5AE8;
-  --color-lime: #C8FF3D;
-  --color-green: #07C66A;
-  --color-sand: #EDE8E1;
-  --color-sand-2: #D8D2C8;
-  --color-sand-card: #F5F2EC; /* card surface on sand — used by the tournaments feature */
+  --color-lime: #1F5FD6;
+  --color-green: #2F80ED;
+  --color-sand: #EAF3FF;
+  --color-sand-2: #CFE1FB;
+  --color-sand-card: #F6FAFF; /* card surface on sand — used by the tournaments feature */
   --color-fire: #E84525;
+  --color-black: #061A44; /* "no black": even literal black utilities render as midnight navy */
+
+  /* Extra rebrand tones (not Tailwind utilities) */
+  --ch-royal: #1F5FD6;
+  --ch-sky: #8EC5FF;
+  --ch-navy: #0A2A66;
+  --ch-glow: 59, 130, 246; /* rgb triplet for glows: rgba(var(--ch-glow), a) */
+}
+
+/* ── Colour zones ───────────────────────────────────────────────────────
+   The accent ("lime" token) adapts to its background so it always reads:
+   • light surfaces → royal blue, and text sitting ON an accent button
+     turns white (navy on royal would be too low-contrast);
+   • deep-navy surfaces → luminous sky blue, with navy text on its buttons.
+   Custom properties inherit, so the nearest zone wins.                  */
+:root { --ch-on-accent: #FFFFFF; }
+.bg-ink, .bg-ink-2, .bg-black, .bg-court-blue, .ch-dark, .ch-on-dark {
+  --color-lime: var(--ch-sky);
+  --ch-on-accent: var(--ch-navy);
+}
+.bg-sand, .bg-sand-2, .bg-sand-card, .bg-white, .ch-light {
+  --color-lime: var(--ch-royal);
+  --ch-on-accent: #FFFFFF;
+}
+/* Accent buttons: the label colour is inherited from the NEAREST zone
+   (custom properties inherit, so the closest background always wins). */
+.bg-lime, .hover:bg-lime:hover {
+  --color-ink: var(--ch-on-accent);
+}
+/* Accent button that turns white on hover → navy label. */
+.bg-lime.hover:bg-white:hover {
+  --color-ink: var(--ch-navy);
 }
 
 @layer base {
@@ -74,15 +112,15 @@ html.lenis body {
 @keyframes radar-pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(7, 198, 106, 0.7);
+    box-shadow: 0 0 0 0 rgba(47, 128, 237, 0.7);
   }
   70% {
     transform: scale(1.1);
-    box-shadow: 0 0 0 6px rgba(7, 198, 106, 0);
+    box-shadow: 0 0 0 6px rgba(47, 128, 237, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(7, 198, 106, 0);
+    box-shadow: 0 0 0 0 rgba(47, 128, 237, 0);
   }
 }
 
@@ -92,10 +130,10 @@ html.lenis body {
 
 @keyframes button-glow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(200, 255, 61, 0.2);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
   }
   50% {
-    box-shadow: 0 0 30px rgba(200, 255, 61, 0.5);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
   }
 }
 
@@ -108,8 +146,8 @@ html.lenis body {
 
 /* Brand text selection */
 ::selection {
-  background: #C8FF3D;
-  color: #0E0E0C;
+  background: var(--ch-royal);
+  color: #FFFFFF;
 }
 
 /* Link underline reveal (motion bible): scaleX 0→1 from the left on hover,
@@ -321,11 +359,15 @@ html.lenis body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #faf8f4 0%, var(--color-sand) 100%);
-  border: 1px solid rgba(14, 14, 12, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 20px rgba(14, 14, 12, 0.06);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  background: linear-gradient(145deg, #F4F9FF 0%, #DCEAFE 100%);
+  border: 1px solid rgba(10, 42, 102, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 20px rgba(10, 42, 102, 0.06);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.35s ease;
 }
+/* The generated icon art has a cream background baked in: greyscale +
+   multiply lets the tile colour show through, so it re-tints to baby blue
+   (and to royal blue on hover) with no new artwork. */
+.ch-svc-icon img { filter: grayscale(1) contrast(1.08) brightness(1.06); mix-blend-mode: multiply; transition: filter 0.35s ease; }
 .ch-svc-icon svg { width: 32px; height: 32px; overflow: visible; }
 .ch-svc-icon .st  { stroke: var(--color-ink); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .ch-svc-icon .st2 { stroke: var(--color-ink); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0.32; }
@@ -337,19 +379,69 @@ html.lenis body {
   inset: -1px;
   border-radius: 18px;
   padding: 1px;
-  background: linear-gradient(145deg, rgba(30, 90, 232, 0.35), rgba(200, 255, 61, 0.45));
+  background: linear-gradient(145deg, rgba(30, 90, 232, 0.35), rgba(59, 130, 246, 0.45));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s;
 }
-.ch-svc:hover .ch-svc-icon {
-  transform: translateY(-3px) rotate(-3deg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 14px 28px rgba(14, 14, 12, 0.12);
+.ch-svc:is(:hover, .is-touched) .ch-svc-icon {
+  transform: translateY(-4px) rotate(-6deg) scale(1.08);
+  background: linear-gradient(145deg, #8EC5FF 0%, #1F5FD6 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 14px 30px rgba(31, 95, 214, 0.35);
 }
-.ch-svc:hover .ch-svc-icon::after { opacity: 1; }
-.ch-svc:hover .ch-svc-icon .ac { fill: var(--color-court-blue); }
+.ch-svc:is(:hover, .is-touched) .ch-svc-icon img { filter: grayscale(1) contrast(1.25) brightness(1.15); }
+.ch-svc:is(:hover, .is-touched) .ch-svc-icon::after { opacity: 1; }
+.ch-svc:is(:hover, .is-touched) .ch-svc-icon .ac { fill: var(--color-court-blue); }
+
+/* ── Interactive service cards (client request: "pop up and glow" on hover
+   AND on touch). A soft spotlight follows the pointer (--mx/--my set by
+   SvcSpotlight.tsx), the card lifts with a blue halo, and a light sweep
+   crosses it once. Pure CSS fallbacks keep it working without JS. */
+.ch-svc {
+  --mx: 50%;
+  --my: 0%;
+  isolation: isolate;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, border-color 0.3s ease !important;
+}
+.ch-svc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(59, 130, 246, 0.16), rgba(142, 197, 255, 0.08) 35%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.ch-svc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.85) 48%, transparent 66%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.ch-svc:is(:hover, .is-touched) {
+  transform: translateY(-10px) scale(1.015);
+  border-color: rgba(31, 95, 214, 0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(31, 95, 214, 0.18),
+    0 26px 60px -18px rgba(31, 95, 214, 0.45),
+    0 0 46px rgba(59, 130, 246, 0.28) !important;
+}
+.ch-svc:is(:hover, .is-touched)::before { opacity: 1; }
+.ch-svc:is(:hover, .is-touched)::after { transform: translateX(120%); transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+.ch-svc:is(:hover, .is-touched) h3 { color: var(--ch-royal); }
+.ch-svc h3 { transition: color 0.3s ease; }
+.ch-svc .ch-svc-go { transition: gap 0.3s ease, letter-spacing 0.3s ease; }
+.ch-svc:is(:hover, .is-touched) .ch-svc-go { gap: 10px; }
+@media (prefers-reduced-motion: reduce) {
+  .ch-svc::after { display: none; }
+}
 
 /* Focus visibility on the simplified home: blue on sand/white surfaces,
    lime on dark (ink) surfaces. */
@@ -391,7 +483,7 @@ html.lenis body {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(900px 500px at 85% -10%, rgba(200, 255, 61, 0.07), transparent 60%),
+    radial-gradient(900px 500px at 85% -10%, rgba(59, 130, 246, 0.07), transparent 60%),
     radial-gradient(700px 500px at -10% 110%, rgba(30, 90, 232, 0.06), transparent 60%),
     linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
@@ -404,7 +496,7 @@ html.lenis body {
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(200, 255, 61, 0.75);
+  color: rgba(59, 130, 246, 0.75);
 }
 
 .adm-card {
@@ -414,8 +506,8 @@ html.lenis body {
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 .adm-card:hover {
-  border-color: rgba(200, 255, 61, 0.28);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(200, 255, 61, 0.06);
+  border-color: rgba(59, 130, 246, 0.28);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.06);
 }
 .adm-card-lift:hover { transform: translateY(-3px); }
 
@@ -431,8 +523,8 @@ html.lenis body {
 }
 .adm-input:focus, .adm-textarea:focus {
   outline: none;
-  border-color: rgba(200, 255, 61, 0.55);
-  box-shadow: 0 0 0 3px rgba(200, 255, 61, 0.12);
+  border-color: rgba(59, 130, 246, 0.55);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -445,7 +537,7 @@ html.lenis body {
 
 /* Primary action pulse — soft lime sonar, CSS loop (runs under reduce-motion
    like the site's Book-a-Court pulse). */
-@keyframes adm-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(200, 255, 61, 0.35); } 55% { box-shadow: 0 0 0 9px rgba(200, 255, 61, 0); } }
+@keyframes adm-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.35); } 55% { box-shadow: 0 0 0 9px rgba(59, 130, 246, 0); } }
 .adm-pulse { animation: adm-pulse 2.6s ease-in-out infinite; }
 
 /* One-shot entrance for cards/sections (staggered via --adm-delay). */
@@ -454,7 +546,7 @@ html.lenis body {
 
 /* Live-status dot (deployment/edited indicators). */
 @keyframes adm-blink { 50% { opacity: 0.35; } }
-.adm-live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--color-lime); box-shadow: 0 0 10px rgba(200, 255, 61, 0.7); animation: adm-blink 1.4s infinite; }
+.adm-live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--color-lime); box-shadow: 0 0 10px rgba(59, 130, 246, 0.7); animation: adm-blink 1.4s infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   .adm-fade-up { animation: none; }
@@ -526,9 +618,8 @@ html[dir='rtl'] .ltr-island {
   transform: scaleX(-1);
 }
 /* ── Admin light mode ───────────────────────────────────────────────────────
-   Opt-in daylight skin for the console, built ONLY from brand colors:
-   ink #0E0E0C, sand #EDE8E1 / #F5F2EC, court blue #1E5AE8, green #07C66A,
-   lime #C8FF3D. Scoped to `.adm-root` (the admin wrapper, stamped from a
+   DEFAULT console skin (client rebrand, Oct 2026: baby blue + navy, no black):
+   navy #0A2A66, baby blue #EAF3FF, royal #1F5FD6, white cards. Scoped to `.adm-root` (the admin wrapper, stamped from a
    cookie server-side) so it renders pre-themed and can never reach the
    public site.
 
@@ -540,57 +631,58 @@ html[dir='rtl'] .ltr-island {
    nearly invisible, so accent TEXT becomes court blue (the brand's other
    primary) while lime stays on button BACKGROUNDS with ink text. */
 .adm-root[data-admin-theme='light'] {
-  --color-white: #0E0E0C;  /* "white" text/borders become ink */
-  --color-ink: #EDE8E1;    /* ink surfaces become brand sand */
+  --color-white: #0A2A66;  /* "white" text/borders become ink */
+  --color-ink: #EAF3FF;    /* ink surfaces become brand sand */
   --color-ink-2: #FFFFFF;
-  background: #EDE8E1;
-  color: #0E0E0C;
+  --color-lime: #1F5FD6;   /* accent buttons: royal blue, white label */
+  background: #EAF3FF;
+  color: #0A2A66;
 }
 
 /* Tokens that keep their original meaning on light. */
-.adm-root[data-admin-theme='light'] .text-ink { color: #0E0E0C; }        /* label on a lime button */
+.adm-root[data-admin-theme='light'] .text-ink { color: #FFFFFF; }        /* label on a royal-blue button */
 .adm-root[data-admin-theme='light'] .bg-white { background-color: #FFFFFF; }
 .adm-root[data-admin-theme='light'] .hover\:bg-white:hover { background-color: #FFFFFF; }
 /* Accent text -> court blue; accent surfaces stay lime. */
 .adm-root[data-admin-theme='light'] .text-lime,
-.adm-root[data-admin-theme='light'] .adm-eyebrow { color: #1E5AE8; }
-.adm-root[data-admin-theme='light'] .hover\:text-lime:hover { color: #1E5AE8; }
-.adm-root[data-admin-theme='light'] .hover\:border-lime:hover { border-color: #1E5AE8; }
-.adm-root[data-admin-theme='light'] .border-lime\/30 { border-color: rgba(30, 90, 232, 0.3); }
-.adm-root[data-admin-theme='light'] .bg-lime\/10 { background-color: rgba(30, 90, 232, 0.08); }
+.adm-root[data-admin-theme='light'] .adm-eyebrow { color: #1F5FD6; }
+.adm-root[data-admin-theme='light'] .hover\:text-lime:hover { color: #1F5FD6; }
+.adm-root[data-admin-theme='light'] .hover\:border-lime:hover { border-color: #1F5FD6; }
+.adm-root[data-admin-theme='light'] .border-lime\/30 { border-color: rgba(31, 95, 214, 0.3); }
+.adm-root[data-admin-theme='light'] .bg-lime\/10 { background-color: rgba(31, 95, 214, 0.08); }
 /* Brand green, darkened just enough to stay legible as text on sand. */
-.adm-root[data-admin-theme='light'] .text-green { color: #05955A; }
+.adm-root[data-admin-theme='light'] .text-green { color: #1F5FD6; }
 /* Live indicator: brand green reads on paper where lime does not. */
 .adm-root[data-admin-theme='light'] .adm-live-dot {
-  background: #07C66A;
-  box-shadow: 0 0 10px rgba(7, 198, 106, 0.55);
+  background: #2F80ED;
+  box-shadow: 0 0 10px rgba(47, 128, 237, 0.55);
 }
 
 /* Console components use literal rgba(), so they need real overrides. */
 .adm-root[data-admin-theme='light'] .adm-card {
   background: #FFFFFF;
-  border-color: rgba(14, 14, 12, 0.10);
-  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.04), 0 8px 24px rgba(14, 14, 12, 0.06);
+  border-color: rgba(10, 42, 102, 0.10);
+  box-shadow: 0 1px 2px rgba(10, 42, 102, 0.04), 0 8px 24px rgba(10, 42, 102, 0.06);
 }
 .adm-root[data-admin-theme='light'] .adm-card:hover {
-  border-color: rgba(30, 90, 232, 0.40);
-  box-shadow: 0 10px 30px rgba(30, 90, 232, 0.12);
+  border-color: rgba(31, 95, 214, 0.40);
+  box-shadow: 0 10px 30px rgba(31, 95, 214, 0.12);
 }
 .adm-root[data-admin-theme='light'] .adm-input,
 .adm-root[data-admin-theme='light'] .adm-textarea {
   background: #FFFFFF;
-  border-color: rgba(14, 14, 12, 0.16);
-  color: #0E0E0C;
+  border-color: rgba(10, 42, 102, 0.16);
+  color: #0A2A66;
 }
 .adm-root[data-admin-theme='light'] .adm-input:focus,
 .adm-root[data-admin-theme='light'] .adm-textarea:focus {
-  border-color: #1E5AE8;
-  box-shadow: 0 0 0 3px rgba(30, 90, 232, 0.16);
+  border-color: #1F5FD6;
+  box-shadow: 0 0 0 3px rgba(31, 95, 214, 0.16);
   background: #FFFFFF;
 }
 .adm-root[data-admin-theme='light'] .adm-input::placeholder,
 .adm-root[data-admin-theme='light'] .adm-textarea::placeholder {
-  color: rgba(14, 14, 12, 0.38);
+  color: rgba(10, 42, 102, 0.38);
 }
 /* Blueprint backdrop: same court-grid idea as dark, drawn in brand blue and
    strong enough to actually read against sand (the previous grey mix was so
@@ -598,10 +690,10 @@ html[dir='rtl'] .ltr-island {
 .adm-root[data-admin-theme='light'].adm-grid-bg::before,
 .adm-root[data-admin-theme='light'] .adm-grid-bg::before {
   background:
-    radial-gradient(900px 500px at 85% -10%, rgba(30, 90, 232, 0.10), transparent 60%),
-    radial-gradient(700px 500px at -10% 110%, rgba(7, 198, 106, 0.08), transparent 60%),
-    linear-gradient(to right, rgba(30, 90, 232, 0.09) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(30, 90, 232, 0.09) 1px, transparent 1px);
+    radial-gradient(900px 500px at 85% -10%, rgba(31, 95, 214, 0.10), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(47, 128, 237, 0.08), transparent 60%),
+    linear-gradient(to right, rgba(31, 95, 214, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 95, 214, 0.09) 1px, transparent 1px);
   background-size: auto, auto, 44px 44px, 44px 44px;
 }
 
@@ -609,31 +701,31 @@ html[dir='rtl'] .ltr-island {
    gap in the token approach: Tailwind v4 inlines a literal `#fff` inside
    color-mix() for them instead of reading --color-white, so they need real
    rules. Values run darker because muted text needs more weight on paper. */
-.adm-root[data-admin-theme='light'] .text-white\/90 { color: rgba(14, 14, 12, 0.92); }
-.adm-root[data-admin-theme='light'] .text-white\/80 { color: rgba(14, 14, 12, 0.84); }
-.adm-root[data-admin-theme='light'] .text-white\/70 { color: rgba(14, 14, 12, 0.76); }
-.adm-root[data-admin-theme='light'] .text-white\/60 { color: rgba(14, 14, 12, 0.68); }
-.adm-root[data-admin-theme='light'] .text-white\/55 { color: rgba(14, 14, 12, 0.64); }
-.adm-root[data-admin-theme='light'] .text-white\/50 { color: rgba(14, 14, 12, 0.60); }
-.adm-root[data-admin-theme='light'] .text-white\/45 { color: rgba(14, 14, 12, 0.56); }
-.adm-root[data-admin-theme='light'] .text-white\/40 { color: rgba(14, 14, 12, 0.54); }
-.adm-root[data-admin-theme='light'] .text-white\/35 { color: rgba(14, 14, 12, 0.50); }
-.adm-root[data-admin-theme='light'] .text-white\/30 { color: rgba(14, 14, 12, 0.46); }
-.adm-root[data-admin-theme='light'] .text-white\/25 { color: rgba(14, 14, 12, 0.42); }
-.adm-root[data-admin-theme='light'] .text-white\/20 { color: rgba(14, 14, 12, 0.38); }
-.adm-root[data-admin-theme='light'] .border-white\/5 { border-color: rgba(14, 14, 12, 0.08); }
-.adm-root[data-admin-theme='light'] .border-white\/10 { border-color: rgba(14, 14, 12, 0.12); }
-.adm-root[data-admin-theme='light'] .border-white\/15 { border-color: rgba(14, 14, 12, 0.16); }
-.adm-root[data-admin-theme='light'] .border-white\/20 { border-color: rgba(14, 14, 12, 0.20); }
-.adm-root[data-admin-theme='light'] .border-white\/30 { border-color: rgba(14, 14, 12, 0.26); }
-.adm-root[data-admin-theme='light'] .border-white\/40 { border-color: rgba(14, 14, 12, 0.32); }
-.adm-root[data-admin-theme='light'] .bg-white\/5 { background-color: rgba(14, 14, 12, 0.035); }
-.adm-root[data-admin-theme='light'] .bg-white\/10 { background-color: rgba(14, 14, 12, 0.055); }
-.adm-root[data-admin-theme='light'] .bg-white\/15 { background-color: rgba(14, 14, 12, 0.08); }
-.adm-root[data-admin-theme='light'] .hover\:bg-white\/10:hover { background-color: rgba(30, 90, 232, 0.08); }
-.adm-root[data-admin-theme='light'] .bg-black\/40 { background-color: rgba(14, 14, 12, 0.05); }
+.adm-root[data-admin-theme='light'] .text-white\/90 { color: rgba(10, 42, 102, 0.92); }
+.adm-root[data-admin-theme='light'] .text-white\/80 { color: rgba(10, 42, 102, 0.84); }
+.adm-root[data-admin-theme='light'] .text-white\/70 { color: rgba(10, 42, 102, 0.76); }
+.adm-root[data-admin-theme='light'] .text-white\/60 { color: rgba(10, 42, 102, 0.68); }
+.adm-root[data-admin-theme='light'] .text-white\/55 { color: rgba(10, 42, 102, 0.64); }
+.adm-root[data-admin-theme='light'] .text-white\/50 { color: rgba(10, 42, 102, 0.60); }
+.adm-root[data-admin-theme='light'] .text-white\/45 { color: rgba(10, 42, 102, 0.56); }
+.adm-root[data-admin-theme='light'] .text-white\/40 { color: rgba(10, 42, 102, 0.54); }
+.adm-root[data-admin-theme='light'] .text-white\/35 { color: rgba(10, 42, 102, 0.50); }
+.adm-root[data-admin-theme='light'] .text-white\/30 { color: rgba(10, 42, 102, 0.46); }
+.adm-root[data-admin-theme='light'] .text-white\/25 { color: rgba(10, 42, 102, 0.42); }
+.adm-root[data-admin-theme='light'] .text-white\/20 { color: rgba(10, 42, 102, 0.38); }
+.adm-root[data-admin-theme='light'] .border-white\/5 { border-color: rgba(10, 42, 102, 0.08); }
+.adm-root[data-admin-theme='light'] .border-white\/10 { border-color: rgba(10, 42, 102, 0.12); }
+.adm-root[data-admin-theme='light'] .border-white\/15 { border-color: rgba(10, 42, 102, 0.16); }
+.adm-root[data-admin-theme='light'] .border-white\/20 { border-color: rgba(10, 42, 102, 0.20); }
+.adm-root[data-admin-theme='light'] .border-white\/30 { border-color: rgba(10, 42, 102, 0.26); }
+.adm-root[data-admin-theme='light'] .border-white\/40 { border-color: rgba(10, 42, 102, 0.32); }
+.adm-root[data-admin-theme='light'] .bg-white\/5 { background-color: rgba(10, 42, 102, 0.035); }
+.adm-root[data-admin-theme='light'] .bg-white\/10 { background-color: rgba(10, 42, 102, 0.055); }
+.adm-root[data-admin-theme='light'] .bg-white\/15 { background-color: rgba(10, 42, 102, 0.08); }
+.adm-root[data-admin-theme='light'] .hover\:bg-white\/10:hover { background-color: rgba(31, 95, 214, 0.08); }
+.adm-root[data-admin-theme='light'] .bg-black\/40 { background-color: rgba(10, 42, 102, 0.05); }
 /* Sticky top bar glass */
-.adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(237, 232, 225, 0.9); }
+.adm-root[data-admin-theme='light'] .bg-ink\/85 { background-color: rgba(234, 243, 255, 0.9); }
 
 /* Native <select> popups paint their own opaque background, but the options
    inherit the admin's light-on-dark text colour, giving white-on-white (only
@@ -644,3 +736,72 @@ html[dir='rtl'] .ltr-island {
   background-color: var(--color-ink-2);
   color: var(--color-white);
 }
+
+/* ── Rotating hero headline (HomeHero) ─────────────────────────────────
+   Each promise rises out of a soft blur; the outgoing one lifts away.
+   CSS keyframes (not Framer) so it also runs under reduce-motion. */
+@keyframes ch-rot-in {
+  from { opacity: 0; transform: translateY(0.32em) scale(0.98); filter: blur(14px); letter-spacing: 0.02em; }
+  to   { opacity: 1; transform: none; filter: blur(0); letter-spacing: inherit; }
+}
+@keyframes ch-rot-out {
+  from { opacity: 1; transform: none; filter: blur(0); }
+  to   { opacity: 0; transform: translateY(-0.28em) scale(1.01); filter: blur(12px); }
+}
+.ch-rot-line { animation: ch-rot-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; will-change: transform, opacity, filter; }
+.ch-rot-line--2 { animation-delay: 0.09s; }
+.ch-rot-line.is-leaving { animation: ch-rot-out 0.5s cubic-bezier(0.7, 0, 0.84, 0) both; }
+.ch-rot-line--2.is-leaving { animation-delay: 0.04s; }
+/* Second line: white → ice → sky gradient, the "court lights" accent. */
+.ch-rot-sky {
+  background: linear-gradient(100deg, #FFFFFF 0%, #DCEBFF 38%, #8EC5FF 72%, #5FA2FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.06em; /* keeps descenders inside the clipped gradient */
+}
+.ch-rot-dash { position: relative; display: block; width: 22px; height: 3px; border-radius: 999px; background: rgba(255, 255, 255, 0.28); overflow: hidden; transition: width 0.4s ease; }
+.ch-rot-dash.is-active { width: 46px; }
+.ch-rot-dash-fill { position: absolute; inset: 0; transform-origin: left; background: #8EC5FF; box-shadow: 0 0 10px rgba(142, 197, 255, 0.9); animation: ch-rot-fill 3.6s linear both; }
+[dir='rtl'] .ch-rot-dash-fill { transform-origin: right; }
+@keyframes ch-rot-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ── Shop filter pills (client reference) ── */
+.ch-pill {
+  position: relative;
+  isolation: isolate; /* the sliding active highlight (-z-10) paints above the pill's own white */
+  padding: 0.55rem 1.05rem;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid rgba(10, 42, 102, 0.1);
+  color: var(--ch-navy);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ch-pill:hover { border-color: rgba(31, 95, 214, 0.45); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(31, 95, 214, 0.12); }
+.ch-pill.is-active { color: #FFFFFF; border-color: transparent; }
+.ch-pill:focus-visible { outline: 2.5px solid var(--ch-royal); outline-offset: 2px; }
+
+/* ── Product cards: lift + blue halo on hover ── */
+.ch-pcard { transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, border-color 0.3s ease; }
+.ch-pcard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(31, 95, 214, 0.35);
+  box-shadow: 0 22px 50px -20px rgba(31, 95, 214, 0.45), 0 0 34px rgba(59, 130, 246, 0.16);
+}
+
+/* ── Order-confirmed check badge (success page) ── */
+.ch-check { position: relative; width: 92px; height: 92px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 30% 25%, #5FA2FF, #1F5FD6 60%, #12387F);
+  box-shadow: 0 18px 40px -10px rgba(31, 95, 214, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.35); }
+.ch-check-ring { position: absolute; inset: 0; border-radius: 999px; border: 2px solid rgba(31, 95, 214, 0.45); animation: ch-check-ring 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; }
+.ch-check-ring--2 { animation-delay: 1.2s; }
+@keyframes ch-check-ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.9); opacity: 0; } }
+.ch-check-path { stroke-dasharray: 48; stroke-dashoffset: 48; animation: ch-check-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards; }
+@keyframes ch-check-draw { to { stroke-dashoffset: 0; } }

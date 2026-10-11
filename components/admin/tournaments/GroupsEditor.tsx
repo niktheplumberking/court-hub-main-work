@@ -49,7 +49,7 @@ function TeamRow({
         <input name="sort" type="number" defaultValue={team?.sort ?? 0} className={miniCls} />
       </div>
       <label className="flex items-center gap-1.5 text-white/60 text-xs pb-2.5">
-        <input type="checkbox" name="q" defaultChecked={team?.q} className="w-4 h-4 accent-[#C8FF3D]" />
+        <input type="checkbox" name="q" defaultChecked={team?.q} className="w-4 h-4 accent-lime" />
         Q
       </label>
       <div className="flex items-center gap-2 pb-0.5">

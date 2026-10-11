@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Reveal from './Reveal';
+import SvcSpotlight from './SvcSpotlight';
 import { localePath, type Locale } from '@/lib/i18n/locale';
 import type { ContentMap } from '@/lib/content/get';
 
@@ -39,6 +40,7 @@ export default function ServicesGrid({
 
   return (
     <section id="services" data-cms="home:services" className="scroll-mt-16 py-[88px]">
+      <SvcSpotlight />
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="mb-11">
           <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/50">
@@ -54,7 +56,7 @@ export default function ServicesGrid({
             <Reveal key={s.title} className="h-full">
               <Link
                 href={localePath(locale, s.href)}
-                className="ch-svc group relative flex h-full flex-col gap-4 overflow-hidden rounded-[24px] border border-ink/[.08] bg-white px-[26px] py-[30px] transition-[transform,box-shadow] duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgba(14,14,12,0.1)]"
+                className="ch-svc group relative flex h-full flex-col gap-4 overflow-hidden rounded-[24px] border border-ink/[.08] bg-white px-[26px] py-[30px]"
               >
                 <div className="ch-svc-icon overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -64,7 +66,7 @@ export default function ServicesGrid({
                   {s.title}
                 </h3>
                 <p className="flex-1 text-[13px] leading-relaxed text-ink/60">{s.desc}</p>
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-court-blue group-hover:underline">
+                <span className="ch-svc-go inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-court-blue">
                   {s.go}
                 </span>
               </Link>

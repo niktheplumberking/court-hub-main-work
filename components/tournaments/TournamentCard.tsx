@@ -23,10 +23,10 @@ export default function TournamentCard({ t }: { t: Tournament }) {
   return (
     <Link
       href={lp(`/tournaments/${t.slug}`)}
-      className="group flex flex-col overflow-hidden rounded-[22px] border border-ink/10 bg-sand-card transition-[transform,box-shadow] duration-200 hover:-translate-y-[5px] hover:shadow-[0_22px_44px_rgba(14,14,12,0.11)]"
+      className="group flex flex-col overflow-hidden rounded-[22px] border border-ink/10 bg-sand-card transition-[transform,box-shadow] duration-200 hover:-translate-y-[5px] hover:shadow-[0_22px_44px_rgba(10,42,102,0.11)]"
     >
       {/* Cover */}
-      <div className="relative flex h-[150px] items-end overflow-hidden bg-[linear-gradient(135deg,#1a1a17,#2a2a24)] p-[13px]">
+      <div className="relative flex h-[150px] items-end overflow-hidden bg-[linear-gradient(135deg,#12387F,#1E4A9E)] p-[13px]">
         <Image
           src={t.cover}
           alt={t.name}
@@ -34,7 +34,7 @@ export default function TournamentCard({ t }: { t: Tournament }) {
           sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 33vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,14,12,0.15),rgba(14,14,12,0.55))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,42,102,0.15),rgba(10,42,102,0.55))]" />
         <div className="absolute inset-x-[13px] top-[13px] z-[2] flex items-start justify-between">
           <TierBadge tier={t.tier} />
           <StatusPill status={t.status} />
@@ -59,7 +59,7 @@ export default function TournamentCard({ t }: { t: Tournament }) {
         <div className="mt-0.5">
           <div className="h-1.5 overflow-hidden rounded-full bg-sand-2">
             <span
-              className={`block h-full rounded-full ${t.status === 'done' ? 'bg-[#9a948a]' : 'bg-court-blue'}`}
+              className={`block h-full rounded-full ${t.status === 'done' ? 'bg-[#9DB6DA]' : 'bg-court-blue'}`}
               style={{ width: `${pct}%` }}
             />
           </div>

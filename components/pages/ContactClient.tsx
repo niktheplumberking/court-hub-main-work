@@ -187,7 +187,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                     {/* Primary CTA (static) */}
                     <a
                       href="#selection"
-                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-sans text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md cursor-pointer"
+                      className="px-6 py-3 bg-lime hover:bg-white text-ink font-sans text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md cursor-pointer"
                     >
                       {content['contact.hero.cta_label']}
                     </a>
@@ -220,7 +220,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
 
         {/* ================= SECTION 2: DYNAMIC ROUTING & WHATSAPP INTEGRATION (Court Blue Backdrop) ================= */}
         <section id="selection" className="py-20 bg-court-blue text-white px-6 md:px-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(200,255,61,0.08)_0%,transparent_50%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.08)_0%,transparent_50%)] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch relative z-10">
 
@@ -333,7 +333,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
 
                 {/* Dynamic Live Text Preview */}
                 <div className="p-6 bg-ink-2 rounded-[20px] border border-white/10 space-y-3 font-sans shadow-inner">
-                  <span className="text-[11px] uppercase tracking-widest text-[#C8FF3D] font-extrabold block">
+                  <span className="text-[11px] uppercase tracking-widest text-lime font-extrabold block">
                     {content['contact.dispatch.preview_label']}
                   </span>
                   <p className="italic text-white/90 text-sm md:text-[15px] leading-relaxed">
@@ -350,7 +350,7 @@ export default function ContactClient({ content }: { content: ContentMap }) {
                   rel="noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-4.5 bg-[#C8FF3D] hover:bg-white text-ink transition-all font-sans font-bold text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2.5 shadow-xl shadow-[#C8FF3D]/10 cursor-pointer"
+                  className="w-full py-4.5 bg-lime hover:bg-white text-ink transition-all font-sans font-bold text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2.5 shadow-xl shadow-lime/10 cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4 text-ink" />
                   <span>{content['contact.dispatch.cta_label']}</span>

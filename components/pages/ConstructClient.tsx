@@ -155,7 +155,7 @@ function MoveEarthRow({ item }: { item: MoveEarthItem; key?: any }) {
         {/* Curved image container - light-theme optimized with elegant shadow and overflow hidden */}
         <motion.div
           whileHover="hover"
-          className="relative w-full aspect-[1.4/1] rounded-[40px] overflow-hidden shadow-[0_32px_64px_rgba(14,14,12,0.12)] border border-ink/5 z-10 bg-white cursor-pointer"
+          className="relative w-full aspect-[1.4/1] rounded-[40px] overflow-hidden shadow-[0_32px_64px_rgba(10,42,102,0.12)] border border-ink/5 z-10 bg-white cursor-pointer"
         >
           <motion.div
             style={{ x: imageMouseX, y: imageMouseY }}
@@ -450,7 +450,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                     {/* Primary CTA (static) — Contact Us */}
                     <Link
                       href={lp('/contact')}
-                      className="px-6 py-3 bg-[#C8FF3D] hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
+                      className="px-6 py-3 bg-lime hover:bg-white text-ink font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full transition-colors shadow-md"
                     >
                       {t.nav.contact}
                     </Link>
@@ -481,10 +481,13 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
 
 
 
-        {/* ================= COURT TYPES (the four models the client sells) ================= */}
-        <section id="court-models" className="scroll-mt-24 bg-ink text-white py-20 md:py-28 px-6 md:px-8 border-t border-white/10">
+        {/* ================= CONSTRUCT BUILD ANIMATION (court-building scrub from the original home) ================= */}
+        <ConstructBuildAnimation content={content} />
+
+        {/* ================= COURT TYPES — moved BELOW the build + quote section (client, Oct 2026) ================= */}
+        <section id="court-models" className="scroll-mt-24 bg-ink text-white py-16 md:py-20 px-6 md:px-8 border-t border-white/10">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16 space-y-4">
+            <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12 space-y-4">
               <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-lime font-bold block">
                 {content['construct.court_types.eyebrow']}
               </span>
@@ -535,8 +538,6 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
           </div>
         </section>
 
-        {/* ================= CONSTRUCT BUILD ANIMATION (court-building scrub from the original home) ================= */}
-        <ConstructBuildAnimation content={content} />
 
         {/* ================= SECTION 6: INQUIRY FLOW (Guided multi-step pipeline configurator) ================= */}
         {/* HIDDEN per client (July 2026) — configurator kept in code, not shown.
@@ -561,7 +562,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
             </div>
 
             {/* Dynamic Interactive Pipeline Progress Tracker */}
-            <div className="bg-[#1A1A17]/80 border border-white/5 rounded-[24px] lg:rounded-[20px] p-6.5 lg:p-4 lg:py-3 max-w-4xl w-full mx-auto backdrop-blur-md relative overflow-hidden shadow-2xl">
+            <div className="bg-ink-2/80 border border-white/5 rounded-[24px] lg:rounded-[20px] p-6.5 lg:p-4 lg:py-3 max-w-4xl w-full mx-auto backdrop-blur-md relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 left-0 w-32 h-32 bg-lime/10 blur-3xl rounded-full pointer-events-none" />
 
               {/* Desktop view: Horizontal Connected Pipeline nodes */}
@@ -569,7 +570,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                 {/* Horizontal progress connection wires */}
                 <div className="absolute top-[23px] lg:top-[18px] left-[70px] lg:left-[55px] right-[70px] lg:right-[55px] h-[3px] lg:h-[2px] bg-white/5 z-0">
                   <motion.div
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-lime to-court-blue shadow-[0_0_12px_rgba(200,255,61,0.6)]"
+                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-lime to-court-blue shadow-[0_0_12px_rgba(59,130,246,0.6)]"
                     initial={{ width: '0%' }}
                     animate={{ width: `${((activeStep - 1) / 4) * 100}%` }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
@@ -594,10 +595,10 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                       {/* Interactive circular checkpoint node */}
                       <div className={`w-11.5 h-11.5 lg:w-9 lg:h-9 rounded-full flex items-center justify-center font-mono text-xs sm:text-sm lg:text-[11px] font-black transition-all duration-200 ${
                         isCompleted
-                          ? 'bg-lime text-ink ring-4 ring-lime/10 shadow-[0_0_16px_rgba(200,255,61,0.35)]'
+                          ? 'bg-lime text-ink ring-4 ring-lime/10 shadow-[0_0_16px_rgba(59,130,246,0.35)]'
                           : isActive
-                            ? 'bg-ink border-2 border-lime text-lime shadow-[0_0_24px_rgba(200,255,61,0.5)] ring-4 ring-lime/5'
-                            : 'bg-[#1A1A17] border border-white/10 text-white/30 group-hover:border-white/30 group-hover:text-white/60'
+                            ? 'bg-ink border-2 border-lime text-lime shadow-[0_0_24px_rgba(59,130,246,0.5)] ring-4 ring-lime/5'
+                            : 'bg-ink-2 border border-white/10 text-white/30 group-hover:border-white/30 group-hover:text-white/60'
                       }`}>
                         {isCompleted ? <Check className="w-5 h-5 lg:w-3.5 lg:h-3.5 stroke-[3.5] lg:stroke-[3]" /> : `0${step.id}`}
                       </div>
@@ -648,7 +649,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
             <div className="pt-2">
 
               {/* Focused Specification View Card */}
-              <div className="max-w-4xl mx-auto w-full bg-gradient-to-br from-ink-2 to-[#1A1A17]/80 p-8 sm:p-10 lg:p-6 rounded-[32px] lg:rounded-[24px] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[580px] md:min-h-[620px] lg:min-h-[460px] gap-8 lg:gap-4">
+              <div className="max-w-4xl mx-auto w-full bg-gradient-to-br from-ink-2 to-ink-2/80 p-8 sm:p-10 lg:p-6 rounded-[32px] lg:rounded-[24px] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[580px] md:min-h-[620px] lg:min-h-[460px] gap-8 lg:gap-4">
                 <div className="absolute top-0 left-0 w-32 h-32 bg-court-blue/5 blur-3xl rounded-full pointer-events-none" />
 
                 <AnimatePresence mode="wait">
@@ -694,7 +695,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               whileTap={{ scale: 0.98 }}
                               className={`p-5.5 lg:p-4 rounded-xl text-left border relative overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer select-none min-h-[140px] lg:min-h-[110px] group/btn ${
                                 isActive
-                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(200,255,61,0.08)]'
+                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(59,130,246,0.08)]'
                                   : 'bg-ink border-white/5 text-white/40 hover:border-white/15'
                               }`}
                             >
@@ -741,7 +742,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               whileTap={{ scale: 0.98 }}
                               className={`p-5.5 lg:p-4 rounded-xl text-left border relative overflow-hidden transition-all duration-300 cursor-pointer select-none group/btn flex flex-col justify-between min-h-[140px] lg:min-h-[110px] gap-2 lg:gap-1.5 ${
                                 isActive
-                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(200,255,61,0.08)]'
+                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(59,130,246,0.08)]'
                                   : 'bg-ink border-white/5 text-white/40 hover:border-white/15'
                               }`}
                             >
@@ -792,7 +793,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               whileTap={{ scale: 0.98 }}
                               className={`p-5 lg:p-3 rounded-xl border flex items-center justify-center gap-3 lg:gap-1.5 transition-all duration-300 cursor-pointer select-none min-h-[140px] lg:min-h-[110px] flex-col text-center ${
                                 isActive
-                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(200,255,61,0.08)]'
+                                  ? 'bg-lime/5 border-lime text-white shadow-[0_0_32px_rgba(59,130,246,0.08)]'
                                   : 'bg-ink border-white/5 text-white/40 hover:border-white/15'
                               }`}
                             >
@@ -829,7 +830,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               whileTap={{ scale: 0.98 }}
                               className={`p-5.5 lg:p-4 rounded-xl text-left border relative overflow-hidden transition-all duration-300 cursor-pointer select-none flex flex-col justify-between min-h-[140px] lg:min-h-[110px] gap-2 lg:gap-1.5 ${
                                 isActive
-                                  ? 'bg-lime text-ink border-lime shadow-[0_0_32px_rgba(200,255,61,0.15)]'
+                                  ? 'bg-lime text-ink border-lime shadow-[0_0_32px_rgba(59,130,246,0.15)]'
                                   : 'bg-ink border-white/5 text-white/40 hover:border-white/15'
                               }`}
                             >
@@ -878,7 +879,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                                 value={clientName || ''}
                                 onChange={(e) => setClientName(e.target.value)}
                                 placeholder="e.g. Nicolas K."
-                                className="w-full bg-[#0E0E0C] border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-4 py-3 lg:py-2 text-xs sm:text-sm text-white placeholder:text-white/20 focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 shadow-inner"
+                                className="w-full bg-ink border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-4 py-3 lg:py-2 text-xs sm:text-sm text-white placeholder:text-white/20 focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 shadow-inner"
                               />
                             </div>
                           </div>
@@ -892,7 +893,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               <select
                                 value={clientLocation}
                                 onChange={(e) => setClientLocation(e.target.value)}
-                                className="w-full bg-[#0E0E0C] border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-10 py-3 lg:py-2 text-xs sm:text-sm text-white focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 cursor-pointer appearance-none shadow-inner"
+                                className="w-full bg-ink border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-10 py-3 lg:py-2 text-xs sm:text-sm text-white focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 cursor-pointer appearance-none shadow-inner"
                               >
                                 <option>Dubai</option>
                                 <option>Abu Dhabi</option>
@@ -917,7 +918,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                               onChange={(e) => setComments(e.target.value)}
                               placeholder="Describe actual terrain, dimensions or any specific constraints..."
                               rows={2}
-                              className="w-full bg-[#0E0E0C] border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-4 py-3 lg:py-2 text-xs sm:text-sm text-white placeholder:text-white/20 focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 resize-none h-[75px] lg:h-[50px] shadow-inner"
+                              className="w-full bg-ink border border-white/10 rounded-xl lg:rounded-lg pl-10 pr-4 py-3 lg:py-2 text-xs sm:text-sm text-white placeholder:text-white/20 focus:border-lime/50 focus:ring-1 focus:ring-lime/30 outline-none transition-all duration-300 resize-none h-[75px] lg:h-[50px] shadow-inner"
                             />
                           </div>
                         </div>
@@ -925,7 +926,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                     )}
 
                     {/* Integrated Guidance Insight Desk */}
-                    <div className="bg-[#1A1A17]/60 border border-white/5 rounded-2xl lg:rounded-xl p-5.5 lg:p-3.5 space-y-1.5 lg:space-y-1 select-none relative overflow-hidden group text-left mt-4 lg:mt-2.5 border-l-2 border-l-lime/30">
+                    <div className="bg-ink-2/60 border border-white/5 rounded-2xl lg:rounded-xl p-5.5 lg:p-3.5 space-y-1.5 lg:space-y-1 select-none relative overflow-hidden group text-left mt-4 lg:mt-2.5 border-l-2 border-l-lime/30">
                       <div className="absolute top-0 right-0 px-2 py-0.5 font-mono text-[8.5px] lg:text-[7.5px] text-lime/50 bg-lime/10 rounded-bl tracking-widest font-black uppercase">ADVISOR</div>
                       <div className="flex items-center gap-2 text-lime">
                         <Sparkles className="w-4 h-4 lg:w-3.5 lg:h-3.5 text-lime shrink-0" />
@@ -977,7 +978,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                     {activeStep < 5 ? (
                       <button
                         onClick={() => setActiveStep(prev => Math.min(5, prev + 1))}
-                        className="w-full sm:w-auto px-7 py-3.5 lg:px-5 lg:py-2.5 bg-lime hover:bg-[#C8FF3D] text-ink font-mono text-xs lg:text-[11px] uppercase font-black tracking-widest rounded-xl lg:rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-lime/10 transition-all cursor-pointer active:scale-95"
+                        className="w-full sm:w-auto px-7 py-3.5 lg:px-5 lg:py-2.5 bg-lime hover:bg-lime text-ink font-mono text-xs lg:text-[11px] uppercase font-black tracking-widest rounded-xl lg:rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-lime/10 transition-all cursor-pointer active:scale-95"
                       >
                         <span>Next Step</span>
                         <ChevronRight className="w-4 h-4 lg:w-3.5 lg:h-3.5 stroke-[3]" />
@@ -989,7 +990,7 @@ export default function ConstructClient({ content }: { content: ContentMap }) {
                         rel="noreferrer"
                         whileHover={{ scale: 1.02, backgroundColor: "#FFFFFF" }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full sm:w-auto px-8 py-4 lg:px-6 lg:py-3 bg-lime hover:bg-[#C8FF3D] text-ink transition-all font-mono font-black text-xs sm:text-[13px] lg:text-[11px] tracking-widest rounded-xl lg:rounded-lg flex items-center justify-center gap-2 shadow-2xl shadow-lime/10 cursor-pointer select-none"
+                        className="w-full sm:w-auto px-8 py-4 lg:px-6 lg:py-3 bg-lime hover:bg-lime text-ink transition-all font-mono font-black text-xs sm:text-[13px] lg:text-[11px] tracking-widest rounded-xl lg:rounded-lg flex items-center justify-center gap-2 shadow-2xl shadow-lime/10 cursor-pointer select-none"
                       >
                         <MessageSquare className="w-4 h-4 lg:w-3.5 lg:h-3.5 text-ink" />
                         <span>LAUNCH ESTIMATE VIA WHATSAPP</span>

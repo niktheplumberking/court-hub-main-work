@@ -239,7 +239,7 @@ export default function AboutSection() {
 
           {/* Headlines Section */}
           <div ref={headlineRef} className="space-y-6 md:space-y-8">
-            <div data-about-rise className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-[10px] md:text-xs font-semibold tracking-[0.15em] text-[#C8FF3D] uppercase">
+            <div data-about-rise className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-[10px] md:text-xs font-semibold tracking-[0.15em] text-lime uppercase">
               <span>Precision Engineering. Elite Performance.</span>
               <span>Built for the Padel Obsessed</span>
             </div>
@@ -255,7 +255,7 @@ export default function AboutSection() {
               </h2>
 
               <div data-about-rise className="max-w-2xl mt-8 md:mt-12">
-                 <p className="font-mono text-[10px] uppercase tracking-widest text-[#C8FF3D] mb-4 md:mb-6 inline-block py-1 px-3 border border-lime/30 rounded-full">
+                 <p className="font-mono text-[10px] uppercase tracking-widest text-lime mb-4 md:mb-6 inline-block py-1 px-3 border border-lime/30 rounded-full">
                   /// The home of premium padel ///
                 </p>
                 <p className="text-lg md:text-2xl font-display font-medium text-white/90 leading-relaxed md:leading-relaxed">

@@ -44,7 +44,7 @@ function MatchCard({ m, champ = false }: { m: Match; champ?: boolean }) {
       type="button"
       onClick={() => toast(<>{m.label} · <b>{live ? `${T.statusLive.toUpperCase()} ${setsStr}` : setsStr}</b></>)}
       aria-label={`${m.label}: ${m.a?.name ?? T.tbd} ${setsStr} ${m.b?.name ?? T.tbd}`}
-      className={`block w-full overflow-hidden rounded-[14px] border bg-sand-card text-start transition-[border-color,box-shadow] duration-200 hover:border-ink/35 hover:shadow-[0_8px_20px_rgba(14,14,12,0.08)] ${
+      className={`block w-full overflow-hidden rounded-[14px] border bg-sand-card text-start transition-[border-color,box-shadow] duration-200 hover:border-ink/35 hover:shadow-[0_8px_20px_rgba(10,42,102,0.08)] ${
         live ? 'border-fire' : champ ? 'border-2 border-lime' : 'border-ink/10'
       }`}
     >

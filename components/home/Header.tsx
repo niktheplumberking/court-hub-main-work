@@ -139,7 +139,7 @@ export default function Header() {
     <>
       {/* Site-wide scroll progress rail (origin follows reading direction) */}
       <div className="fixed top-0 left-0 right-0 z-[70] h-[2px] pointer-events-none">
-        <div ref={progressRef} className="h-full w-full origin-left rtl:origin-right scale-x-0 bg-lime shadow-[0_0_10px_rgba(200,255,61,0.55)] transition-opacity duration-300 opacity-0" />
+        <div ref={progressRef} className="h-full w-full origin-left rtl:origin-right scale-x-0 bg-lime shadow-[0_0_10px_rgba(59,130,246,0.55)] transition-opacity duration-300 opacity-0" />
       </div>
 
       {/* 1. DESKTOP SIDEWAYS RAIL (slides in once the hero is out of view).
@@ -158,7 +158,7 @@ export default function Header() {
               // Original opaque look (client-approved), floating as an OVERLAY:
               // content never reserves a lane for it (see .ch-has-rail clearance
               // in globals.css, which pads sections only where they'd collide).
-              className="fixed top-0 start-0 bottom-0 w-24 bg-[#0E0E0C] border-e border-white/10 flex flex-col justify-between py-10 items-center z-50 shadow-[5px_0_30px_rgba(0,0,0,0.5)] rtl:shadow-[-5px_0_30px_rgba(0,0,0,0.5)]"
+              className="fixed top-0 start-0 bottom-0 w-24 bg-ink border-e border-white/10 flex flex-col justify-between py-10 items-center z-50 shadow-[5px_0_30px_rgba(0,0,0,0.5)] rtl:shadow-[-5px_0_30px_rgba(0,0,0,0.5)]"
             >
               {/* Vertical Logo Badge */}
               <Link href={lp('/')} className="font-sans text-lg tracking-wider text-white flex flex-col items-center select-none hover:text-lime transition-colors">
@@ -187,7 +187,7 @@ export default function Header() {
                           initial={{ opacity: 0, scale: 0.4 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.25, ease: 'easeOut' }}
-                          className="absolute -end-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-lime shadow-[0_0_8px_#C8FF3D]"
+                          className="absolute -end-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-lime shadow-[0_0_8px_#3B82F6]"
                         />
                       )}
                     </Link>
@@ -210,7 +210,7 @@ export default function Header() {
                 {/* Compact CTA — court construction */}
                 <MotionLink
                   href={lp('/construct-your-court')}
-                  whileHover={{ scale: 1.05, backgroundColor: "#ffffff", color: "#0e0e0c" }}
+                  whileHover={{ scale: 1.05, backgroundColor: "#ffffff", color: "#0A2A66" }}
                   whileTap={{ scale: 0.95 }}
                   className="w-12 h-12 bg-lime text-ink rounded-full flex items-center justify-center shadow-lg transition-colors duration-300"
                   title={t.nav.buildYourCourt}
@@ -227,8 +227,8 @@ export default function Header() {
       <div className="md:hidden relative z-[9999]">
         <header
           className={`fixed top-0 left-0 right-0 z-50 px-6 py-5 transition-all duration-300 ${
-            (hasScrolledPastHero || (!isHome && scrolled))
-              ? 'bg-black/90 backdrop-blur-md border-b border-white/10 shadow-lg'
+            (hasScrolledPastHero || !isHome)
+              ? 'bg-ink/88 backdrop-blur-md border-b border-white/10 shadow-[0_10px_30px_rgba(6,26,68,0.25)]'
               : 'bg-transparent'
           }`}
         >

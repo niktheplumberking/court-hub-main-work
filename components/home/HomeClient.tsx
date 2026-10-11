@@ -146,7 +146,7 @@ export default function App({ products = [] }: HomeClientProps) {
               {/* Progress Bar Container */}
               <div className="relative w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="absolute top-0 left-0 h-full bg-lime transition-all duration-300 ease-out shadow-[0_0_10px_#C8FF3D]"
+                  className="absolute top-0 left-0 h-full bg-lime transition-all duration-300 ease-out shadow-[0_0_10px_#3B82F6]"
                   style={{ width: `${totalProgress}%` }}
                 />
               </div>

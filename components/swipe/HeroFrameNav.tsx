@@ -47,7 +47,7 @@ export default function HeroFrameNav({
       // and frees vertical space so the hero fits the phone viewport.
       className={
         fixedBar
-          ? 'fixed top-0 left-0 right-0 z-50 hidden md:flex items-center justify-between px-6 lg:px-10 py-4 bg-ink/85 backdrop-blur-md border-b border-white/10'
+          ? 'fixed top-0 left-0 right-0 z-50 hidden md:flex items-center justify-between px-6 lg:px-10 py-4 bg-ink/92 backdrop-blur-md border-b border-white/10 shadow-[0_10px_30px_rgba(6,26,68,0.18)]'
           : 'relative z-30 w-full hidden md:flex items-center justify-between border-b border-white/15 pb-4 md:pb-6'
       }
     >

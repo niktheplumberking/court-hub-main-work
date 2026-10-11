@@ -70,7 +70,7 @@ export default function TournamentAdmin() {
   return (
     <div className="bg-sand text-ink">
       {/* Hero */}
-      <section className="bg-[radial-gradient(130%_150%_at_100%_-10%,#1c1c18,#0E0E0C_55%)] px-6 pb-9 pt-28 text-white md:pt-32">
+      <section className="bg-[radial-gradient(130%_150%_at_100%_-10%,#12387F,#0A2A66_55%)] px-6 pb-9 pt-28 text-white md:pt-32">
         <div className="mx-auto max-w-[1320px]">
           <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">Backend · Demo</p>
           <h1 className="font-display text-[clamp(30px,4vw,52px)] font-black uppercase leading-[0.95] tracking-[-0.03em]">

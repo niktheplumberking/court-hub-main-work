@@ -208,7 +208,7 @@ export default function TournamentForm({ tournament }: { tournament?: Tournament
             </div>
           </div>
           <label className="flex items-center gap-3 text-white/70 text-sm">
-            <input type="checkbox" name="has_bracket" checked={form.has_bracket} onChange={(e) => set('has_bracket', e.target.checked)} className="w-4 h-4 accent-[#C8FF3D]" />
+            <input type="checkbox" name="has_bracket" checked={form.has_bracket} onChange={(e) => set('has_bracket', e.target.checked)} className="w-4 h-4 accent-lime" />
             Standings tab labelled &quot;Standings &amp; Bracket&quot;
           </label>
         </div>

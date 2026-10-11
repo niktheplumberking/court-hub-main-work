@@ -17,6 +17,42 @@
     "type": "text",
     "value": "ELEVATED"
   },
+  "home.hero.rotate2_line1": {
+    "page": "home",
+    "label": "Hero · Rotating title 2 · line 1",
+    "type": "text",
+    "value": "BUILD"
+  },
+  "home.hero.rotate2_line2": {
+    "page": "home",
+    "label": "Hero · Rotating title 2 · line 2",
+    "type": "text",
+    "value": "YOUR COURT"
+  },
+  "home.hero.rotate3_line1": {
+    "page": "home",
+    "label": "Hero · Rotating title 3 · line 1",
+    "type": "text",
+    "value": "SHOP"
+  },
+  "home.hero.rotate3_line2": {
+    "page": "home",
+    "label": "Hero · Rotating title 3 · line 2",
+    "type": "text",
+    "value": "PADEL GEAR"
+  },
+  "home.hero.rotate4_line1": {
+    "page": "home",
+    "label": "Hero · Rotating title 4 · line 1",
+    "type": "text",
+    "value": "ENJOY"
+  },
+  "home.hero.rotate4_line2": {
+    "page": "home",
+    "label": "Hero · Rotating title 4 · line 2",
+    "type": "text",
+    "value": "THE GAME"
+  },
   "home.hero.paragraph": {
     "page": "home",
     "label": "Hero · Paragraph",
@@ -1107,7 +1143,7 @@
     "page": "construct",
     "label": "Court Types · Intro paragraph",
     "type": "richtext",
-    "value": "Every court is engineered for its site and finished turnkey. Pick the model that fits your space, then configure it below."
+    "value": "Every court is engineered for its site and finished turnkey. Pick the model that fits your space, then request your quote in the form above."
   },
   "construct.court_types.card_cta": {
     "page": "construct",

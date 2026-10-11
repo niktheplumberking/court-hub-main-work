@@ -42,7 +42,7 @@ export default function TournamentHub({
   return (
     <div className="bg-sand text-ink">
       {/* Hero — dark gradient, no court-line graphic (removed by request) */}
-      <section className="relative overflow-hidden bg-[radial-gradient(130%_150%_at_100%_-10%,#1c1c18,#0E0E0C_55%)] px-6 pb-10 pt-28 text-white md:pt-32">
+      <section className="relative overflow-hidden bg-[radial-gradient(130%_150%_at_100%_-10%,#12387F,#0A2A66_55%)] px-6 pb-10 pt-28 text-white md:pt-32">
         <div className="mx-auto max-w-[1320px]">
           <p className="mb-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">{T.kicker}</p>
           <h1 className="font-display text-[clamp(38px,6vw,76px)] font-black uppercase leading-[0.95] tracking-[-0.03em]">

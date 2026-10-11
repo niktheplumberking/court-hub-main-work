@@ -330,7 +330,7 @@ export default function Hero({ isLoaded, onProgress }: HeroProps) {
           >
             <div className="text-center md:text-right space-y-6 max-w-xl pointer-events-auto select-none float-effect">
               <div className="flex justify-center md:justify-end">
-                <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-md text-lime text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] rounded-full border border-lime/20 shadow-[0_0_15px_rgba(200,255,61,0.15)]">
+                <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-md text-lime text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] rounded-full border border-lime/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
                   Tour-Ready Arenas
                 </span>
               </div>
@@ -344,7 +344,7 @@ export default function Hero({ isLoaded, onProgress }: HeroProps) {
               <div className="flex justify-center md:justify-end pt-4">
                 <MotionLink
                   href="/construct-your-court"
-                  whileHover={{ scale: 1.05, backgroundColor: "#ffffff", color: "#0e0e0c", boxShadow: "0 0 25px rgba(255,255,255,0.25)" }}
+                  whileHover={{ scale: 1.05, backgroundColor: "#ffffff", color: "#0A2A66", boxShadow: "0 0 25px rgba(255,255,255,0.25)" }}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center gap-3 px-8 py-4 bg-lime text-ink font-bold uppercase tracking-[0.15em] text-[11px] rounded-full shadow-lg transition-colors duration-300 pointer-events-auto cursor-pointer"
                 >

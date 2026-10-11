@@ -33,7 +33,7 @@ export default function ConstructPanel({
                 sizes="(max-width: 900px) 100vw, 660px"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_55%,rgba(14,14,12,0.55)_100%)] rtl:bg-[linear-gradient(270deg,transparent_55%,rgba(14,14,12,0.55)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_55%,rgba(10,42,102,0.55)_100%)] rtl:bg-[linear-gradient(270deg,transparent_55%,rgba(10,42,102,0.55)_100%)]" />
             </div>
 
             <div className="flex flex-col justify-center gap-[22px] px-7 py-9 text-white min-[901px]:px-[52px] min-[901px]:py-14">

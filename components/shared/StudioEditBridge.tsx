@@ -19,11 +19,11 @@ export default function StudioEditBridge() {
     style.setAttribute('data-cms-style', '');
     style.textContent = `
       [data-cms]{cursor:pointer;transition:outline-color .15s ease;}
-      [data-cms]:hover{outline:2px dashed rgba(200,255,61,.9);outline-offset:3px;border-radius:4px;}
+      [data-cms]:hover{outline:2px dashed rgba(31,95,214,.9);outline-offset:3px;border-radius:4px;}
       [data-cms]::after{
         content:"✎ Edit";position:absolute;z-index:2147483000;
         top:6px;left:6px;padding:2px 8px;border-radius:999px;
-        background:#C8FF3D;color:#0E0E0C;font:700 10px/1.4 ui-monospace,monospace;
+        background:#1F5FD6;color:#FFFFFF;font:700 10px/1.4 ui-monospace,monospace;
         letter-spacing:.08em;text-transform:uppercase;opacity:0;transition:opacity .15s ease;
         pointer-events:none;
       }
