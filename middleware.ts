@@ -2,6 +2,13 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { hardenCookie } from '@/lib/supabase/cookies';
 
+// Redirects always use the public domain. Behind nginx the request URL Next
+// sees can be its internal address (e.g. localhost:3000), never send users there.
+function siteUrl(request: NextRequest, path: string): URL {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
+  return new URL(path, base);
+}
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -13,8 +20,7 @@ export async function middleware(request: NextRequest) {
     !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!configured) {
     if (process.env.NODE_ENV !== 'production') return response;
-    const url = request.nextUrl.clone();
-    url.pathname = '/';
+    const url = siteUrl(request, '/');
     return NextResponse.redirect(url);
   }
 
@@ -52,8 +58,7 @@ export async function middleware(request: NextRequest) {
   // A failed lookup (network blip) just denies this request without signing out.
   if (user && !isAdmin && !lookupFailed) {
     await supabase.auth.signOut();
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
+    const url = siteUrl(request, '/admin/login');
     const out = NextResponse.redirect(url);
     // Carry over the sign-out's cookie deletions (each keeps its own attributes).
     response.cookies.getAll().forEach((c) => out.cookies.set(c));
@@ -61,13 +66,11 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!isAdmin && !isLogin) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
+    const url = siteUrl(request, '/admin/login');
     return NextResponse.redirect(url);
   }
   if (isAdmin && isLogin) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin';
+    const url = siteUrl(request, '/admin');
     return NextResponse.redirect(url);
   }
   return response;

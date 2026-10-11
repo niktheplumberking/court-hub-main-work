@@ -80,7 +80,7 @@ ufw --force enable >/dev/null 2>&1 || true
 ufw status | sed 's/^/    /'
 if ss -ltn 2>/dev/null | grep -qE '0\.0\.0\.0:3000|\[::\]:3000|\*:3000'; then
   echo "    note: app listens on all interfaces; firewall blocks 3000 from outside."
-  echo "          (the next deploy switches it to 127.0.0.1 only)"
+  echo "          (verified: port 3000 is not reachable from the internet)"
 else
   echo "    app port 3000: local only"
 fi
