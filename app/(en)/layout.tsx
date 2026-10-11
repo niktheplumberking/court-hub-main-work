@@ -4,6 +4,7 @@ import { LocaleProvider } from '@/lib/i18n/LocaleProvider';
 import { CartProvider } from '@/lib/cart-context';
 import { TournamentStoreProvider } from '@/lib/tournaments/store';
 import CartDrawer from '@/components/cart/CartDrawer';
+import TennisBallScroll from '@/components/shared/TennisBallScroll';
 import MotionProvider from '@/components/shared/MotionProvider';
 import Cursor from '@/components/shared/Cursor';
 import NavigationFlag from '@/components/shared/NavigationFlag';
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
               {/* Global live cart: floating bag button + slide-in drawer, on every page. */}
               <CartDrawer />
+              <TennisBallScroll />
             </TournamentStoreProvider>
           </CartProvider>
         </MotionProvider>

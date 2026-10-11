@@ -805,3 +805,41 @@ html[dir='rtl'] .ltr-island {
 @keyframes ch-check-ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.9); opacity: 0; } }
 .ch-check-path { stroke-dasharray: 48; stroke-dashoffset: 48; animation: ch-check-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards; }
 @keyframes ch-check-draw { to { stroke-dashoffset: 0; } }
+
+/* ── Court hero (client concept): floating decor, court zones, rally ball ── */
+@keyframes ch-floaty {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50%      { translate: 0 -14px; rotate: 8deg; }
+}
+.ch-floaty { animation: ch-floaty 6s ease-in-out infinite; }
+/* Second headline line on the court hero: white → ball yellow. */
+.ch-rot-ball {
+  background: linear-gradient(100deg, #FFFFFF 0%, #F6FFC2 40%, #D8F03C 78%, #C6E02A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.06em;
+}
+/* Court fits the viewport height as well as its column. */
+.ch-court { width: min(78vw, 36vh, 340px); }
+@media (min-width: 1024px) { .ch-court { width: min(100%, 31vh, 360px); } }
+.ch-zone { cursor: pointer; outline: none; }
+.ch-zone rect { fill: transparent; transition: fill 0.3s ease; }
+.ch-zone:hover rect, .ch-zone:focus-visible rect { fill: rgba(216, 240, 60, 0.16); }
+.ch-zone:focus-visible rect { stroke: #D8F03C; stroke-width: 3; }
+.ch-zone-l { fill: #FFFFFF; font-family: var(--font-display); font-weight: 900; font-size: 17px; letter-spacing: 0.04em; text-anchor: middle; transition: fill 0.3s ease; }
+.ch-zone-s { fill: rgba(255, 255, 255, 0.72); font-family: var(--font-sans); font-weight: 500; font-size: 9.5px; text-anchor: middle; }
+.ch-zone:hover .ch-zone-l, .ch-zone:focus-visible .ch-zone-l { fill: #D8F03C; }
+/* Rally ball "height": grows mid-flight, lands small (each leg = 1.6 s). */
+@keyframes ch-court-hop { 0%, 100% { transform: scale(0.85); } 50% { transform: scale(1.55); } }
+.ch-court-ball { transform-box: fill-box; transform-origin: center; animation: ch-court-hop 1.6s ease-in-out infinite; }
+
+/* ── Tennis-ball scroll indicator ── */
+.ch-ball-line, .ch-ball-fill {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; margin-left: -1.5px; border-radius: 999px;
+}
+.ch-ball-line { background: rgba(31, 95, 214, 0.22); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45); }
+/* Travelled part of the line glows in ball colour. */
+.ch-ball-fill { background: linear-gradient(to bottom, #D8F03C, #A9C21A); transform-origin: top; transform: scaleY(var(--ch-ball-p, 0)); opacity: 0.85; }
+.ch-ball-tick { position: absolute; left: 50%; width: 12px; height: 3px; margin-left: -6px; border-radius: 999px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 0 1px rgba(31, 95, 214, 0.35); }
+.ch-ball-track:hover .ch-ball-line { background: rgba(31, 95, 214, 0.38); }
