@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
-import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getStripe } from '@/lib/stripe';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { fulfillCheckoutSession, revalidateStorefront } from '@/lib/shop/fulfill';
 
 /**
- * Stripe webhook: checkout.session.completed
- * 1. Creates the order record
- * 2. Decrements stock for each purchased item
- * 3. Unique items (used rackets etc.) auto-flip to 'sold' → vanish from the shop
+ * Stripe webhook.
+ *  • checkout.session.completed / async_payment_succeeded → record the order,
+ *    turn the stock reservation into a sale (unique items → 'sold').
+ *  • checkout.session.expired → shopper never paid: give the stock back.
+ *
+ * All handlers are idempotent (Stripe retries and may deliver twice). Any
+ * database failure answers 500 so Stripe retries instead of losing an order.
  */
 export async function POST(req: Request) {
   const stripe = getStripe();
@@ -19,73 +22,32 @@ export async function POST(req: Request) {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig!, secret);
+    event = stripe.webhooks.constructEvent(body, sig ?? '', secret);
   } catch (err) {
     return NextResponse.json({ error: `Invalid signature: ${(err as Error).message}` }, { status: 400 });
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-
-    // Tournament entries are NOT shop orders. They are recorded on the booking
-    // success-return page for now (in-memory stage); when the tournaments
-    // Supabase project lands, durable recording moves here. Without this guard
-    // the fallthrough below would insert an empty order for every entry fee.
-    if (session.metadata?.type === 'tournament_registration') {
-      return NextResponse.json({ received: true });
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed':
+      case 'checkout.session.async_payment_succeeded': {
+        const result = await fulfillCheckoutSession(event.data.object);
+        if (result === 'ok' || result === 'late') revalidateStorefront();
+        break;
+      }
+      case 'checkout.session.expired': {
+        const holdId = event.data.object.metadata?.hold_id;
+        if (holdId) {
+          const { data: released, error } = await supabaseAdmin().rpc('release_hold', { p_hold: holdId });
+          if (error) throw new Error(`release_hold failed: ${error.message}`);
+          if (released) revalidateStorefront();
+        }
+        break;
+      }
     }
-
-    const supabase = supabaseAdmin();
-
-    // Idempotency: skip if this session was already processed
-    const { data: existing } = await supabase
-      .from('orders').select('id').eq('stripe_session_id', session.id).maybeSingle();
-    if (existing) return NextResponse.json({ received: true });
-
-    const cart: { id: string; qty: number }[] = JSON.parse(session.metadata?.cart ?? '[]');
-    const ids = cart.map((c) => c.id);
-    const { data: products } = await supabase.from('products').select('*').in('id', ids);
-
-    const orderItems = cart.map((c) => {
-      const p = products?.find((x) => x.id === c.id);
-      return { id: c.id, title: p?.title ?? 'Unknown', qty: c.qty, price_aed: p?.price_aed ?? 0 };
-    });
-
-    const { error: insertError } = await supabase.from('orders').insert({
-      stripe_session_id: session.id,
-      customer_email: session.customer_details?.email ?? null,
-      customer_name: session.customer_details?.name ?? null,
-      customer_phone: session.customer_details?.phone ?? null,
-      shipping: (session.collected_information?.shipping_details as object) ?? null,
-      items: orderItems,
-      amount_aed: (session.amount_total ?? 0) / 100,
-      status: 'paid',
-    });
-
-    // A failed write must NOT be acknowledged: returning 500 makes Stripe retry
-    // the event (the idempotency check above stops any double insert), instead
-    // of the order being silently lost with the customer already charged.
-    if (insertError) {
-      console.error('[stripe webhook] order insert failed', session.id, insertError);
-      return NextResponse.json({ error: 'Order could not be saved' }, { status: 500 });
-    }
-
-    // Inventory: decrement + auto-sold for unique items
-    for (const c of cart) {
-      const p = products?.find((x) => x.id === c.id);
-      if (!p) continue;
-      const newQty = Math.max(0, p.quantity - c.qty);
-      const newStatus = newQty <= 0 && p.is_unique ? 'sold' : p.status;
-      await supabase.from('products')
-        .update({ quantity: newQty, status: newStatus })
-        .eq('id', c.id);
-    }
-
-    // Stock just changed — refresh every storefront surface so a sold-out or
-    // sold one-of-a-kind item disappears immediately, not after the ISR window.
-    for (const path of ['/', '/ar', '/shop', '/ar/shop']) revalidatePath(path);
-    revalidatePath('/shop/[slug]', 'page');
-    revalidatePath('/ar/shop/[slug]', 'page');
+  } catch (e) {
+    console.error('[stripe webhook]', event.type, event.id, e);
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });

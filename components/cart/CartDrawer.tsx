@@ -7,7 +7,7 @@ import { ShoppingBag, X, Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatAED } from '@/lib/utils';
 import { waHref } from '@/lib/whatsapp';
-import { useDirSign, useLocalePath, useT } from '@/lib/i18n/LocaleProvider';
+import { useDirSign, useLocale, useLocalePath, useT } from '@/lib/i18n/LocaleProvider';
 import { stripLocale } from '@/lib/i18n/locale';
 
 // WhatsApp glyph (brand mark) for the floating contact button.
@@ -37,10 +37,26 @@ const SLIDE_TRANSITION = 'transform 420ms cubic-bezier(0.32,0.72,0,1)';
  * node, leaving the drawer stuck in the DOM. CSS transforms are bulletproof.
  */
 export default function CartDrawer() {
-  const { items, count, total, setQty, remove, drawerOpen, openDrawer, closeDrawer } = useCart();
+  const {
+    items,
+    count,
+    total,
+    setQty,
+    remove,
+    drawerOpen,
+    openDrawer,
+    closeDrawer,
+    hasUnavailable,
+    refresh,
+    pendingHold,
+    setPendingHold,
+    notice,
+    setNotice,
+  } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const t = useT();
+  const locale = useLocale();
   const lp = useLocalePath();
   const sign = useDirSign();
   const tab = drawerOpen ? 0 : -1;
@@ -62,6 +78,35 @@ export default function CartDrawer() {
     };
   }, [drawerOpen]);
 
+  // Every time the bag opens, re-check stock and prices with the server so a
+  // days-old bag never surprises the shopper at the pay button.
+  useEffect(() => {
+    if (!drawerOpen) return;
+    let alive = true;
+    refresh().then((changed) => {
+      if (alive && changed) setNotice('bagUpdated');
+    });
+    return () => {
+      alive = false;
+    };
+  }, [drawerOpen, refresh, setNotice]);
+
+  // Closing the bag dismisses its messages.
+  useEffect(() => {
+    if (drawerOpen) return;
+    setNotice(null);
+    setError(null);
+  }, [drawerOpen, setNotice]);
+
+  // Browser Back from Stripe restores this page frozen mid-"Redirecting…".
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setLoading(false);
+    };
+    window.addEventListener('pageshow', onShow);
+    return () => window.removeEventListener('pageshow', onShow);
+  }, []);
+
   // Close on Escape.
   useEffect(() => {
     if (!drawerOpen) return;
@@ -73,21 +118,52 @@ export default function CartDrawer() {
   }, [drawerOpen, closeDrawer]);
 
   const checkout = async () => {
+    if (loading || hasUnavailable) return;
     setLoading(true);
     setError(null);
+    setNotice(null);
+    let data: { url?: string; hold?: string; code?: string } = {};
+    let ok = false;
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items.map((i) => ({ id: i.id, qty: i.qty })) }),
+        body: JSON.stringify({
+          items: items.map((i) => ({ id: i.id, qty: i.qty })),
+          locale,
+          replaceHold: pendingHold,
+        }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || t.cart.checkoutError);
+      ok = res.ok;
+      data = await res.json().catch(() => ({}));
+    } catch {
+      // Network down: falls through to the generic message below.
+    }
+
+    if (ok && data.url) {
+      if (data.hold) setPendingHold(data.hold);
       window.location.href = data.url;
-    } catch (e: unknown) {
-      // Checkout is intentionally deferred until Stripe keys exist; fail soft.
-      setError(e instanceof Error ? e.message : t.cart.checkoutError);
-      setLoading(false);
+      return; // keep "Redirecting…" while the browser leaves
+    }
+
+    // Any previous reservation was swapped out server-side.
+    setPendingHold(null);
+    setLoading(false);
+    switch (data.code) {
+      case 'stock':
+      case 'unavailable':
+        // Someone else just bought it: pull live stock into the bag and say so.
+        await refresh();
+        setNotice('bagUpdated');
+        break;
+      case 'min_total':
+        setError(t.cart.minTotal);
+        break;
+      case 'rate_limited':
+        setError(t.cart.tooMany);
+        break;
+      default:
+        setError(t.cart.checkoutError);
     }
   };
 
@@ -214,10 +290,20 @@ export default function CartDrawer() {
             </div>
           ) : (
             <div className="space-y-4">
+              {notice && (
+                <p
+                  role="status"
+                  className="text-xs leading-relaxed text-white/80 bg-court-blue/15 border border-court-blue/30 rounded-[14px] px-4 py-3"
+                >
+                  {notice === 'cancelled' ? t.cart.cancelled : t.cart.bagUpdated}
+                </p>
+              )}
               {items.map((i) => (
                 <div
                   key={i.id}
-                  className="flex gap-4 p-4 bg-ink rounded-[20px] border border-white/5 items-center overflow-hidden"
+                  className={`flex gap-4 p-4 bg-ink rounded-[20px] border items-center overflow-hidden ${
+                    i.unavailable ? 'border-fire/30' : 'border-white/5'
+                  }`}
                 >
                   {/* Thumbnail */}
                   <Link
@@ -247,6 +333,12 @@ export default function CartDrawer() {
                     >
                       {i.title}
                     </Link>
+                    {i.unavailable ? (
+                      <span className="inline-block text-[10px] font-mono uppercase tracking-widest text-fire bg-fire/10 border border-fire/30 rounded-full px-2.5 py-1">
+                        {t.cart.soldOut}
+                      </span>
+                    ) : (
+                    <div className="flex items-center gap-2 flex-wrap">
                     <div className="flex items-center gap-1.5 bg-white/5 rounded-[12px] p-1 w-fit border border-white/5">
                       <button
                         onClick={() => setQty(i.id, i.qty - 1)}
@@ -261,16 +353,28 @@ export default function CartDrawer() {
                         onClick={() => setQty(i.id, i.qty + 1)}
                         aria-label={t.cart.increaseQty}
                         tabIndex={tab}
-                        className="p-1 hover:bg-white/10 rounded-full text-white/50 hover:text-white cursor-pointer transition-colors"
+                        disabled={i.qty >= i.max_qty}
+                        className="p-1 hover:bg-white/10 rounded-full text-white/50 hover:text-white cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
                     </div>
+                    {i.max_qty > 1 && i.qty >= i.max_qty && (
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">
+                        {t.cart.onlyLeft(i.max_qty)}
+                      </span>
+                    )}
+                    </div>
+                    )}
                   </div>
 
                   {/* Price + remove */}
                   <div className="flex flex-col items-end gap-3 shrink-0">
-                    <span className="font-display font-black text-lime text-sm whitespace-nowrap">
+                    <span
+                      className={`font-display font-black text-sm whitespace-nowrap ${
+                        i.unavailable ? 'text-white/30 line-through' : 'text-lime'
+                      }`}
+                    >
                       {formatAED(i.price_aed * i.qty)}
                     </span>
                     <button
@@ -309,13 +413,18 @@ export default function CartDrawer() {
               </div>
             </div>
 
-            {error && <p className="text-fire text-xs text-center">{error}</p>}
+            {error && (
+              <p role="alert" className="text-fire text-xs text-center">
+                {error}
+              </p>
+            )}
+            {hasUnavailable && <p className="text-fire text-xs text-center">{t.cart.removeSoldOut}</p>}
 
             <button
               onClick={checkout}
-              disabled={loading}
+              disabled={loading || hasUnavailable}
               tabIndex={tab}
-              className="w-full py-4 bg-lime hover:bg-white text-ink font-display font-black uppercase tracking-[0.16em] rounded-full shadow-xl transition-colors duration-300 cursor-pointer text-xs flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-60"
+              className="w-full py-4 bg-lime hover:bg-white text-ink font-display font-black uppercase tracking-[0.16em] rounded-full shadow-xl transition-colors duration-300 cursor-pointer text-xs flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-lime"
             >
               {loading ? t.cart.redirecting : t.cart.proceed}
             </button>

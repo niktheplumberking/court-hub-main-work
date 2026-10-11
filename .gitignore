@@ -23,3 +23,10 @@ next-env.d.ts
 # Local QA artifacts (screenshots, crawl scripts)
 .qa/
 .claude/
+scripts/loadtest/node_modules/
+scripts/loadtest/bin/
+scripts/loadtest/*.log
+scripts/loadtest/infra-data/
+scripts/loadtest/data-*/
+scripts/loadtest/postgrest.conf
+scripts/loadtest/package*.json

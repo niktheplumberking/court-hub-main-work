@@ -98,9 +98,16 @@ export async function deleteProduct(id: string) {
   revalidateStorefront();
 }
 
+/**
+ * Status change through set_order_status() (supabase/UPGRADE-CHECKOUT.sql):
+ * cancelling puts the items back in stock exactly once, un-cancelling takes
+ * them out again, and a row lock makes double-clicks harmless.
+ */
 export async function updateOrderStatus(id: string, status: string) {
   await requireAdmin();
-  const { error } = await supabaseAdmin().from('orders').update({ status }).eq('id', id);
+  if (!['paid', 'fulfilled', 'cancelled'].includes(status)) throw new Error('Invalid status');
+  const { error } = await supabaseAdmin().rpc('set_order_status', { p_order: id, p_status: status });
   if (error) throw new Error(error.message);
   revalidatePath('/admin/orders');
+  revalidateStorefront();
 }

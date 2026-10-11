@@ -30,6 +30,8 @@ export type CartItem = {
   image: string | null;
   qty: number;
   max_qty: number;
+  /** Set by the live stock check: sold out or no longer in the shop. */
+  unavailable?: boolean;
 };
 
 export type Order = {
@@ -43,4 +45,8 @@ export type Order = {
   amount_aed: number;
   status: 'paid' | 'fulfilled' | 'cancelled';
   created_at: string;
+  // Added by supabase/UPGRADE-CHECKOUT.sql (absent on databases not yet upgraded).
+  hold_id?: string | null;
+  stripe_payment_intent?: string | null;
+  restocked?: boolean;
 };

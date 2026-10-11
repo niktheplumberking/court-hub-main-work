@@ -44,7 +44,7 @@ After login you land on the dashboard. The top bar is your menu:
 | All website text and photos (Site Content) | New features, design changes, bug fixes |
 | Products: add, edit, price, discount, photos, stock | Adding or removing an admin account, password resets |
 | Categories: add, remove | Changing the WhatsApp number or connecting Stripe |
-| Orders: mark Fulfilled / Cancelled | Changing wording on the **Arabic** pages |
+| Orders: mark Shipped / Cancelled | Changing wording on the **Arabic** pages |
 | Tournaments: everything — events, scores, brackets, schedule, points, leaderboard, registrations | Anything about the domain, server, or email hosting |
 | Terms of Service & Privacy Policy text | |
 
@@ -131,12 +131,21 @@ Click **Orders**. Every PAID checkout appears here automatically — customers c
 
 Each order shows: the items and quantities, total in AED, customer name, email, phone, and the UAE shipping address they entered at checkout.
 
+The page opens on the **To ship** tab: only orders still waiting for you. The four boxes at the top show what is waiting, anything waiting **2+ days** (amber: ship these first), revenue and average order for the chosen period.
+
 ### Your fulfilment routine
-1. New order appears (status **Paid**).
-2. Pack the items. Stock already decreased by itself; unique items already left the shop.
-3. Arrange delivery (your courier). Questions for the buyer? Use the phone/email on the order — WhatsApp works great.
-4. When delivered, change the order's status dropdown to **Fulfilled** — this is your own bookkeeping so you always know what's still pending.
-5. Problem/cancellation? Set status **Cancelled** AND refund the money in the **Stripe dashboard** (stripe.com → Payments → find the payment → Refund). Refunds happen in Stripe, never in the site admin.
+1. New order appears under **To ship**.
+2. Click the order to open its **Details**: items with prices, the full address (**Copy for courier** copies name, phone and address in one go), and buttons to **WhatsApp**, **Call** or **Email** the customer.
+3. Pack the items. Stock already decreased by itself; unique items already left the shop.
+4. When it's handed to the courier, press **Mark shipped**. It moves to the **Shipped** tab.
+5. Problem/cancellation? Choose **Cancelled** in the status dropdown. The site asks you to confirm and **puts the items back in stock automatically**. Then refund the money in Stripe: open the order's Details → **Payment in Stripe (refunds)** → Refund. Refunds happen in Stripe, never in the site admin.
+
+### Finding things fast
+- **Date range** (All time / Today / Last 7 / Last 30 days) and **sort** (newest, oldest, highest amount).
+- **Search** by name, phone, email, product, area or order number.
+- **Products sold** view: how many of each product you sold, how many are still to ship, and revenue per product.
+- **Export CSV** downloads exactly what you're looking at, for Excel / your accountant.
+- "**PAYING NOW**" at the top = shoppers on the payment page this minute. Their items are reserved for up to 30 minutes so nobody else can buy the same last piece; if they don't pay, the items come back by themselves.
 
 ### Where's the money?
 Card payments land in your **Stripe** account and are paid out to your bank on Stripe's rolling schedule. See payouts at stripe.com → **Balance**.

@@ -1,5 +1,8 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { getStripe } from '@/lib/stripe';
+import { fulfillCheckoutSession } from '@/lib/shop/fulfill';
 import SiteHeader from '@/components/shared/SiteHeader';
 import SmoothScroll from '@/components/shared/SmoothScroll';
 import Footer from '@/components/home/Footer';
@@ -27,11 +30,47 @@ export default async function OrderSuccess({
   searchParams: Promise<{ session_id?: string }>;
 }) {
   const { session_id } = await searchParams;
-  let order = null;
-  if (session_id) {
-    const { data } = await supabaseAdmin()
-      .from('orders').select('*').eq('stripe_session_id', session_id).maybeSingle();
-    order = data;
+  if (!session_id || !/^cs_[A-Za-z0-9_]+$/.test(session_id)) redirect('/shop');
+
+  // Ask Stripe directly whether this checkout is paid — never trust the URL
+  // alone. If it is paid and the webhook hasn't landed yet (slow, retried or
+  // misconfigured), record the order right here; the webhook will then find it
+  // already done. Both paths are idempotent.
+  let paid = false;
+  const stripe = getStripe();
+  if (stripe) {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+      paid = session.status === 'complete' && session.payment_status !== 'unpaid';
+      if (paid) await fulfillCheckoutSession(session);
+    } catch (e) {
+      console.error('[order/success] could not confirm session', session_id, e);
+    }
+  }
+
+  const { data: order } = await supabaseAdmin()
+    .from('orders').select('*').eq('stripe_session_id', session_id).maybeSingle();
+  if (order) paid = true;
+
+  if (!paid) {
+    return (
+      <main className="min-h-screen bg-ink">
+        <SiteHeader spacer />
+        <div className="max-w-xl mx-auto px-6 py-24 text-center space-y-6">
+          <h1 className="font-display font-extrabold text-3xl md:text-4xl text-white">Payment not completed</h1>
+          <p className="text-white/50">
+            We could not confirm a payment for this checkout. Nothing has been charged by us. Your bag is still saved.
+          </p>
+          <Link
+            href="/shop"
+            className="inline-block px-8 py-4 rounded-full bg-lime text-ink font-bold hover:brightness-110 active:scale-95 transition-[filter,transform] duration-200"
+          >
+            BACK TO THE SHOP
+          </Link>
+        </div>
+        <Footer />
+      </main>
+    );
   }
 
   return (
@@ -76,7 +115,7 @@ export default async function OrderSuccess({
               </div>
             ) : (
               <p data-success-rise className="text-white/50">
-                Payment received — your order is being processed. Refresh in a moment to see the summary.
+                Payment received. Your order is being recorded; refresh in a moment to see the summary.
               </p>
             )}
             <div data-success-rise className="flex flex-col sm:flex-row items-center justify-center gap-3">
