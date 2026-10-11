@@ -23,7 +23,7 @@ const check = (name, cond, extra = '') => {
 
 try {
   // Supabase roles + the original schema (minus storage + policies).
-  await q(`create role anon; create role authenticated; create role service_role;`);
+  await q(`create role anon; create role authenticated; create role service_role; create schema if not exists auth; create table if not exists auth.users (id uuid primary key); create or replace function auth.uid() returns uuid language sql stable as \$\$ select null::uuid \$\$; create schema if not exists storage; create table if not exists storage.buckets (id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);`);
   const schema = fs.readFileSync(`${REPO}/supabase/schema.sql`, 'utf8')
     .split('-- ── Row Level Security ──')[0];
   await q(schema);

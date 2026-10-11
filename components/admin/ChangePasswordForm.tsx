@@ -8,6 +8,20 @@ export default function ChangePasswordForm() {
   return (
     <form action={action} className="space-y-4">
       <div>
+        <label htmlFor="current" className="block text-white/40 text-xs uppercase tracking-wider mb-2">
+          Current password
+        </label>
+        <input
+          id="current"
+          name="current"
+          type="password"
+          required
+          autoComplete="current-password"
+          className="adm-input"
+          placeholder="Your password today"
+        />
+      </div>
+      <div>
         <label htmlFor="password" className="block text-white/40 text-xs uppercase tracking-wider mb-2">
           New password
         </label>
@@ -16,10 +30,10 @@ export default function ChangePasswordForm() {
           name="password"
           type="password"
           required
-          minLength={8}
+          minLength={10}
           autoComplete="new-password"
           className="adm-input"
-          placeholder="At least 8 characters"
+          placeholder="At least 10 characters"
         />
       </div>
       <div>
@@ -31,7 +45,7 @@ export default function ChangePasswordForm() {
           name="confirm"
           type="password"
           required
-          minLength={8}
+          minLength={10}
           autoComplete="new-password"
           className="adm-input"
           placeholder="Type it again"

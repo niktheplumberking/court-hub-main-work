@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { hardenCookie } from './cookies';
 
 /** Cookie-aware server client — respects RLS, knows the logged-in admin. */
 export async function supabaseServer() {
@@ -13,7 +14,7 @@ export async function supabaseServer() {
         setAll: (cookiesToSet) => {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, hardenCookie(options))
             );
           } catch {
             /* called from a Server Component — middleware handles refresh */

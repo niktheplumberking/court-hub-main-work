@@ -22,7 +22,16 @@ const COPY = {
 
 export const metadata = {
   title: COPY.metaTitle,
+  robots: { index: false, follow: false },
 };
+
+// Anyone holding the link can open this page, so it never shows full personal
+// data: j***@gmail.com instead of the address.
+function maskEmail(email: string): string {
+  const [user, domain] = email.split('@');
+  if (!domain) return '***';
+  return `${user.slice(0, 1)}***@${domain}`;
+}
 
 export default async function OrderSuccess({
   searchParams,
@@ -110,7 +119,7 @@ export default async function OrderSuccess({
                   <span className="text-lime">{formatAED(order.amount_aed)}</span>
                 </div>
                 {order.customer_email && (
-                  <p className="text-white/40 text-xs">Payment received for {order.customer_email}. Keep this page for your records; we will contact you about delivery.</p>
+                  <p className="text-white/40 text-xs">Payment received for {maskEmail(order.customer_email)}. Keep this page for your records; we will contact you about delivery.</p>
                 )}
               </div>
             ) : (

@@ -95,6 +95,10 @@ export async function saveContentField(
       if (!value) return { status: 'error', message: 'Text cannot be empty (use Reset to restore the default).' };
       const cap = field.type === 'richtext' ? MAX_RICHTEXT : MAX_TEXT;
       if (value.length > cap) return { status: 'error', message: `Too long (max ${cap} characters).` };
+      // Some fields are rendered as links: never allow script/data URLs.
+      if (/^\s*(javascript|data|vbscript):/i.test(value)) {
+        return { status: 'error', message: 'That kind of link is not allowed.' };
+      }
     }
 
     const { error } = await supabaseAdmin().from('site_content').upsert({

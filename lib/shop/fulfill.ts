@@ -57,6 +57,20 @@ export async function fulfillCheckoutSession(
     });
   }
 
+  // Defence in depth: the charge must match what was reserved, in AED. Our
+  // server builds every session from DB prices, so a mismatch means something
+  // is badly wrong — the customer DID pay, so the order is still recorded, but
+  // it is logged loudly and flagged in the admin (items ≠ charged).
+  const expected = items.reduce((s, i) => s + Math.round(Number(i.price_aed) * 100) * i.qty, 0);
+  if (session.currency !== 'aed' || (holdId && session.amount_total !== expected)) {
+    console.error('[fulfill] AMOUNT/CURRENCY MISMATCH — review this order', {
+      session: session.id,
+      currency: session.currency,
+      charged: session.amount_total,
+      expected,
+    });
+  }
+
   const pi = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id ?? null;
 
   // ON CONFLICT DO NOTHING on the unique stripe_session_id: concurrent webhook

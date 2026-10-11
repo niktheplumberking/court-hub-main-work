@@ -223,3 +223,50 @@ grant execute on function release_hold(uuid) to service_role;
 grant execute on function convert_hold(uuid) to service_role;
 grant execute on function take_stock(jsonb) to service_role;
 grant execute on function set_order_status(uuid, text) to service_role;
+
+-- ============================================================
+-- SECURITY HARDENING (Oct 2026 audit)
+-- ============================================================
+
+-- Admins allow-list + check used by the policies below (same as
+-- SETUP-SITE-CONTENT.sql; repeated so this file never depends on it).
+create table if not exists admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  email      text not null unique,
+  created_at timestamptz not null default now()
+);
+alter table admins enable row level security;
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  select exists (select 1 from admins where user_id = auth.uid());
+$$;
+
+-- Customer data (orders), drafts and inquiries: readable ONLY by enrolled
+-- admins. Before, any logged-in account could read them through the API.
+drop policy if exists "admin read all products" on products;
+create policy "admin read all products" on products
+  for select to authenticated using (public.is_admin());
+
+drop policy if exists "admin read orders" on orders;
+create policy "admin read orders" on orders
+  for select to authenticated using (public.is_admin());
+
+drop policy if exists "admin read inquiries" on inquiries;
+create policy "admin read inquiries" on inquiries
+  for select to authenticated using (public.is_admin());
+
+-- The site never writes inquiries (contact goes through WhatsApp); an open
+-- public INSERT only invited spam straight into the database.
+drop policy if exists "public create inquiry" on inquiries;
+
+-- Product image bucket: images only, max 10 MB each.
+update storage.buckets
+  set file_size_limit = 10485760,
+      allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
+  where id = 'products';

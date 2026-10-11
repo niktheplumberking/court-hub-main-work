@@ -393,6 +393,9 @@ function OrderCard({
   const ship = formatShipping(o.shipping);
   const ageDays = now ? Math.floor((now - new Date(o.created_at).getTime()) / DAY) : 0;
   const late = o.status === 'paid' && ageDays >= LATE_AFTER_DAYS;
+  // Charged amount should equal the items' total; anything else needs a look.
+  const itemsTotal = o.items.reduce((s, i) => s + Number(i.price_aed) * i.qty, 0);
+  const mismatch = o.items.length > 0 && Math.abs(itemsTotal - Number(o.amount_aed)) > 0.01;
   const phoneDigits = (o.customer_phone ?? '').replace(/\D/g, '');
   const stripeUrl = o.stripe_payment_intent
     ? `https://dashboard.stripe.com/${stripeLive ? '' : 'test/'}payments/${o.stripe_payment_intent}`
@@ -418,6 +421,14 @@ function OrderCard({
             {late && (
               <span className="text-[10px] font-mono uppercase tracking-wider text-amber-500 border border-amber-500/40 rounded-full px-2 py-0.5">
                 Waiting {ageDays} days
+              </span>
+            )}
+            {mismatch && (
+              <span
+                title={`Items add up to ${formatAED(itemsTotal)} but ${formatAED(Number(o.amount_aed))} was charged. Check this payment in Stripe before shipping.`}
+                className="text-[10px] font-mono uppercase tracking-wider text-fire border border-fire/40 rounded-full px-2 py-0.5"
+              >
+                Check amount
               </span>
             )}
           </p>

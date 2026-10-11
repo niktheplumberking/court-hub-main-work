@@ -9,6 +9,7 @@ live database or real Stripe.
 | `db-stress.mjs` | Runs `supabase/UPGRADE-CHECKOUT.sql` on a throwaway real Postgres and hammers it with truly concurrent connections (200 buyers vs 1 racket, deadlock check, double-webhook, double-cancel…). |
 | `infra.mjs` | Local stand-in for production: Postgres + PostgREST (the engine behind Supabase's API) + a fake Stripe. |
 | `load.mjs` | Drives the real production build like real shoppers + Stripe would (rush of 200, 100 purchases/min paced, abandoned checkouts, lost webhooks, garbage input, bots, page capacity). |
+| `rls-check.mjs` | Proves the database permissions: non-admins see no orders, nobody but the server can touch stock. |
 | `run-all.sh` | Fresh test world → `next build` → `next start` → `load.mjs` → tear down. |
 
 ## One-time setup
@@ -39,6 +40,7 @@ your next `npm run dev` starts clean.
 - 150 simultaneous buyers, 1 one-of-a-kind racket → exactly 1 sale, 149 clean "sold out".
 - 200 complete purchases fired in the same second → 200 orders, 0 duplicates, stock exact.
 - 100 purchases paced over 60 s + 50 browsing visitors → checkout p50 15 ms / p95 213 ms.
+- Security: 11 header/endpoint checks (CSP, HSTS, forged webhooks, fake sessions…) + 16 database-permission checks (`rls-check.mjs`).
 - Abandoned, expired, re-started checkouts → stock returned exactly once.
 - Webhook never arrives → order still recorded from the success page.
 - ~140 shop pages/second served with 50 concurrent visitors, 0 errors.

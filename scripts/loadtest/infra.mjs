@@ -26,7 +26,7 @@ await db.initialise();
 await db.start();
 await db.createDatabase('t');
 const pool = new pg.Pool({ host: 'localhost', port: 54330, user: 'postgres', password: 'x', database: 't' });
-await pool.query(`create role anon; create role authenticated; create role service_role;`);
+await pool.query(`create role anon; create role authenticated; create role service_role; create schema if not exists auth; create table if not exists auth.users (id uuid primary key); create or replace function auth.uid() returns uuid language sql stable as \$\$ select null::uuid \$\$; create schema if not exists storage; create table if not exists storage.buckets (id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);`);
 await pool.query(fs.readFileSync(`${REPO}/supabase/schema.sql`, 'utf8').split('-- ── Row Level Security ──')[0]);
 await pool.query(fs.readFileSync(`${REPO}/supabase/UPGRADE-CHECKOUT.sql`, 'utf8'));
 const cat = (await pool.query(`insert into categories (name, slug, sort) values ('New Rackets','new-rackets',1) returning id`)).rows[0].id;

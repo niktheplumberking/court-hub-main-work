@@ -2,6 +2,8 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
+import { getStripe } from '@/lib/stripe';
+import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import type { Division, Tier, Tournament, TournamentStatus, PointsTable } from '@/lib/tournaments/data';
 import type { MatchSlot, RegistrationStatus } from '@/lib/tournaments/admin-types';
 import {
@@ -329,6 +331,14 @@ export interface CreateRegistrationResult {
 export async function createRegistration(
   input: CreateRegistrationInput,
 ): Promise<CreateRegistrationResult> {
+  // SECURITY: this path records an entry WITHOUT taking money. Server actions
+  // are public HTTP endpoints (callable directly, whatever the UI shows), so
+  // it must refuse on any real site: once Stripe is configured, the only way
+  // to register is a verified paid Checkout (register page / webhook).
+  if (getStripe()) return { ok: false, error: 'Please pay by card to complete your registration.' };
+  if (!tournamentsArePublic() && process.env.NODE_ENV === 'production') {
+    return { ok: false, error: 'Registration is not open yet.' };
+  }
   const captain = input.captain?.trim();
   const email = input.email?.trim();
   const partner = input.partner?.trim();

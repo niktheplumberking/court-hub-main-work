@@ -225,6 +225,29 @@ try {
   }));
   check('no failed page loads', errN === 0, `${okN} pages in 10 s = ${Math.round(okN / 10)} pages/sec; p50 ${pct(pl, 50).toFixed(0)} ms, p95 ${pct(pl, 95).toFixed(0)} ms`);
 
+  // ── 8. Security surface ────────────────────────────────────────────────
+  console.log('\n## 8. Security checks');
+  const home = await fetch(`${SITE}/`);
+  const h = (k) => home.headers.get(k) ?? '';
+  check('Content-Security-Policy is sent', /default-src 'self'/.test(h('content-security-policy')) && /object-src 'none'/.test(h('content-security-policy')));
+  check('HSTS is sent', /max-age=\d{7,}/.test(h('strict-transport-security')));
+  check('framework is not advertised (no X-Powered-By)', !home.headers.has('x-powered-by'));
+  check('clickjacking blocked (X-Frame-Options)', h('x-frame-options') === 'SAMEORIGIN');
+  const succ = await fetch(`${SITE}/order/success?session_id=cs_test_nope`);
+  check('order pages are never cached', /no-store/.test(succ.headers.get('cache-control') ?? ''));
+  const adm = await fetch(`${SITE}/admin/orders`, { redirect: 'manual' });
+  check('admin pages redirect anonymous visitors to login', [307, 308].includes(adm.status) && (adm.headers.get('location') ?? '').includes('/admin/login'));
+  const tadm = await fetch(`${SITE}/tournaments/admin`, { redirect: 'manual' });
+  check('old public tournament "demo admin" is gone (redirects to protected admin)', [307, 308].includes(tadm.status));
+  const tco = await fetch(`${SITE}/api/tournament-checkout`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-real-ip': ip() }, body: JSON.stringify({ slug: 'x', team: { captain: 'a', email: 'a@b.co', partner: 'b' } }) });
+  check('tournament payment endpoint closed while tournaments are hidden', tco.status === 404);
+  const relBad = await fetch(`${SITE}/api/checkout/release`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-real-ip': ip() }, body: JSON.stringify({ hold: "1' or '1'='1" }) });
+  check('release endpoint rejects non-uuid input', relBad.status === 400);
+  const unsigned = await fetch(`${SITE}/api/webhooks/stripe`, { method: 'POST', body: JSON.stringify({ type: 'checkout.session.completed', data: { object: { id: 'cs_fake', status: 'complete', payment_status: 'paid', metadata: {} } } }) });
+  check('unsigned fake "payment completed" webhook is rejected', unsigned.status === 400);
+  const fakeSuccess = await fetch(`${SITE}/order/success?session_id=cs_test_${'a'.repeat(24)}`).then((r) => r.text());
+  check('made-up session id on success page creates nothing', !fakeSuccess.includes('Order summary') && (await q(`select count(*)::int n from orders where stripe_session_id like 'cs_test_aaaa%'`))[0].n === 0);
+
   // ── Final consistency audit ────────────────────────────────────────────
   console.log('\n## Final audit');
   const neg = (await q(`select count(*)::int n from products where quantity < 0`))[0].n;

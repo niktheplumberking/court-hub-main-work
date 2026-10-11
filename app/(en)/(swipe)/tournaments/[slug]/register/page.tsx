@@ -25,7 +25,21 @@ export const dynamic = 'force-dynamic';
  * per session id). At the final stage this recording moves into the webhook
  * with durable Supabase storage; the page then just looks the row up.
  */
-async function resolveStripeReturn(sessionId: string): Promise<StripeReturn> {
+// Two loads of the same return URL at once (double refresh) must not both
+// pass the "already recorded?" check and register the pair twice.
+const inFlight = new Map<string, Promise<StripeReturn>>();
+
+function resolveStripeReturn(sessionId: string): Promise<StripeReturn> {
+  if (!/^cs_[A-Za-z0-9_]+$/.test(sessionId)) return Promise.resolve({ sessionId, reg: null });
+  let p = inFlight.get(sessionId);
+  if (!p) {
+    p = resolveStripeReturnOnce(sessionId).finally(() => inFlight.delete(sessionId));
+    inFlight.set(sessionId, p);
+  }
+  return p;
+}
+
+async function resolveStripeReturnOnce(sessionId: string): Promise<StripeReturn> {
   try {
     const existing = await getRegistrationBySession(sessionId);
     if (existing) {
@@ -38,7 +52,12 @@ async function resolveStripeReturn(sessionId: string): Promise<StripeReturn> {
     if (!stripe) return { sessionId, reg: null };
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     const m = session.metadata;
-    if (session.payment_status !== 'paid' || m?.type !== 'tournament_registration' || !m.slug) {
+    if (
+      session.status !== 'complete' ||
+      session.payment_status !== 'paid' ||
+      m?.type !== 'tournament_registration' ||
+      !m.slug
+    ) {
       return { sessionId, reg: null };
     }
     const reg = await addRegistration({

@@ -135,7 +135,6 @@ export async function POST(req: Request) {
         phone_number_collection: { enabled: true },
         client_reference_id: r.hold_id,
         metadata: { hold_id: r.hold_id },
-        payment_intent_data: { metadata: { hold_id: r.hold_id } },
       },
       // A network retry can never open two sessions for one reservation.
       { idempotencyKey: `checkout-${r.hold_id}` }
