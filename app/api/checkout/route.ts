@@ -43,7 +43,18 @@ export async function POST(req: Request) {
   }
 
   const site = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3005';
-  const session = await stripe.checkout.sessions.create({
+
+  // Stripe refuses amounts under its AED minimum (AED 2) and can reject for other reasons
+  // (account not activated, bad key). Never let that surface as an empty 500: return JSON
+  // the cart drawer can show, and log the real reason for us.
+  const total = line_items.reduce((sum, li) => sum + li.price_data.unit_amount * li.quantity, 0);
+  if (total < 200) {
+    return NextResponse.json({ error: 'The order total must be at least AED 2.' }, { status: 400 });
+  }
+
+  let session;
+  try {
+  session = await stripe.checkout.sessions.create({
     mode: 'payment',
     line_items,
     currency: AED,
@@ -53,6 +64,10 @@ export async function POST(req: Request) {
     phone_number_collection: { enabled: true },
     metadata: { cart: JSON.stringify(items.map((i) => ({ id: i.id, qty: i.qty }))) },
   });
+  } catch (e) {
+    console.error('[checkout] stripe session create failed', e);
+    return NextResponse.json({ error: 'Payment could not be started. Please try again or contact us on WhatsApp.' }, { status: 502 });
+  }
 
   return NextResponse.json({ url: session.url });
 }
