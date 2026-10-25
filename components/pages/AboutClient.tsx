@@ -27,7 +27,7 @@ const MotionLink = motion.create(Link);
  */
 function StatCounter({ raw }: { raw: string }) {
   const m = /^([\d,]+(?:\.\d+)?)(.*)$/.exec(raw);
-  if (!m) return <>{raw}</>;
+  if (!m) return <bdi dir="ltr">{raw}</bdi>;
   // Thousands-style commas only — "2,1x" (decimal comma) renders statically
   // instead of silently becoming 21.
   const numeric = m[1].replace(/,(?=\d{3}(\D|$))/g, '');
@@ -369,16 +369,16 @@ export default function AboutClient({
                 <p className="text-ink/70 text-xs sm:text-sm leading-relaxed font-sans font-medium">
                   {content['about.story.paragraph2']}
                 </p>                 {/* Playful counting statistics row with zoom and brand color-exchanging hover animations */}
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-start">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-ink/10 text-start">
                   <div className="group/stat cursor-pointer">
                     <motion.p
                       whileHover={{ scale: 1.15, color: '#1F5FD6', textShadow: '0 4px 12px rgba(10,13,24,0.12)' }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
-                      <StatCounter raw={content['about.story.stat1_value']} />
+                      <StatCounter raw={content['about.story.community_value']} />
                     </motion.p>
-                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.stat1_caption']}</p>
+                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.community_caption']}</p>
                   </div>
                   <div className="group/stat cursor-pointer">
                     <motion.p
@@ -396,9 +396,9 @@ export default function AboutClient({
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-court-blue tracking-tighter origin-left inline-block"
                     >
-                      <StatCounter raw={content['about.story.stat3_value']} />
+                      <StatCounter raw={content['about.story.experience_value']} />
                     </motion.p>
-                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.stat3_caption']}</p>
+                    <p className="text-[9px] sm:text-[10px] font-mono text-ink/50 uppercase tracking-widest mt-1.5 leading-snug font-bold transition-colors group-hover/stat:text-ink/85">{content['about.story.experience_caption']}</p>
                   </div>
                 </div>
               </motion.div>

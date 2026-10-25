@@ -89,54 +89,6 @@
     "type": "richtext",
     "value": "From Al Quoz to the wider GCC, engineered courts and a growing community of players."
   },
-  "home.numbers.stat1.value": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 1 value",
-    "type": "text",
-    "value": "180+"
-  },
-  "home.numbers.stat1.caption": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 1 caption",
-    "type": "text",
-    "value": "Pre-Calibrated Arenas"
-  },
-  "home.numbers.stat2.value": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 2 value",
-    "type": "text",
-    "value": "5,000+"
-  },
-  "home.numbers.stat2.caption": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 2 caption",
-    "type": "text",
-    "value": "Active Players in Our Community"
-  },
-  "home.numbers.stat3.value": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 3 value",
-    "type": "text",
-    "value": "2.1x"
-  },
-  "home.numbers.stat3.caption": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 3 caption",
-    "type": "text",
-    "value": "Vibration Dampening"
-  },
-  "home.numbers.stat4.value": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 4 value",
-    "type": "text",
-    "value": "10yr"
-  },
-  "home.numbers.stat4.caption": {
-    "page": "home",
-    "label": "Numbers Strip · Stat 4 caption",
-    "type": "text",
-    "value": "Rust & Structure Warranty"
-  },
   "home.services.eyebrow": {
     "page": "home",
     "label": "Services · Eyebrow",
@@ -311,18 +263,6 @@
     "type": "image",
     "value": "/assets/images/court_action_landscape_1779705580138.png"
   },
-  "home.about_teaser.badge_value": {
-    "page": "home",
-    "label": "About Teaser · Image badge stat value",
-    "type": "text",
-    "value": "180+"
-  },
-  "home.about_teaser.badge_caption": {
-    "page": "home",
-    "label": "About Teaser · Image badge stat caption",
-    "type": "richtext",
-    "value": "Arenas built\nacross the GCC"
-  },
   "home.about_teaser.eyebrow": {
     "page": "home",
     "label": "About Teaser · Eyebrow",
@@ -443,18 +383,6 @@
     "type": "richtext",
     "value": "We set out to re-engineer court diagnostics. Fusing Spanish glass technologies with aerospace structural metal alloy formulations, we designed playing frames that ignore high winds and custom rackets that preserve muscles. Today, we craft sports spaces where architectural integrity meets ultimate player stamina."
   },
-  "about.story.stat1_value": {
-    "page": "about",
-    "label": "Story · Stat 1 value",
-    "type": "text",
-    "value": "180+"
-  },
-  "about.story.stat1_caption": {
-    "page": "about",
-    "label": "Story · Stat 1 caption",
-    "type": "text",
-    "value": "Pre-Calibrated Arenas"
-  },
   "about.story.stat2_value": {
     "page": "about",
     "label": "Story · Stat 2 value",
@@ -466,18 +394,6 @@
     "label": "Story · Stat 2 caption",
     "type": "text",
     "value": "Larger Sweetspot"
-  },
-  "about.story.stat3_value": {
-    "page": "about",
-    "label": "Story · Stat 3 value",
-    "type": "text",
-    "value": "2.1x"
-  },
-  "about.story.stat3_caption": {
-    "page": "about",
-    "label": "Story · Stat 3 caption",
-    "type": "text",
-    "value": "Vibration Dampening"
   },
   "about.blueprint.eyebrow": {
     "page": "about",
@@ -1600,5 +1516,65 @@
     "label": "Section 6, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
+  },
+  "home.numbers.players.value": {
+    "page": "home",
+    "label": "Numbers Strip · Active players",
+    "type": "text",
+    "value": "+3,000"
+  },
+  "home.numbers.players.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Players caption",
+    "type": "text",
+    "value": "Active Players in Our Community"
+  },
+  "home.numbers.experience.value": {
+    "page": "home",
+    "label": "Numbers Strip · Years of experience",
+    "type": "text",
+    "value": "+5"
+  },
+  "home.numbers.experience.caption": {
+    "page": "home",
+    "label": "Numbers Strip · Experience caption",
+    "type": "text",
+    "value": "Years’ Experience in Padel Products"
+  },
+  "home.about_teaser.experience_value": {
+    "page": "home",
+    "label": "About teaser · Experience value",
+    "type": "text",
+    "value": "+5"
+  },
+  "home.about_teaser.experience_caption": {
+    "page": "home",
+    "label": "About teaser · Experience caption",
+    "type": "richtext",
+    "value": "Years’ experience\nin padel products"
+  },
+  "about.story.community_value": {
+    "page": "about",
+    "label": "Story · Community value",
+    "type": "text",
+    "value": "+3,000"
+  },
+  "about.story.community_caption": {
+    "page": "about",
+    "label": "Story · Community caption",
+    "type": "text",
+    "value": "Active Players in Our Community"
+  },
+  "about.story.experience_value": {
+    "page": "about",
+    "label": "Story · Experience value",
+    "type": "text",
+    "value": "+5"
+  },
+  "about.story.experience_caption": {
+    "page": "about",
+    "label": "Story · Experience caption",
+    "type": "text",
+    "value": "Years’ Experience in Padel Products"
   }
 }

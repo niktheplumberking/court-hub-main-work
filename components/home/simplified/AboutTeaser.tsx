@@ -29,10 +29,10 @@ export default function AboutTeaser({
               />
               <div className="ch-on-dark absolute bottom-4 start-4 flex items-center gap-3.5 rounded-[16px] bg-ink/80 px-[18px] py-3.5 text-white backdrop-blur-md">
                 <b className="font-display text-[22px] font-black text-lime">
-                  {content['home.about_teaser.badge_value']}
+                  <bdi dir="ltr">{content['home.about_teaser.experience_value']}</bdi>
                 </b>
                 <span className="font-mono text-[9px] uppercase leading-normal tracking-[0.16em] text-white/65">
-                  {content['home.about_teaser.badge_caption'].split('\n').map((line, i, arr) => (
+                  {content['home.about_teaser.experience_caption'].split('\n').map((line, i, arr) => (
                     <Fragment key={i}>
                       {line}
                       {i < arr.length - 1 && <br />}

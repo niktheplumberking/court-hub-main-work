@@ -2,6 +2,13 @@
 
 Client revision numbers are separate from the application package version.
 
+## 1.5 · 25 October 2026
+
+- Show only the two client-specified homepage metrics: +3,000 active community players and +5 years of experience in padel products.
+- Remove the homepage arena/dampening metrics and replace its rust/structure warranty metric with experience. Update the repeated arena/dampening counters on About and the homepage arena badge to the approved community/experience figures.
+- Render the requested values accurately on first paint, in English and Arabic. Use new editable content keys, so legacy database overrides cannot revive retired metrics. Existing records are retained; no database writes or product changes are required.
+- Preserve v1.4 sharing, copy, search metadata and product visibility fixes.
+
 ## 1.4 · 25 October 2026
 
 - Remove em dashes from authored UI copy and metadata. Normalize existing CMS/catalogue text when displayed, preserving stored content and all product data for rollback.
