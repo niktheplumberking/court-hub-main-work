@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, ChevronDown, Mail, MapPin, Check, ShieldCheck, Sparkles } from 'lucide-react';
+import { MessageSquare, ChevronDown, Mail, MapPin, UserRound, ShieldCheck } from 'lucide-react';
 import { waHref } from '@/lib/whatsapp';
 import { useT } from '@/lib/i18n/LocaleProvider';
 import type { ContentMap } from '@/lib/content/get';
@@ -48,58 +47,18 @@ export default function ConstructionSection({
   const formRef = externalFormRef || internalFormRef;
 
   const t = useT();
+  const [name, setName] = useState('');
   const [contact, setContact] = useState('');
   const [location, setLocation] = useState('Dubai');
-  const [courtModel, setCourtModel] = useState<'classic' | 'panoramic' | 'super'>('panoramic');
-
-  // Localized display copy for the spec lines. COURT_CONFIGS below stays
-  // English — it feeds the WhatsApp payload, which is machine/agent-facing.
-  const SPEC_LABELS: Record<'classic' | 'panoramic' | 'super', string[]> = {
-    classic: [t.pages.specClassic1, t.pages.specClassic2, t.pages.specClassic3, t.pages.specClassic4],
-    panoramic: [t.pages.specPanoramic1, t.pages.specPanoramic2, t.pages.specPanoramic3, t.pages.specPanoramic4],
-    super: [t.pages.specSuper1, t.pages.specSuper2, t.pages.specSuper3, t.pages.specSuper4],
-  };
-
-  const COURT_CONFIGS = {
-    classic: {
-      name: 'Classic Model',
-      specs: [
-        '10mm tempered safety glass panels',
-        'Standard textured monofilament turf',
-        '4x 200W high-efficiency LED lights',
-        'Hot-dip galvanized steel structure'
-      ]
-    },
-    panoramic: {
-      name: 'Panoramic Pro',
-      specs: [
-        '12mm panoramic tempered safety glass',
-        'WPT-grade textured monofilament turf',
-        '8x 200W professional LED floodlights',
-        'Seamless reinforced structure frame'
-      ]
-    },
-    super: {
-      name: 'Super Panoramic',
-      specs: [
-        '12mm ultimate safety glass panels',
-        'Premium WPT textured turf',
-        '8x 240W elite smart LED floodlights',
-        'Championship double-reinforced structure'
-      ]
-    }
-  };
-
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const modelName = COURT_CONFIGS[courtModel].name;
-    const message = `Hello Court Hub, I'd like to request a proposal for padel court construction.
+    if (!name.trim() || !contact.trim()) return;
+    const message = `Hello Court Hub, I'd like to discuss padel court construction.
 
-Configuration Details:
-- Court Model: ${modelName}
-- Court Location: ${location}
-- Contact Details: ${contact}`;
-    window.open(waHref(message), '_blank');
+- Name: ${name.trim()}
+- Contact Details: ${contact.trim()}
+- Court Location: ${location}`;
+    window.open(waHref(message), '_blank', 'noopener,noreferrer');
   };
 
   // 1. Preload construction frames
@@ -206,6 +165,7 @@ Configuration Details:
           start: 'top top',
           end: 'bottom bottom',
           scrub: isMobile ? 0.3 : 0.8,
+          invalidateOnRefresh: true,
         }
       });
 
@@ -224,8 +184,11 @@ Configuration Details:
       // form is hidden — e.g. when this is embedded purely as a build animation).
       if (!hideForm) {
         tl.fromTo(formRef.current,
-          { opacity: 0, y: 60, pointerEvents: 'none' },
-          { opacity: 1, y: 0, pointerEvents: 'auto', duration: 1.0, ease: 'power2.out' },
+          // GSAP owns the transform, including desktop vertical centering;
+          // otherwise its y tween clears Tailwind's -translate-y-1/2 and
+          // pushes the fields/button below the visible animation frame.
+          { opacity: 0, y: 60, yPercent: () => window.innerWidth < 768 ? 0 : -50, pointerEvents: 'none' },
+          { opacity: 1, y: 0, yPercent: () => window.innerWidth < 768 ? 0 : -50, pointerEvents: 'auto', duration: 1.0, ease: 'power2.out' },
           3.2
         );
       }
@@ -269,7 +232,7 @@ Configuration Details:
           {/* WhatsApp Request Panel Overlay (Appears on the right side once court finishes building) */}
           <div
             ref={formRef}
-            className={`${hideForm ? 'hidden ' : ''}absolute top-[46vh] bottom-2 start-4 end-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:start-auto md:end-16 lg:end-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto`}
+            className={`${hideForm ? 'hidden ' : ''}absolute top-auto bottom-6 start-4 end-4 mx-auto md:mx-0 flex flex-col md:block md:bottom-auto md:start-auto md:end-16 lg:end-24 md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md lg:max-w-[480px] w-auto md:w-full bg-ink border border-white/10 rounded-[20px] md:rounded-[40px] p-5 md:p-8 space-y-4 md:space-y-5 z-20 opacity-0 shadow-[0_0_50px_rgba(30,90,232,0.18)] hover:shadow-[0_0_60px_rgba(30,90,232,0.25)] transition-shadow duration-500 pointer-events-auto`}
           >
             {/* System telemetry header - Hidden on mobile to save space */}
             <div className="hidden md:flex items-center justify-between border-b border-white/5 pb-2 md:pb-3">
@@ -288,95 +251,72 @@ Configuration Details:
             </div>
 
             <div className="space-y-0.5 md:space-y-1">
-              <span className="font-mono text-[8px] md:text-[10px] tracking-[0.2em] text-lime uppercase font-bold">{content?.['construct.build_form.eyebrow'] ?? '/// Builder Configurator ///'}</span>
-              <h3 className="text-base md:text-3xl font-display font-black text-white uppercase italic leading-none">{content?.['construct.build_form.heading'] ?? 'Configure Your Court'}</h3>
+              <span className="font-mono text-[8px] md:text-[10px] tracking-[0.2em] text-lime uppercase font-bold">{content?.['construct.build_form.eyebrow'] ?? '/// Court Construction Enquiry ///'}</span>
+              <h3 className="text-xl md:text-3xl font-display font-black text-white uppercase italic leading-none">{content?.['construct.build_form.heading'] ?? 'Let’s Build Your Court'}</h3>
               <p className="hidden md:block text-[10px] md:text-xs text-white/50 leading-relaxed">
-                {content?.['construct.build_form.desc'] ?? 'Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp.'}
+                {content?.['construct.build_form.desc'] ?? 'Add your name, contact details and court location, then chat with our team on WhatsApp.'}
               </p>
             </div>
 
-            <form onSubmit={handleWhatsAppSubmit} className="flex flex-1 flex-col justify-between space-y-3 md:block md:flex-none md:space-y-4">
+            <form onSubmit={handleWhatsAppSubmit} className="space-y-3 md:space-y-4">
               
-              {/* Interactive Tabs for Court Model */}
               <div className="space-y-1">
-                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">
-                  {t.pages.buildStep1} <span className="md:hidden text-lime">({COURT_CONFIGS[courtModel].name})</span>
+                <label htmlFor="construction-name" className="text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">
+                  {t.pages.buildStep1}
                 </label>
-                <div className="grid grid-cols-3 gap-1.5 md:gap-2">
-                  {[
-                    { id: 'classic', label: 'Classic' },
-                    { id: 'panoramic', label: 'Panoramic' },
-                    { id: 'super', label: 'Super Pro' }
-                  ].map((model) => {
-                    const isActive = courtModel === model.id;
-                    return (
-                      <button
-                        key={model.id}
-                        type="button"
-                        onClick={() => setCourtModel(model.id as any)}
-                        className={`py-1.5 md:py-2 px-1 rounded-lg md:rounded-xl text-[9px] md:text-xs font-display font-bold uppercase tracking-wider transition-all duration-300 border text-center cursor-pointer ${
-                          isActive
-                            ? 'bg-lime text-ink border-lime shadow-[0_0_15px_rgba(59,130,246,0.25)] font-extrabold'
-                            : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white'
-                        }`}
-                      >
-                        {model.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Dynamic specs details box - Hidden on mobile to save space */}
-              <div className="hidden md:block bg-white/[0.03] border border-white/5 rounded-xl md:rounded-2xl p-2.5 md:p-4 space-y-1.5 md:space-y-2.5">
-                <div className="flex items-center justify-between border-b border-white/5 pb-1 md:pb-1.5">
-                  <span className="font-mono text-[8px] md:text-[9px] text-white/40 uppercase tracking-widest">
-                    {t.pages.specsDetails}
-                  </span>
-                  <span className="font-mono text-[8px] md:text-[9px] text-lime uppercase tracking-widest font-bold flex items-center gap-1">
-                    <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                    {COURT_CONFIGS[courtModel].name}
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 gap-1 md:gap-2">
-                  {SPEC_LABELS[courtModel].map((spec, i) => (
-                    <div key={i} className="flex items-start gap-1.5 md:gap-2.5 text-[9px] md:text-[11px] text-white/80">
-                      <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-lime shrink-0 mt-0.5" />
-                      <span className="leading-snug">{spec}</span>
-                    </div>
-                  ))}
+                <div className="relative flex items-center">
+                  <UserRound className="absolute start-3 w-3 h-3 md:w-4 md:h-4 text-white/30 pointer-events-none" />
+                  <input
+                    id="construction-name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    maxLength={120}
+                    pattern=".*\S.*"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t.pages.namePlaceholder}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-3 py-2 text-base md:text-sm text-white placeholder:text-white/20 focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all"
+                  />
                 </div>
               </div>
 
               {/* Input for contact details */}
               <div className="space-y-1">
-                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep2}</label>
+                <label htmlFor="construction-contact" className="text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep2}</label>
                 <div className="relative flex items-center">
                   <div className="absolute start-3 text-white/30 pointer-events-none">
                     <Mail className="w-3 h-3 md:w-4 md:h-4" />
                   </div>
                   <input
+                    id="construction-contact"
+                    name="contact"
                     type="text"
                     required
+                    maxLength={254}
+                    pattern=".*\S.*"
                     value={contact}
                     onChange={(e) => setContact(e.target.value)}
                     placeholder={t.pages.contactPlaceholder}
-                    className="ltr-island w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-3 py-2 text-[10px] md:text-sm text-white placeholder:text-white/20 focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all"
+                    className="ltr-island w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-3 py-2 text-base md:text-sm text-white placeholder:text-white/20 focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Input for location select */}
               <div className="space-y-1">
-                <label className="text-[8px] md:text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep3}</label>
+                <label htmlFor="construction-location" className="text-[10px] font-mono text-white/40 uppercase tracking-widest font-bold block">{t.pages.buildStep3}</label>
                 <div className="relative flex items-center">
                   <div className="absolute start-3 text-white/30 pointer-events-none">
                     <MapPin className="w-3 h-3 md:w-4 md:h-4" />
                   </div>
                   <select
+                    id="construction-location"
+                    name="location"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-8 py-2 text-[10px] md:text-sm text-white appearance-none focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all cursor-pointer"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg md:rounded-2xl ps-9 pe-8 py-2 text-base md:text-sm text-white appearance-none focus:border-lime focus:ring-1 focus:ring-lime focus:bg-white/[0.07] outline-none transition-all cursor-pointer"
                   >
                     <option value="Dubai" className="bg-ink text-white">{t.pages.cityDubai}</option>
                     <option value="Abu Dhabi" className="bg-ink text-white">{t.pages.cityAbuDhabi}</option>
@@ -394,7 +334,7 @@ Configuration Details:
               <div className="pt-1 space-y-1.5">
                 <button 
                   type="submit"
-                  className="w-full py-2.5 bg-lime text-ink rounded-lg md:rounded-2xl font-display font-extrabold uppercase tracking-widest text-[9px] md:text-xs flex items-center justify-center gap-1.5 md:gap-2 hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 button-glow-effect cursor-pointer"
+                  className="w-full py-2.5 bg-lime text-ink rounded-lg md:rounded-2xl font-display font-extrabold uppercase tracking-widest text-[11px] md:text-xs flex items-center justify-center gap-1.5 md:gap-2 hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 button-glow-effect cursor-pointer"
                 >
                   <MessageSquare className="w-3 h-3 fill-ink" />
                   {content?.['construct.build_form.cta'] ?? 'Chat on WhatsApp'}
@@ -402,7 +342,7 @@ Configuration Details:
                 
                 <div className="hidden md:flex items-center justify-center gap-1 md:gap-1.5 text-[8px] md:text-[9px] font-mono text-white/40 uppercase tracking-wider">
                   <ShieldCheck className="w-3 md:w-3.5 h-3 md:h-3.5 text-lime" />
-                  <span>{content?.['construct.build_form.security_caption'] ?? 'PROPOSAL DELIVERED SECURELY IN SECONDS'}</span>
+                  <span>{content?.['construct.build_form.security_caption'] ?? 'CONTINUE YOUR ENQUIRY ON WHATSAPP'}</span>
                 </div>
               </div>
 

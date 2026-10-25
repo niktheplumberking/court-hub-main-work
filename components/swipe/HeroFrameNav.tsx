@@ -7,7 +7,7 @@ import { switchLocalePath } from '@/lib/i18n/locale';
 
 /**
  * THE site top navbar (one of the only two nav versions, with the side rail):
- * COURT HUB logo · About Us / Construct Your Court / Shop / Contact Us · Book a Court.
+ * COURT HUB logo · About Us / Construct Your Court / Shop / Contact Us · About Us CTA.
  * Two placements:
  *  • default — lives INSIDE a page's glass-frame hero (home + the swipe pages)
  *    and scrolls away with it; the global side rail takes over past the hero.
@@ -43,7 +43,7 @@ export default function HeroFrameNav({
       initial={false}
       animate={{ y: 0, opacity: 1 }}
       // Hidden on mobile — the global top bar (hamburger + logo) covers nav there, and
-      // the hero's own bottom CTAs cover "Book a Court"; this removes the duplicate logo
+      // the hero's own bottom CTAs cover primary actions; this removes the duplicate logo
       // and frees vertical space so the hero fits the phone viewport.
       className={
         fixedBar
@@ -87,12 +87,12 @@ export default function HeroFrameNav({
         </Link>
       </div>
 
-      {/* Book a Court pill (static) */}
+      {/* About Us pill (static) */}
       <Link
-        href={lp('/contact')}
+        href={lp('/about')}
         className="shrink-0 bg-lime hover:bg-white text-ink font-sans text-[10px] md:text-xs font-bold uppercase tracking-widest px-5 py-2.5 sm:px-6 sm:py-3.5 rounded-full transition-colors duration-300 shadow-md shadow-lime/10 flex items-center gap-1.5"
       >
-        <span>{t.nav.bookACourt}</span>
+        <span>{t.nav.about}</span>
       </Link>
     </motion.div>
   );

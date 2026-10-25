@@ -262,18 +262,13 @@ export default function ShopClient({
                       className="ch-pcard group bg-white rounded-[18px] sm:rounded-[22px] p-2.5 sm:p-5 border border-court-blue/10 flex flex-col justify-between relative overflow-hidden text-start"
                     >
                       <div className="relative z-10 space-y-2.5 sm:space-y-4">
-                        {/* Soft premium grey-beige backplate for product photo. `isolate`
-                            scopes the image's multiply blend so it composites only against
-                            this box's cream — the product photos' white studio backgrounds
-                            multiply to EXACTLY #EEF5FF (white × box = box), so no white/black
-                            rectangle ever shows. (racket-19/20 had their black bgs flood-filled
-                            to white so they behave the same.) */}
+                        {/* Display uploaded photos as-is, without colour blending or cropping. */}
                         <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-[12px] bg-gradient-to-b from-[#F1F7FF] to-[#E1EDFE] overflow-hidden isolate">
                           <Link href={lp(`/shop/${prod.slug}`)} className="block w-full h-full cursor-pointer">
                             <img
                               src={prod.image}
                               alt={prod.name}
-                              className="w-full h-full object-contain p-2 sm:p-4 mix-blend-multiply group-hover:scale-105 group-hover:-rotate-2 transition-transform duration-700 select-none"
+                              className="w-full h-full object-contain p-2 sm:p-4 group-hover:scale-105 group-hover:-rotate-2 transition-transform duration-700 select-none"
                               referrerPolicy="no-referrer" loading="lazy" decoding="async"
                             />
                           </Link>

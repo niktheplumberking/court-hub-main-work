@@ -259,16 +259,14 @@ export default function ProductClient({
                 </div>
                 )}
 
-                {/* Product Showpiece Container (`isolate` scopes the image's blend to this card). */}
+                {/* Product photo on a neutral card, preserving the uploaded colours. */}
                 <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[4/5] bg-white rounded-[32px] overflow-hidden border border-ink/10 shadow-xs flex items-center justify-center p-8 lg:p-12 isolate">
 
                   {/* Soft floating ground shadow beneath the product — keeps the lifted look without
                       the old rectangular drop-shadow that outlined the image's bounding box. */}
                   <div className="absolute bottom-[14%] left-1/2 -translate-x-1/2 w-2/5 h-5 bg-black/15 blur-2xl rounded-[50%] pointer-events-none z-0" />
 
-                  {/* Floating Racket Render — mix-blend-multiply melts the image's white studio
-                      background into the white card pixel-for-pixel (white × card = card), so no
-                      rectangle shows; the bob keeps the floating effect. */}
+                  {/* Render the original photo without colour blending or re-encoding. */}
                   <div className="absolute inset-x-8 inset-y-12 flex items-center justify-center select-none pointer-events-none z-10">
                     <motion.img
                       key={mainImage}
@@ -276,7 +274,7 @@ export default function ProductClient({
                       alt={product.name}
                       animate={{ y: [0, -12, 0] }}
                       transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="h-full w-auto max-h-[420px] sm:max-h-[500px] object-contain mix-blend-multiply"
+                      className="h-full w-auto max-h-[420px] sm:max-h-[500px] object-contain"
                       referrerPolicy="no-referrer" fetchPriority="high" decoding="async"
                     />
                   </div>
@@ -298,7 +296,7 @@ export default function ProductClient({
                         i === activeImage ? 'border-court-blue shadow-sm' : 'border-ink/10 hover:border-ink/30'
                       }`}
                     >
-                      <img src={src} alt="" className="w-full h-full object-contain mix-blend-multiply" loading="lazy" decoding="async" />
+                      <img src={src} alt="" className="w-full h-full object-contain" loading="lazy" decoding="async" />
                     </button>
                   ))}
                 </div>

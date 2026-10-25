@@ -137,11 +137,12 @@ export default function TopSellersRail({
                 <Link href={lp(item.href)} className="relative block aspect-[1/1.08] overflow-hidden bg-sand-2">
                   {item.image ? (
                     <Image
+                      unoptimized
                       src={item.image}
                       alt={item.title}
                       fill
                       sizes="264px"
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+                      className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.06]"
                     />
                   ) : (
                     <span className="flex h-full w-full items-center justify-center font-display text-sm tracking-widest text-ink/20">

@@ -3,6 +3,20 @@ import defaults from './defaults.json';
 import arDefaults from './defaults.ar.json';
 import type { Locale } from '@/lib/i18n/locale';
 
+// v1.2 replaces the model selector with a direct enquiry. Older database
+// overrides may still describe the retired form; upgrade only those exact
+// default values without overwriting client-authored copy or changing data.
+const RETIRED_COPY: Record<string, string[]> = {
+  'about.hero.cta_secondary': ['Book a Court', 'احجز ملعبًا'],
+  'construct.build_form.eyebrow': ['/// Builder Configurator ///', '/// مُجهّز المواصفات ///'],
+  'construct.build_form.heading': ['Configure Your Court', 'جهّز مواصفات ملعبك'],
+  'construct.build_form.desc': [
+    'Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp.',
+    'اختر مواصفات الطراز، وراجع الخصائص الأساسية لحظيًا، واحصل على عرض سعر فوري مخصص عبر واتساب.',
+  ],
+  'construct.build_form.security_caption': ['PROPOSAL DELIVERED SECURELY IN SECONDS', 'يصلك العرض بأمان خلال ثوانٍ'],
+};
+
 // ============================================================================
 // Site Content — client-editable copy.
 //
@@ -86,6 +100,13 @@ export async function getPageContent(page: ContentPage, locale: Locale = 'en'): 
       for (const [key, value] of Object.entries(AR_CONTENT_DEFAULTS)) {
         if (key in map && value.length > 0) map[key] = value;
       }
+    }
+  }
+  for (const [key, retired] of Object.entries(RETIRED_COPY)) {
+    if (key in map && retired.some((value) => value.toLowerCase() === map[key].trim().toLowerCase())) {
+      map[key] = locale === 'ar'
+        ? AR_CONTENT_DEFAULTS[key] ?? CONTENT_DEFAULTS[key].value
+        : CONTENT_DEFAULTS[key].value;
     }
   }
   return map;

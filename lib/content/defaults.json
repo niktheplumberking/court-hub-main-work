@@ -375,7 +375,7 @@
     "page": "about",
     "label": "Hero · Secondary CTA label",
     "type": "text",
-    "value": "Book a Court"
+    "value": "About Us"
   },
   "about.hero.community_blurb": {
     "page": "about",
@@ -1239,19 +1239,19 @@
     "page": "construct",
     "label": "Build Form · Eyebrow",
     "type": "text",
-    "value": "/// Builder Configurator ///"
+    "value": "/// Court Construction Enquiry ///"
   },
   "construct.build_form.heading": {
     "page": "construct",
     "label": "Build Form · Heading",
     "type": "text",
-    "value": "Configure Your Court"
+    "value": "Let’s Build Your Court"
   },
   "construct.build_form.desc": {
     "page": "construct",
     "label": "Build Form · Description",
     "type": "richtext",
-    "value": "Select a court model specs, check key features in real-time, and get a customized instant quote on WhatsApp."
+    "value": "Add your name, contact details and court location, then chat with our team on WhatsApp."
   },
   "construct.build_form.cta": {
     "page": "construct",
@@ -1263,7 +1263,7 @@
     "page": "construct",
     "label": "Build Form · Security caption",
     "type": "text",
-    "value": "PROPOSAL DELIVERED SECURELY IN SECONDS"
+    "value": "CONTINUE YOUR ENQUIRY ON WHATSAPP"
   },
   "shop.header.eyebrow": {
     "page": "shop",

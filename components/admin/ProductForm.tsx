@@ -1,5 +1,5 @@
 'use client';
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 import { saveProduct } from '@/lib/actions/products';
@@ -27,9 +27,30 @@ export default function ProductForm({ product, categories }: { product?: Product
   });
   const [existingImages, setExistingImages] = useState<string[]>(product?.images ?? []);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [imageDetails, setImageDetails] = useState<{ name: string; width: number; height: number }[]>([]);
+  const imageSelection = useRef(0);
   const [pending, startTransition] = useTransition();
 
   const set = (k: string, v: string | boolean) => setForm((f) => ({ ...f, [k]: v }));
+
+  const inspectImages = async (files: File[]) => {
+    const selection = ++imageSelection.current;
+    setImageDetails([]);
+    const details = await Promise.all(files.map(async (file) => {
+      const url = URL.createObjectURL(file);
+      try {
+        const image = new Image();
+        image.src = url;
+        await image.decode();
+        return { name: file.name, width: image.naturalWidth, height: image.naturalHeight };
+      } catch {
+        return { name: file.name, width: 0, height: 0 };
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }));
+    if (selection === imageSelection.current) setImageDetails(details);
+  };
 
   const submit = (formData: FormData) => {
     setSaveError(null);
@@ -106,8 +127,27 @@ export default function ProductForm({ product, categories }: { product?: Product
                   ))}
                 </div>
               )}
-              <input type="file" name="image_files" multiple accept="image/*"
+              <label htmlFor="product-image-files" className={labelCls}>Upload original photos</label>
+              <input id="product-image-files" type="file" name="image_files" multiple accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+                aria-describedby="product-image-guidance"
+                onChange={(event) => void inspectImages(Array.from(event.target.files ?? []))}
                 className="block w-full text-sm text-white/50 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:bg-lime file:text-ink file:font-bold file:text-sm hover:file:brightness-110" />
+              <p id="product-image-guidance" className="mt-3 text-xs leading-relaxed text-white/60">
+                Photos are saved at their original resolution without compression. For sharp product pages, choose the original camera file with at least 1,200 pixels on its longest side, up to 10 MB per photo.
+              </p>
+              <ul className="mt-3 space-y-2 text-xs" aria-live="polite">
+                {imageDetails.map((image, index) => {
+                  const small = Math.max(image.width, image.height) < 1200;
+                  return (
+                    <li key={`${image.name}-${index}`} className={small ? 'text-amber-700' : 'text-white/70'}>
+                      <span className="break-all font-medium">{image.name}</span>
+                      {image.width > 0 ? (
+                        <> · {image.width} × {image.height} px. {small ? 'Small photo: it may look blurry when enlarged. Choose a higher-resolution original if available.' : 'Ready to upload at original quality.'}</>
+                      ) : ' · Could not read the image dimensions. Check that this is a supported image file.'}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
         </div>

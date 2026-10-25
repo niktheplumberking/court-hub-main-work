@@ -263,7 +263,7 @@ export default function AboutClient({
                     </Link>
 
                     <Link
-                      href={lp('/construct-your-court')}
+                      href={lp('/about')}
                       className="px-6 py-3 border border-white/30 backdrop-blur-sm bg-white/5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white/10 text-white transition-colors text-center"
                     >
                       {content['about.hero.cta_secondary']}

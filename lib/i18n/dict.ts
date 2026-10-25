@@ -32,7 +32,6 @@ const en = {
     shop: 'Shop',
     tournaments: 'Tournaments',
     contact: 'Contact Us',
-    bookACourt: 'Book a Court',
     buildYourCourt: 'Build Your Court',
     tagline: 'Premium Padel Experience',
     yourCart: (n: number) =>
@@ -174,7 +173,7 @@ const en = {
     formThanks: (name: string) => `Thank you, ${name}.`,
     formReceivedBefore: 'Our team has received your request and will contact you via',
     formReceivedAfter: 'shortly.',
-    buildStep1: '1. Select Court Model',
+    buildStep1: '1. Your Name',
     buildStep2: '2. Contact Info',
     buildStep3: '3. Court Location',
     specsDetails: 'Specifications Details',
@@ -434,7 +433,6 @@ const ar: Dict = {
     shop: 'المتجر',
     tournaments: 'البطولات',
     contact: 'تواصل معنا',
-    bookACourt: 'احجز ملعبًا',
     buildYourCourt: 'ابنِ ملعبك',
     tagline: 'تجربة بادل فاخرة',
     yourCart: (n: number) =>
@@ -582,7 +580,7 @@ const ar: Dict = {
     formThanks: (name: string) => `شكرًا لك، ${name}.`,
     formReceivedBefore: 'استلم فريقنا طلبك وسيتواصل معك عبر',
     formReceivedAfter: 'قريبًا.',
-    buildStep1: '1. اختر طراز الملعب',
+    buildStep1: '1. اسمك',
     buildStep2: '2. بيانات التواصل',
     buildStep3: '3. موقع الملعب',
     specsDetails: 'تفاصيل المواصفات',

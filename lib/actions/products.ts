@@ -60,6 +60,8 @@ export async function saveProduct(formData: FormData) {
     if (!ext) throw new Error(`"${file.name}" is not a JPG, PNG, WebP, AVIF or GIF image.`);
     if (file.size > MAX_IMAGE_BYTES) throw new Error(`"${file.name}" is larger than 10 MB.`);
     const path = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
+    // Upload the original File bytes: never resize, re-encode or replace it
+    // with a thumbnail. The admin's dimension check is advisory only.
     const { error } = await admin.storage.from('products').upload(path, file, {
       contentType: file.type,
       upsert: false,

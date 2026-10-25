@@ -250,13 +250,12 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Book a Court — restored, end-aligned (took the old cart slot; cart now lives
-                only in the always-on floating bag widget). */}
+            {/* Primary mobile CTA; the cart has its own floating bag widget. */}
             <Link
-              href={lp('/contact')}
+              href={lp('/about')}
               className="shrink-0 bg-lime hover:bg-white text-ink font-sans text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full transition-all shadow-md shadow-lime/10"
             >
-              {t.nav.bookACourt}
+              {t.nav.about}
             </Link>
           </nav>
         </header>
