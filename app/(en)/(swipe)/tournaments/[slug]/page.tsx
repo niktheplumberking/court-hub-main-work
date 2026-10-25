@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const t = await getTournament(slug);
   return {
-    title: t ? `${t.name} — Court Hub` : 'Tournament — Court Hub',
+    title: t ? `${t.name} | Court Hub` : 'Tournament | Court Hub',
     description: t?.blurb,
   };
 }

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug, tab } = await params;
   const t = await getTournament(slug);
   const label = tab.charAt(0).toUpperCase() + tab.slice(1);
-  return { title: t ? `${t.name} · ${label} — Court Hub` : 'Tournament — Court Hub' };
+  return { title: t ? `${t.name} · ${label} | Court Hub` : 'Tournament | Court Hub' };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string; tab: string }> }) {

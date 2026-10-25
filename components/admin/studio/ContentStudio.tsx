@@ -161,7 +161,7 @@ export default function ContentStudio({ overrides }: { overrides: Record<string,
             Edit the <span className="text-lime">site</span>
           </h1>
           <p className="text-sm text-white/50 max-w-xl">
-            Pick a page, open a section, change the words — Save puts it live in
+            Pick a page, open a section and change the words. Save puts it live in
             seconds.
           </p>
         </div>
@@ -386,7 +386,7 @@ function SearchResults({
           </p>
           <p className="text-xs text-white/40">
             {otherPages.length > 0
-              ? 'Good news though — it shows up on another page:'
+              ? 'Good news though, it shows up on another page:'
               : 'Try a different word, or switch pages with the tabs above.'}
           </p>
         </div>

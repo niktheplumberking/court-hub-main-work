@@ -1,3 +1,8 @@
+import { getHeroRackets } from '@/lib/shop/catalog';
+import { cleanProductCopy } from '@/lib/copy';
+import JsonLd from '@/components/shared/JsonLd';
+import { homeSchema } from '@/lib/seo';
+import { pageMetadata } from '@/lib/seo';
 import SimplifiedHome from '@/components/home/simplified/SimplifiedHome';
 import { supabasePublic } from '@/lib/supabase/public';
 import { getPageContent } from '@/lib/content/get';
@@ -5,9 +10,10 @@ import type { Product } from '@/lib/types';
 
 export const revalidate = 60;
 
-export const metadata = {
-  alternates: { canonical: '/', languages: { en: '/', ar: '/ar', 'x-default': '/' } },
-};
+export const metadata = pageMetadata("/", "en", {
+  "title": "Court Hub | Padel Rackets & Court Construction in Dubai, UAE",
+  "description": "Discover padel rackets and equipment at Court Hub in Dubai, UAE. Shop in AED, compare product conditions and discuss your court construction project on WhatsApp."
+});
 
 /**
  * Fetches the eight newest active products for the homepage top-sellers rail.
@@ -26,7 +32,7 @@ async function getTopSellerProducts(): Promise<Product[]> {
       .eq('status', 'active')
       .order('created_at', { ascending: false })
       .limit(8);
-    return (data as Product[] | null) ?? [];
+    return ((data as Product[] | null) ?? []).map(cleanProductCopy);
   } catch (e) {
     console.error('[home] top sellers fetch failed', e);
     return [];
@@ -34,9 +40,10 @@ async function getTopSellerProducts(): Promise<Product[]> {
 }
 
 export default async function HomePage() {
-  const [products, content] = await Promise.all([
+  const [products, content, heroRackets] = await Promise.all([
     getTopSellerProducts(),
     getPageContent('home'),
+    getHeroRackets(),
   ]);
-  return <SimplifiedHome products={products} content={content} />;
+  return <><JsonLd data={homeSchema('en')} /><SimplifiedHome products={products} content={content} heroRackets={heroRackets} /></>;
 }

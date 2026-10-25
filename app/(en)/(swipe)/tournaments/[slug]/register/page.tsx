@@ -12,7 +12,7 @@ import {
 } from '@/lib/tournaments/server-store';
 
 export const metadata = {
-  title: 'Book Your Spot — Court Hub',
+  title: 'Book Your Spot | Court Hub',
   robots: { index: false },
 };
 

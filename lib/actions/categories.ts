@@ -15,7 +15,7 @@ async function requireAdmin() {
     .select('user_id')
     .eq('user_id', user.id)
     .maybeSingle();
-  if (error || !data) throw new Error('Unauthorized — account is not enrolled in the admins list.');
+  if (error || !data) throw new Error('Unauthorized, account is not enrolled in the admins list.');
   return user;
 }
 
@@ -84,7 +84,7 @@ export async function deleteCategory(
     if ((count ?? 0) > 0) {
       return {
         status: 'error',
-        message: `Can’t delete — ${count} product${count === 1 ? '' : 's'} still use this category. Move or delete them first.`,
+        message: `Can’t delete, ${count} product${count === 1 ? '' : 's'} still use this category. Move or delete them first.`,
       };
     }
 

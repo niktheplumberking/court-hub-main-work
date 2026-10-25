@@ -1,15 +1,14 @@
+import { pageMetadata } from '@/lib/seo';
 import ShopClient from '@/components/pages/ShopClient';
 import { getPageContent } from '@/lib/content/get';
 import { getShopCategories, getShopProducts } from '@/lib/shop/catalog';
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: 'المتجر — Court Hub',
-  description:
-    'مضارب بادل فاخرة ومستعملة معتمدة ومعدات وإكسسوارات، منتقاة من Court Hub في الإمارات. دفع آمن بالدرهم.',
-  alternates: { canonical: '/ar/shop', languages: { en: '/shop', ar: '/ar/shop', 'x-default': '/shop' } },
-};
+export const metadata = pageMetadata("/shop", "ar", {
+  "title": "متجر مضارب ومعدات البادل في الإمارات | Court Hub",
+  "description": "تسوق مضارب ومعدات البادل لدى Court Hub. قارن الأسعار بالدرهم الإماراتي وحالة كل منتج ومدى توفره في متجرنا الإلكتروني."
+});
 
 export default async function Page() {
   const [content, products] = await Promise.all([getPageContent('shop', 'ar'), getShopProducts()]);

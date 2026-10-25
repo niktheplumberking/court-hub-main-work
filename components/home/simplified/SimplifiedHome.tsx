@@ -9,6 +9,8 @@ import ServicesGrid from './ServicesGrid';
 import TopSellersRail from './TopSellersRail';
 import ConstructPanel from './ConstructPanel';
 import AboutTeaser from './AboutTeaser';
+import QuickAnswers from '@/components/shared/QuickAnswers';
+import type { HeroRacket } from '@/lib/shop/hero-rackets';
 
 /**
  * Simplified single-scroll homepage. Opens with the same framed mock-up hero
@@ -21,15 +23,17 @@ import AboutTeaser from './AboutTeaser';
 export default function SimplifiedHome({
   products,
   content,
+  heroRackets,
   locale = 'en',
 }: {
   products: Product[];
   content: ContentMap;
+  heroRackets: HeroRacket[];
   locale?: Locale;
 }) {
   return (
     <div className="ch-home ch-has-rail min-h-screen bg-ink text-ink">
-      <HomeHero content={content} />
+      <HomeHero content={content} heroRackets={heroRackets} />
       <div className="relative overflow-x-clip bg-sand">
         <BrandRibbon locale={locale} />
         <NumbersStrip content={content} />
@@ -37,6 +41,7 @@ export default function SimplifiedHome({
         <TopSellersRail products={products} content={content} />
         <ConstructPanel content={content} locale={locale} />
         <AboutTeaser content={content} locale={locale} />
+        <QuickAnswers locale={locale} />
         <div className="ch-on-dark">
           <Footer />
         </div>

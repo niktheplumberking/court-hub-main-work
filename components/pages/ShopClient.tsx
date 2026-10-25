@@ -155,10 +155,10 @@ export default function ShopClient({
                 <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/65 font-bold block">
                   {content['shop.header.eyebrow']}
                 </span>
-                <h2 className="text-4.5xl sm:text-5xl lg:text-6xl font-display font-black leading-[0.9] tracking-tighter uppercase text-ink">
+                <h1 className="text-4.5xl sm:text-5xl lg:text-6xl font-display font-black leading-[0.9] tracking-tighter uppercase text-ink">
                   {content['shop.header.heading_line1']} <br className="hidden sm:inline" />
                   <span className="text-court-blue">{content['shop.header.heading_highlight']}</span>
-                </h2>
+                </h1>
               </div>
 
               <div className="md:col-span-5 text-start md:text-end">

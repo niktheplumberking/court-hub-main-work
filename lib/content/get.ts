@@ -2,6 +2,7 @@ import { supabasePublic } from '@/lib/supabase/public';
 import defaults from './defaults.json';
 import arDefaults from './defaults.ar.json';
 import type { Locale } from '@/lib/i18n/locale';
+import { cleanText } from '@/lib/copy';
 
 // v1.2 replaces the model selector with a direct enquiry. Older database
 // overrides may still describe the retired form; upgrade only those exact
@@ -95,7 +96,7 @@ export async function getPageContent(page: ContentPage, locale: Locale = 'en'): 
     }
   } catch (e) {
     // Missing env (local dev) or DB hiccup — defaults keep the site whole.
-    console.error(`[content] ${page} fetch failed — serving defaults`, e);
+    console.error(`[content] ${page} fetch failed, serving defaults`, e);
     if (locale === 'ar') {
       for (const [key, value] of Object.entries(AR_CONTENT_DEFAULTS)) {
         if (key in map && value.length > 0) map[key] = value;
@@ -108,6 +109,9 @@ export async function getPageContent(page: ContentPage, locale: Locale = 'en'): 
         ? AR_CONTENT_DEFAULTS[key] ?? CONTENT_DEFAULTS[key].value
         : CONTENT_DEFAULTS[key].value;
     }
+  }
+  for (const key of Object.keys(map)) {
+    if (CONTENT_DEFAULTS[key]?.type !== 'image') map[key] = cleanText(map[key]);
   }
   return map;
 }

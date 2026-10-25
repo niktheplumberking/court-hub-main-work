@@ -107,7 +107,7 @@ export default function PreviewPane({
             <EyeOff className="w-4 h-4 text-white/50" aria-hidden />
           </span>
           <p className="font-display text-sm font-extrabold uppercase text-white">
-            Nothing to preview — yet
+            Nothing to preview yet
           </p>
           <p className="text-xs text-white/45 leading-relaxed">
             The {page.title} section isn&apos;t currently shown anywhere on the
@@ -118,7 +118,7 @@ export default function PreviewPane({
       )}
 
       <p className="text-xs text-white/35">
-        This is the real live site — it updates moments after you save.
+        This is the real live site, it updates moments after you save.
         {src && ' Tip: click any highlighted section in the preview to jump straight to its text.'}
       </p>
     </div>

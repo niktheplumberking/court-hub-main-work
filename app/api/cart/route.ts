@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabasePublic } from '@/lib/supabase/public';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { sweepExpiredHolds } from '@/lib/shop/fulfill';
+import { cleanText } from '@/lib/copy';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
     const maxQty = p.is_unique ? Math.min(1, qty) : Math.max(0, qty);
     return {
       id,
-      title: p.title as string,
+      title: cleanText(p.title as string),
       slug: p.slug as string,
       price_aed: Number(p.price_aed),
       image: ((p.images as string[] | null) ?? [])[0] ?? null,

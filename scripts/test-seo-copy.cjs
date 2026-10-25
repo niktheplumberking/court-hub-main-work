@@ -1,0 +1,61 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const ts = require('typescript');
+const cache = new Map();
+function load(file) {
+  const full = path.resolve(file);
+  if (cache.has(full)) return cache.get(full).exports;
+  const module = { exports: {} }; cache.set(full, module);
+  const code = ts.transpileModule(fs.readFileSync(full, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const localRequire = (name) => {
+    if (name.startsWith('@/')) return load(`${name.slice(2)}.ts`);
+    if (name.startsWith('.')) return load(path.resolve(path.dirname(full), `${name}.ts`));
+    return require(name);
+  };
+  vm.runInNewContext(code, { module, exports: module.exports, require: localRequire, process, URL, console }, { filename: full });
+  return module.exports;
+}
+const { cleanText, cleanProductCopy } = load('lib/copy.ts');
+const seo = load('lib/seo.ts');
+const { HERO_MODELS, visibleHeroRackets } = load('lib/shop/hero-rackets.ts');
+const featured = HERO_MODELS.map((model) => ({ slug: model.slug, title: model.name, status: 'active', brand: 'NOX' }));
+assert.equal(visibleHeroRackets(featured).length, 3);
+featured[0].status = 'draft';
+featured[1].status = 'archived';
+assert.equal(visibleHeroRackets(featured).length, 1, 'Draft/archived products must not be advertised in the 3D hero.');
+assert.equal(visibleHeroRackets(featured)[0].href, `/shop/${featured[2].slug}`);
+featured[2].status = 'sold';
+assert.equal(visibleHeroRackets(featured).length, 0, 'No active featured product must produce an empty hero line-up.');
+assert.equal(cleanText('One\u2014two &mdash; three &#8212; four &#x2014; five'), 'One, two, three, four, five');
+const source = { title: 'Racket\u2014model', slug: 'keep-this-slug', images: ['https://images/a.png'], price_aed: 1199, quantity: 2, specs: { weight: '360\u2014375g' } };
+const clean = cleanProductCopy(source);
+assert.equal(clean.title, 'Racket, model');
+assert.equal(source.title, 'Racket\u2014model', 'Display normalization must not mutate stored records.');
+assert.equal(clean.images, source.images);
+assert.equal(clean.price_aed, source.price_aed);
+assert.equal(clean.quantity, source.quantity);
+
+const meta = seo.pageMetadata('/shop/test', 'ar', { title: 'Product | Court Hub', description: 'Description' });
+assert.equal(meta.alternates.canonical, 'https://courthub.ae/ar/shop/test');
+assert.equal(meta.alternates.languages.en, 'https://courthub.ae/shop/test');
+assert.equal(meta.openGraph.url, meta.alternates.canonical);
+assert.equal(meta.openGraph.locale, 'ar_AE');
+assert.equal(meta.openGraph.images[0].width, 1200);
+assert.equal(meta.openGraph.images[0].height, 630);
+assert.match(meta.twitter.images[0], /court-hub-share-v1\.4\.png$/);
+
+const product = { id: 'real-id', slug: 'test', name: '</script><img src=x>', images: ['https://images/racket.png'], desc: 'Product details', price: 1149.99, condition: 'good', inStock: false, brand: 'NOX' };
+const [schema, breadcrumbs] = seo.productSchema(product, 'ar');
+assert.equal(schema.offers.price, 1149.99);
+assert.equal(schema.offers.priceCurrency, 'AED');
+assert.equal(schema.offers.itemCondition, 'https://schema.org/UsedCondition');
+assert.equal(schema.offers.availability, 'https://schema.org/OutOfStock');
+assert.equal(schema.offers.url, 'https://courthub.ae/ar/shop/test');
+assert.equal(breadcrumbs.itemListElement[2].item, schema.offers.url);
+assert(!seo.serializeJsonLd(schema).includes('</script>'), 'Product copy must not escape its JSON-LD script.');
+assert.equal(JSON.parse(seo.serializeJsonLd(schema)).name, product.name);
+assert.equal(seo.homeSchema('ar')[1].mainEntity.length, seo.QUICK_ANSWERS.ar.length);
+assert(!('aggregateRating' in schema), 'Never fabricate reviews.');
+console.log('PASS: punctuation, data preservation, bilingual canonicals/share metadata, live offer semantics and JSON-LD script safety.');

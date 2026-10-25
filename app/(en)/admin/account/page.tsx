@@ -5,7 +5,7 @@ import ChangePasswordForm from '@/components/admin/ChangePasswordForm';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = { title: 'My Account — Court Hub Admin', robots: { index: false } };
+export const metadata = { title: 'My Account | Court Hub Admin', robots: { index: false } };
 
 /**
  * Account screen — lets an admin change their OWN password. Essential at

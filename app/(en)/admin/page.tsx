@@ -52,7 +52,7 @@ export default async function AdminDashboard() {
     year: 'numeric',
   });
 
-  const dash = (n: number | null) => (n === null ? '—' : n);
+  const dash = (n: number | null) => (n === null ? 'N/A' : n);
 
   return (
     <div className="space-y-10">
@@ -111,7 +111,7 @@ export default async function AdminDashboard() {
           <p className="mt-5 font-display font-black text-4xl text-white">227</p>
           <p className="mt-1 text-white/50 text-sm">Editable fields</p>
           <p className="mt-3 text-xs text-white/35 group-hover:text-white/60 transition-colors">
-            {contentEditedCount === null ? '—' : contentEditedCount} edited · open Content Studio
+            {contentEditedCount === null ? 'N/A' : contentEditedCount} edited · open Content Studio
           </p>
         </Link>
 
@@ -150,7 +150,7 @@ export default async function AdminDashboard() {
           </div>
           {recentOrders.length === 0 ? (
             <p className="mt-6 py-10 text-center text-white/30 text-sm border border-dashed border-white/10 rounded-2xl">
-              — no orders yet —
+              No orders yet.
             </p>
           ) : (
             <div className="mt-4 overflow-x-auto">
@@ -174,11 +174,11 @@ export default async function AdminDashboard() {
                       </td>
                       <td className="py-3 pr-4">
                         <span className="text-xs uppercase tracking-wider text-white/60 border border-white/15 rounded-full px-2.5 py-0.5">
-                          {o.status ?? '—'}
+                          {o.status ?? 'N/A'}
                         </span>
                       </td>
                       <td className="py-3 text-white/40 text-xs">
-                        {o.created_at ? new Date(o.created_at).toLocaleDateString('en-AE') : '—'}
+                        {o.created_at ? new Date(o.created_at).toLocaleDateString('en-AE') : 'N/A'}
                       </td>
                     </tr>
                   ))}

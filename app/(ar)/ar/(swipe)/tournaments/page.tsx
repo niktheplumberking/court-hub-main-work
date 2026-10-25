@@ -1,18 +1,15 @@
+import { pageMetadata } from '@/lib/seo';
 import TournamentHub from '@/components/tournaments/TournamentHub';
 import ComingSoon from '@/components/tournaments/ComingSoon';
 import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getLiveFinal, listTournaments } from '@/lib/tournaments/server-store';
 
-export const metadata = {
-  title: 'البطولات — Court Hub',
-  description:
-    'شارك في بطولات بادل معتمدة من P25 إلى P250 في الإمارات، وتابع المجموعات والجداول مباشرة، وراقب ترتيب موسم Court Hub.',
-  alternates: {
-    canonical: '/ar/tournaments',
-    languages: { en: '/tournaments', ar: '/ar/tournaments', 'x-default': '/tournaments' },
-  },
-};
+export const metadata = pageMetadata("/tournaments", "ar", {
+  "title": "تحديثات بطولات البادل | Court Hub",
+  "description": "تابع تحديثات بطولات البادل لدى Court Hub وتواصل مع فريقنا لمعرفة المزيد عن الفعاليات القادمة في الإمارات.",
+  noindex: !tournamentsArePublic(),
+});
 
 export const dynamic = 'force-dynamic';
 

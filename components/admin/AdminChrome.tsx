@@ -36,7 +36,7 @@ export default function AdminChrome({ theme }: { theme: AdminTheme }) {
         <ThemeToggle initial={theme} />
         <Link
           href="/admin/account"
-          title="My account — change password"
+          title="My account, change password"
           className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 text-white/50 text-sm hover:border-lime hover:text-lime transition-colors"
         >
           <UserCog className="w-4 h-4" />

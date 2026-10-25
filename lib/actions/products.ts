@@ -36,7 +36,7 @@ async function requireAdmin() {
     .select('user_id')
     .eq('user_id', user.id)
     .maybeSingle();
-  if (error || !data) throw new Error('Unauthorized — account is not enrolled in the admins list.');
+  if (error || !data) throw new Error('Unauthorized, account is not enrolled in the admins list.');
   return user;
 }
 

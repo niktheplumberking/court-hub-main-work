@@ -1,3 +1,5 @@
+import { pageMetadata, SITE_URL, SITE_TITLE, SITE_DESCRIPTION, organizationSchema } from '@/lib/seo';
+import JsonLd from '@/components/shared/JsonLd';
 import type { Metadata } from 'next';
 import '../globals.css';
 import { LocaleProvider } from '@/lib/i18n/LocaleProvider';
@@ -10,44 +12,18 @@ import Cursor from '@/components/shared/Cursor';
 import NavigationFlag from '@/components/shared/NavigationFlag';
 import StudioEditBridge from '@/components/shared/StudioEditBridge';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3005';
-
-// PLACEHOLDER COPY — replace with client-provided copy (contract §8)
-const META_DESCRIPTION =
-  'Court Hub Group: premium padel equipment shop, court construction, and the home of padel in the UAE.';
-
 export const metadata: Metadata = {
+  ...pageMetadata('/', 'en', { title: SITE_TITLE.en, description: SITE_DESCRIPTION.en }),
   metadataBase: new URL(SITE_URL),
-  // Title strategy: subpages (about, contact, construct-your-court) already
-  // declare their own COMPLETE titles, e.g. 'Contact — Court Hub'. A template
-  // of '%s — Court Hub' would double-suffix those to 'Contact — Court Hub —
-  // Court Hub'. Using the identity template '%s' renders child titles verbatim
-  // without editing any other file, while routes that declare no title (e.g.
-  // /shop) still fall back to `default` below.
-  title: {
-    default: 'Court Hub — Premium Padel Shop & Court Construction, UAE',
-    template: '%s',
-  },
-  description: META_DESCRIPTION,
-  openGraph: {
-    type: 'website',
-    siteName: 'Court Hub',
-    locale: 'en_AE',
-    images: ['/images/hero_padel_night_view_1779713624496.png'],
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  applicationName: 'Court Hub',
+  title: { default: SITE_TITLE.en, template: '%s' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" dir="ltr">
       <body className="bg-ink text-white antialiased">
+        <JsonLd data={organizationSchema()} />
         {/* Persists across navigations (above the page) so it can record the
             first in-app route change — drives the homepage's first-landing-only
             preloader. Renders nothing. */}

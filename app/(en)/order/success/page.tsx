@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 
 // ─── PLACEHOLDER COPY — replace with client-provided copy (contract §8) ───
 const COPY = {
-  metaTitle: 'Order Confirmed — Court Hub',
+  metaTitle: 'Order Confirmed | Court Hub',
   continueCta: 'CONTINUE SHOPPING',
   backHomeCta: 'BACK HOME',
 };

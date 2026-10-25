@@ -93,7 +93,7 @@ export default function CategoryManager({ categories }: { categories: Row[] }) {
       <div className="space-y-3">
         <p className="adm-eyebrow">/// {categories.length} categor{categories.length === 1 ? 'y' : 'ies'}</p>
         {categories.length === 0 ? (
-          <p className="text-white/40 text-sm">No categories yet — add your first one above.</p>
+          <p className="text-white/40 text-sm">No categories yet, add your first one above.</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
             {categories.map((c) => (

@@ -26,19 +26,19 @@ const FAQS = [
   },
   {
     question: "Can I try a racket before I buy?",
-    answer: "Yes — message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit." // placeholder claim (showroom location & appointment model) — confirm with client
+    answer: "Yes, message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit." // placeholder claim (showroom location & appointment model) — confirm with client
   },
   {
     question: "How do I order gear or request a court build?",
-    answer: "Gear is simple — browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."
+    answer: "Gear is simple, browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."
   },
   {
     question: "What happens after I send a court build inquiry?",
-    answer: "A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build — you'll know exactly what's happening at every stage." // placeholder claim (response time & process) — confirm with client
+    answer: "A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build, you'll know exactly what's happening at every stage." // placeholder claim (response time & process) — confirm with client
   },
   {
-    question: "Do you deliver outside Dubai — or internationally?",
-    answer: "We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn't part of standard checkout yet — if you're ordering from abroad, message us on WhatsApp and we'll quote it case by case." // placeholder claim (delivery scope & international policy) — confirm with client
+    question: "Do you deliver outside Dubai, or internationally?",
+    answer: "We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn't part of standard checkout yet, if you're ordering from abroad, message us on WhatsApp and we'll quote it case by case." // placeholder claim (delivery scope & international policy) — confirm with client
   }
 ];
 

@@ -15,7 +15,7 @@ export default async function AdminContent() {
       if (typeof row.value === 'string') overrides[row.key] = row.value;
     }
   } catch (e) {
-    console.error('[admin/content] override fetch failed — showing defaults', e);
+    console.error('[admin/content] override fetch failed, showing defaults', e);
   }
 
   return <ContentStudio overrides={overrides} />;

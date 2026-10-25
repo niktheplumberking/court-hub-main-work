@@ -196,7 +196,7 @@ export default function ProductForm({ product, categories }: { product?: Product
               <input type="checkbox" name="is_unique" checked={form.is_unique}
                 onChange={(e) => { set('is_unique', e.target.checked); if (e.target.checked) set('quantity', '1'); }}
                 className="w-4 h-4 accent-lime" />
-              <span className="text-white/70 text-sm">Unique item — auto-remove when sold</span>
+              <span className="text-white/70 text-sm">Unique item, auto-remove when sold</span>
             </label>
           </div>
 

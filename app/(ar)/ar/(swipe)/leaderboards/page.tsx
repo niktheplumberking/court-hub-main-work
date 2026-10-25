@@ -1,18 +1,15 @@
+import { pageMetadata } from '@/lib/seo';
 import Leaderboard from '@/components/tournaments/Leaderboard';
 import ComingSoon from '@/components/tournaments/ComingSoon';
 import { tournamentsArePublic } from '@/lib/tournaments/flags';
 import HeroFrameNav from '@/components/swipe/HeroFrameNav';
 import { getLeaderboardRows } from '@/lib/tournaments/server-store';
 
-export const metadata = {
-  title: 'ترتيب الموسم — Court Hub',
-  description:
-    'ترتيب موسم Court Hub 2026: نقاط تراكمية عبر كل فعالية، موزونة حسب الفئة، وقابلة للتصفية حسب القسم.',
-  alternates: {
-    canonical: '/ar/leaderboards',
-    languages: { en: '/leaderboards', ar: '/ar/leaderboards', 'x-default': '/leaderboards' },
-  },
-};
+export const metadata = pageMetadata("/leaderboards", "ar", {
+  "title": "تحديثات ترتيب لاعبي البادل | Court Hub",
+  "description": "تعرف على تحديثات ترتيب لاعبي البادل وتابع مجتمع Court Hub في الإمارات.",
+  noindex: !tournamentsArePublic(),
+});
 
 export const dynamic = 'force-dynamic';
 

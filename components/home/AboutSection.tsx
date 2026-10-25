@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ─── PLACEHOLDER COPY — replace with client-provided copy (contract §8) ───
 const ABOUT_BLURB =
-  'Pro-level rackets and gear, championship-grade court construction, and a community that lives for padel — Court Hub powers the game across the UAE.';
+  'Pro-level rackets and gear, championship-grade court construction, and a community that lives for padel | Court Hub powers the game across the UAE.';
 // ─── END PLACEHOLDER COPY ───
 
 export default function AboutSection() {
@@ -259,7 +259,7 @@ export default function AboutSection() {
                   /// The home of premium padel ///
                 </p>
                 <p className="text-lg md:text-2xl font-display font-medium text-white/90 leading-relaxed md:leading-relaxed">
-                  From racket to court to championship moment — Court Hub Group powers every part of the game. We stock what the pros play with, build the surfaces they win on, and stage the tournaments where careers are made.
+                  From racket to court to championship moment | Court Hub Group powers every part of the game. We stock what the pros play with, build the surfaces they win on, and stage the tournaments where careers are made.
                 </p>
               </div>
             </div>

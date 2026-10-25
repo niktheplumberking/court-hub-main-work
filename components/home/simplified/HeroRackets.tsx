@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useLocalePath } from '@/lib/i18n/LocaleProvider';
+import type { HeroRacket } from '@/lib/shop/hero-rackets';
 
 /**
  * Hero showcase: 3D models of the shop's best-selling rackets (client request,
@@ -11,32 +12,16 @@ import { useLocalePath } from '@/lib/i18n/LocaleProvider';
  * Models: /public/models/*.glb, generated from the shop's own product photos
  * (Higgsfield / Meshy image-to-3D) and compressed (1024px WebP textures,
  * quantized mesh) so the hero stays fast. To change the line-up, edit
- * RACKETS — `href` must be a live product slug.
+ * Active products select their 3D assets through lib/shop/hero-rackets.ts.
  */
-const RACKETS = [
-  {
-    src: '/models/racket-ea10-ventus-attack.glb',
-    brand: 'NOX',
-    name: 'EA10 Ventus Attack 12K',
-    href: '/shop/ea10-ventus-attack-12k-xtrem-by-edu-alonso-ui2c0',
-  },
-  {
-    src: '/models/racket-ea10-ventus-hybrid.glb',
-    brand: 'NOX',
-    name: 'EA10 Ventus Hybrid 12K',
-    href: '/shop/ea10-ventus-hybrid-12k-xtrem-by-edu-alonso-0gsjw',
-  },
-  {
-    src: '/models/racket-at10-genius-attack.glb',
-    brand: 'NOX',
-    name: 'AT10 Genius Attack 18K',
-    href: '/shop/at10-genius-attack-18k-alum-by-agustin-tapia-a8kmy',
-  },
-];
-
 const CYCLE_MS = 6000;
 
-export default function HeroRackets({ viewLabel }: { viewLabel: string }) {
+export default function HeroRackets({ viewLabel, rackets }: { viewLabel: string; rackets: HeroRacket[] }) {
+  if (!rackets.length) return null;
+  return <RacketShowcase key={rackets.map((r) => r.href).join('|')} viewLabel={viewLabel} rackets={rackets} />;
+}
+
+function RacketShowcase({ viewLabel, rackets }: { viewLabel: string; rackets: HeroRacket[] }) {
   const lp = useLocalePath();
   const [ready, setReady] = useState(false);
   const [idx, setIdx] = useState(0);
@@ -44,9 +29,9 @@ export default function HeroRackets({ viewLabel }: { viewLabel: string }) {
   // moment later (≈1.5 MB each), so phones see a racket sooner.
   const [mounted, setMounted] = useState(1);
   useEffect(() => {
-    const t = window.setTimeout(() => setMounted(RACKETS.length), 2500);
+    const t = window.setTimeout(() => setMounted(rackets.length), 2500);
     return () => window.clearTimeout(t);
-  }, []);
+  }, [rackets.length]);
   const holding = useRef(false); // pause the cycle while someone drags a racket
 
   // model-viewer is a browser-only web component: load it after hydration.
@@ -64,13 +49,13 @@ export default function HeroRackets({ viewLabel }: { viewLabel: string }) {
     let t = 0;
     const next = () => {
       if (holding.current) t = window.setTimeout(next, 1500);
-      else setIdx((i) => (i + 1) % RACKETS.length);
+      else setIdx((i) => (i + 1) % rackets.length);
     };
     t = window.setTimeout(next, CYCLE_MS);
     return () => window.clearTimeout(t);
-  }, [idx]);
+  }, [idx, rackets.length]);
 
-  const current = RACKETS[idx];
+  const current = rackets[idx];
 
   return (
     <div className="ch-rackets flex flex-col items-center">
@@ -86,7 +71,7 @@ export default function HeroRackets({ viewLabel }: { viewLabel: string }) {
         <div aria-hidden className="ch-rackets-ring ch-rackets-ring--2 absolute inset-[22%] rounded-full border border-dashed border-white/20" />
         <div aria-hidden className="absolute bottom-[7%] left-1/2 -translate-x-1/2 w-[46%] h-[7%] rounded-[50%] bg-[radial-gradient(ellipse,rgba(6,26,68,0.55),transparent_70%)] blur-[2px]" />
 
-        {RACKETS.map((r, i) => {
+        {rackets.map((r, i) => {
           const active = i === idx;
           return (
             <div key={r.src} className={`ch-racket absolute inset-0 ${active ? 'is-active' : ''}`} aria-hidden={!active}>
@@ -133,7 +118,7 @@ export default function HeroRackets({ viewLabel }: { viewLabel: string }) {
           {viewLabel} →
         </Link>
         <div className="mt-3 flex items-center gap-2" role="tablist" aria-label="Rackets">
-          {RACKETS.map((r, i) => (
+          {rackets.map((r, i) => (
             <button
               key={r.src}
               type="button"

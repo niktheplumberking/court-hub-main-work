@@ -1,5 +1,7 @@
 import { supabasePublic } from '@/lib/supabase/public';
 import type { Product } from '@/lib/types';
+import { cleanProductCopy } from '@/lib/copy';
+import { HERO_MODELS, visibleHeroRackets, type HeroRacket } from './hero-rackets';
 
 /**
  * The storefront's view of a product — built ONLY from the products table, so
@@ -32,9 +34,21 @@ export type ShopProduct = {
 
 export type ShopCategory = { slug: string; name: string };
 
+export async function getHeroRackets(): Promise<HeroRacket[]> {
+  try {
+    const { data, error } = await supabasePublic().from('products')
+      .select('slug,status,title,brand').eq('status', 'active').in('slug', HERO_MODELS.map((model) => model.slug));
+    if (error) throw error;
+    return visibleHeroRackets(data ?? []);
+  } catch {
+    return [];
+  }
+}
+
 const FALLBACK_IMAGE = '/placeholders/racket-01.jpeg';
 
 function toShopProduct(p: Product): ShopProduct {
+  p = cleanProductCopy(p);
   const images = (p.images ?? []).filter(Boolean);
   const maxQty = p.is_unique ? Math.min(1, p.quantity) : Math.max(0, p.quantity);
   const compareAt =

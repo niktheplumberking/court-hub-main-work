@@ -2,6 +2,17 @@
 
 Client revision numbers are separate from the application package version.
 
+## 1.4 · 25 October 2026
+
+- Remove em dashes from authored UI copy and metadata. Normalize existing CMS/catalogue text when displayed, preserving stored content and all product data for rollback.
+- Add a static 1200 × 630 COURT HUB share image using the header's Inter Bold wordmark and navy/sky-blue colours. Every public core page and product has complete Open Graph and large-image Twitter metadata, with canonical production URLs.
+- Complete English/Arabic canonical and hreflang metadata, including Arabic product detail pages. Add both product languages and alternates to the sitemap; exclude private/order routes and keep unfinished sections/legal drafts out of indexing.
+- Add business identity, actual Product/Offer/Breadcrumb structured data, and four visible bilingual quick answers with matching FAQ markup. Use actual AED prices, stock and condition; do not invent ratings, certifications or shipping promises.
+- Make the three featured 3D rackets follow real product visibility. Draft, archived and sold products are excluded from that showcase, as they already are from the shop. Existing product statuses are not changed.
+- Preserve v1.3 product images, layout, payment handling and database records. No data migration or external index-submission/account change.
+
+Validation covers initial crawler HTML, metadata, sitemap language pairs, structured product data, visible FAQ parity, display punctuation, JSON-LD script safety and responsive English/Arabic views. Ranking changes and WhatsApp cache refreshes depend on external services.
+
 ## 1.3 · 25 October 2026
 
 - Replace the eight 220 × 220 NOX catalogue photos with the client-approved, exact-model official 2026 transparent 1200 × 1200 PNGs. Preserve original bytes, upright framing, holes and straps; retain the shop’s pale-blue backgrounds and layout.

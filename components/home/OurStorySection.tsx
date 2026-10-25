@@ -27,7 +27,7 @@ export function OurStoryContent({ isDesktop = false }: { isDesktop?: boolean }) 
 
       <div className="space-y-4 md:space-y-6">
         <p className="text-xs md:text-lg leading-relaxed text-ink/80 font-normal">
-          We believe padel is more than just a sport—it is a pursuit of pure precision, relentless speed, and the raw joy of the perfect shot. From our hand-laid court surfaces to the balanced carbon core of our rackets, Court Hub is built by players, for players.
+          We believe padel is more than just a sport, it is a pursuit of pure precision, relentless speed, and the raw joy of the perfect shot. From our hand-laid court surfaces to the balanced carbon core of our rackets, Court Hub is built by players, for players.
         </p>
         <p className="text-[11px] md:text-base leading-relaxed text-ink/70 font-light">
           Every detail is engineered to perform at the highest level. We source the finest materials, collaborate with world-class engineers, and design for those who live and play with passion.

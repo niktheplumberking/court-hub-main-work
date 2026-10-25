@@ -9,6 +9,7 @@ import { useLocalePath, useT } from '@/lib/i18n/LocaleProvider';
 import TennisBall from '@/components/shared/TennisBall';
 import HeroRackets from './HeroRackets';
 import type { ContentMap } from '@/lib/content/get';
+import type { HeroRacket } from '@/lib/shop/hero-rackets';
 
 // Decorative balls floating over the turf: [inline-start %, top %, size px, float seconds, delay s]
 const BALLS: [number, number, number, number, number][] = [
@@ -40,7 +41,7 @@ function Racket({ className, style }: { className?: string; style?: React.CSSPro
  * for. Keeps the framed mock-up + in-frame navbar shared by every page hero.
  * (The old night-courts photo field stays in the CMS but is no longer used.)
  */
-export default function HomeHero({ content }: { content: ContentMap }) {
+export default function HomeHero({ content, heroRackets }: { content: ContentMap; heroRackets: HeroRacket[] }) {
   const { x: parallaxX, y: parallaxY } = useMouseParallax(22);
   const lp = useLocalePath();
   const t = useT();
@@ -149,7 +150,7 @@ export default function HomeHero({ content }: { content: ContentMap }) {
 
             {/* Best-selling rackets in 3D (client request, Oct 2026) */}
             <div className="flex justify-center lg:justify-end">
-              <HeroRackets viewLabel={t.courtMap.viewRacket} />
+              <HeroRackets viewLabel={t.courtMap.viewRacket} rackets={heroRackets} />
             </div>
           </div>
         </div>

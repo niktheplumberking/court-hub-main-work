@@ -1,11 +1,11 @@
+import { pageMetadata } from '@/lib/seo';
 import ContactClient from '@/components/pages/ContactClient';
 import { getPageContent } from '@/lib/content/get';
 
-export const metadata = {
-  title: 'Contact — Court Hub',
-  description:
-    'Reach Court Hub on WhatsApp for rackets, court construction and orders — plus phone, email, showroom details in Al Quoz, Dubai.',
-};
+export const metadata = pageMetadata("/contact", "en", {
+  "title": "Contact Court Hub | WhatsApp, Phone & Dubai Address",
+  "description": "Contact Court Hub in Dubai for padel rackets, orders and court construction. Find our WhatsApp, phone, email and Al Warqa 3 address."
+});
 
 export const revalidate = 300;
 

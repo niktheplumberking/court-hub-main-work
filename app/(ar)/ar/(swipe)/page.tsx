@@ -1,3 +1,8 @@
+import { getHeroRackets } from '@/lib/shop/catalog';
+import { cleanProductCopy } from '@/lib/copy';
+import JsonLd from '@/components/shared/JsonLd';
+import { homeSchema } from '@/lib/seo';
+import { pageMetadata } from '@/lib/seo';
 import SimplifiedHome from '@/components/home/simplified/SimplifiedHome';
 import { supabasePublic } from '@/lib/supabase/public';
 import { getPageContent } from '@/lib/content/get';
@@ -5,12 +10,10 @@ import type { Product } from '@/lib/types';
 
 export const revalidate = 60;
 
-export const metadata = {
-  title: 'Court Hub — متجر البادل الفاخر وإنشاء الملاعب في الإمارات',
-  description:
-    'ملاعب بادل فاخرة مُهندَسة لدول الخليج، مع متجر منتقى بعناية لأفضل المضارب والمعدات، كل ذلك في مكان واحد.',
-  alternates: { canonical: '/ar', languages: { en: '/', ar: '/ar', 'x-default': '/' } },
-};
+export const metadata = pageMetadata("/", "ar", {
+  "title": "Court Hub | مضارب البادل وإنشاء الملاعب في دبي والإمارات",
+  "description": "اكتشف مضارب ومعدات البادل لدى Court Hub في دبي والإمارات. تسوق بالدرهم، وقارن حالة المنتجات، وتواصل عبر واتساب لمناقشة مشروع إنشاء ملعبك."
+});
 
 async function getTopSellerProducts(): Promise<Product[]> {
   try {
@@ -21,7 +24,7 @@ async function getTopSellerProducts(): Promise<Product[]> {
       .eq('status', 'active')
       .order('created_at', { ascending: false })
       .limit(8);
-    return (data as Product[] | null) ?? [];
+    return ((data as Product[] | null) ?? []).map(cleanProductCopy);
   } catch (e) {
     console.error('[home:ar] top sellers fetch failed', e);
     return [];
@@ -29,9 +32,10 @@ async function getTopSellerProducts(): Promise<Product[]> {
 }
 
 export default async function ArabicHomePage() {
-  const [products, content] = await Promise.all([
+  const [products, content, heroRackets] = await Promise.all([
     getTopSellerProducts(),
     getPageContent('home', 'ar'),
+    getHeroRackets(),
   ]);
-  return <SimplifiedHome products={products} content={content} locale="ar" />;
+  return <><JsonLd data={homeSchema('ar')} /><SimplifiedHome products={products} content={content} heroRackets={heroRackets} locale="ar" /></>;
 }

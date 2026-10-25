@@ -57,7 +57,7 @@
     "page": "home",
     "label": "Hero · Paragraph",
     "type": "richtext",
-    "value": "Premium padel courts engineered for the GCC, plus a curated shop of elite rackets and gear — all in one place."
+    "value": "Premium padel courts engineered for the GCC, plus a curated shop of elite rackets and gear, all in one place."
   },
   "home.hero.cta_primary": {
     "page": "home",
@@ -87,7 +87,7 @@
     "page": "home",
     "label": "Numbers Strip · Intro",
     "type": "richtext",
-    "value": "From Al Quoz to the wider GCC — engineered courts and a growing community of players."
+    "value": "From Al Quoz to the wider GCC, engineered courts and a growing community of players."
   },
   "home.numbers.stat1.value": {
     "page": "home",
@@ -159,7 +159,7 @@
     "page": "home",
     "label": "Services · Card 1 (Shop) description",
     "type": "richtext",
-    "value": "Elite rackets, balls and gear — curated drops from Stealth, HEAD, Wilson and more, priced in AED."
+    "value": "Elite rackets, balls and gear, curated drops from Stealth, HEAD, Wilson and more, priced in AED."
   },
   "home.services.card1.cta": {
     "page": "home",
@@ -183,7 +183,7 @@
     "page": "home",
     "label": "Services · Card 2 (Court Construction) description",
     "type": "richtext",
-    "value": "Turnkey padel arenas built for desert heat — Spanish glass, galvanized frames, 145km/h wind rating."
+    "value": "Turnkey padel arenas built for desert heat, Spanish glass, galvanized frames, 145km/h wind rating."
   },
   "home.services.card2.cta": {
     "page": "home",
@@ -207,7 +207,7 @@
     "page": "home",
     "label": "Services · Card 3 (Tournaments) description",
     "type": "richtext",
-    "value": "Sanctioned P25–P250 events across the UAE — live groups, brackets and the season leaderboard."
+    "value": "Sanctioned P25–P250 events across the UAE, live groups, brackets and the season leaderboard."
   },
   "home.services.card3.cta": {
     "page": "home",
@@ -261,7 +261,7 @@
     "page": "home",
     "label": "Construct Panel · Paragraph",
     "type": "richtext",
-    "value": "Pick a model, get an instant quote on WhatsApp. Engineered for extreme heat, coastal salinity and 145km/h winds — installed anywhere in the GCC."
+    "value": "Pick a model, get an instant quote on WhatsApp. Engineered for extreme heat, coastal salinity and 145km/h winds, installed anywhere in the GCC."
   },
   "home.construct.type1.name": {
     "page": "home",
@@ -339,7 +339,7 @@
     "page": "home",
     "label": "About Teaser · Paragraph",
     "type": "richtext",
-    "value": "Born in Al Quoz, Dubai — we fuse Spanish structural glass with aerospace-grade metal alloys to build courts that ignore high winds, and curate rackets that protect your game. Architectural integrity meets player stamina."
+    "value": "Born in Al Quoz, Dubai, we fuse Spanish structural glass with aerospace-grade metal alloys to build courts that ignore high winds, and curate rackets that protect your game. Architectural integrity meets player stamina."
   },
   "home.about_teaser.cta": {
     "page": "home",
@@ -435,7 +435,7 @@
     "page": "about",
     "label": "Story · Paragraph 1",
     "type": "richtext",
-    "value": "Court Hub was not conceived in a corporate boardroom. It was forged in a specialized marine metalwork foundry in Al Quoz, Dubai. Our engineers observed that typical imported courts were structural templates—vulnerable to extreme GCC desert heat, coastal salinity, and deafening playground sound repercussions."
+    "value": "Court Hub was not conceived in a corporate boardroom. It was forged in a specialized marine metalwork foundry in Al Quoz, Dubai. Our engineers observed that typical imported courts were structural templates, vulnerable to extreme GCC desert heat, coastal salinity, and deafening playground sound repercussions."
   },
   "about.story.paragraph2": {
     "page": "about",
@@ -1167,7 +1167,7 @@
     "page": "construct",
     "label": "Court Type 1 · Description",
     "type": "richtext",
-    "value": "Frameless tempered-glass walls for uninterrupted 360° sightlines — tournament-grade views."
+    "value": "Frameless tempered-glass walls for uninterrupted 360° sightlines, tournament-grade views."
   },
   "construct.court_type2.name": {
     "page": "construct",
@@ -1365,7 +1365,7 @@
     "page": "faq",
     "label": "FAQ Item 4 · Answer",
     "type": "richtext",
-    "value": "Yes — message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit."
+    "value": "Yes, message us on WhatsApp to arrange a showroom visit at our Al Quoz space in Dubai. Visits are by appointment, so you get one-on-one time to handle the rackets, compare shapes and weights, and get honest advice before you commit."
   },
   "faq.q5.question": {
     "page": "faq",
@@ -1377,7 +1377,7 @@
     "page": "faq",
     "label": "FAQ Item 5 · Answer",
     "type": "richtext",
-    "value": "Gear is simple — browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."
+    "value": "Gear is simple, browse the Pro Shop online, add to cart, and check out; we deliver across the UAE. For court construction, share your site details through the Construct Your Court page or message us on WhatsApp, and our team will scope, quote, and schedule your build."
   },
   "faq.q6.question": {
     "page": "faq",
@@ -1389,19 +1389,19 @@
     "page": "faq",
     "label": "FAQ Item 6 · Answer",
     "type": "richtext",
-    "value": "A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build — you'll know exactly what's happening at every stage."
+    "value": "A build consultant reviews your site details and replies on WhatsApp within one working day. From there we arrange a site survey, lock in a fixed line-item quote, and schedule your build, you'll know exactly what's happening at every stage."
   },
   "faq.q7.question": {
     "page": "faq",
     "label": "FAQ Item 7 · Question",
     "type": "text",
-    "value": "Do you deliver outside Dubai — or internationally?"
+    "value": "Do you deliver outside Dubai, or internationally?"
   },
   "faq.q7.answer": {
     "page": "faq",
     "label": "FAQ Item 7 · Answer",
     "type": "richtext",
-    "value": "We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn't part of standard checkout yet — if you're ordering from abroad, message us on WhatsApp and we'll quote it case by case."
+    "value": "We deliver gear to all seven emirates via tracked courier, and court construction projects run UAE-wide. International shipping isn't part of standard checkout yet, if you're ordering from abroad, message us on WhatsApp and we'll quote it case by case."
   },
   "faq.support.title": {
     "page": "faq",
@@ -1425,7 +1425,7 @@
     "page": "terms",
     "label": "Top badge line (type a single dash - to hide it)",
     "type": "text",
-    "value": "DRAFT — pending legal review"
+    "value": "DRAFT, pending legal review"
   },
   "terms.header.title": {
     "page": "terms",
@@ -1441,73 +1441,73 @@
   },
   "terms.section1.heading": {
     "page": "terms",
-    "label": "Section 1 — heading",
+    "label": "Section 1, heading",
     "type": "text",
     "value": "Orders & Payment"
   },
   "terms.section1.body": {
     "page": "terms",
-    "label": "Section 1 — text",
+    "label": "Section 1, text",
     "type": "richtext",
     "value": "All prices are listed in UAE Dirhams (AED). Payments are processed securely through Stripe; Court Hub does not store your card details. An order is confirmed once payment has been successfully processed and you receive an order confirmation."
   },
   "terms.section2.heading": {
     "page": "terms",
-    "label": "Section 2 — heading",
+    "label": "Section 2, heading",
     "type": "text",
     "value": "Shipping"
   },
   "terms.section2.body": {
     "page": "terms",
-    "label": "Section 2 — text",
+    "label": "Section 2, text",
     "type": "richtext",
     "value": "We ship across the United Arab Emirates. Delivery timelines and any applicable shipping fees are shown at checkout before you pay. Risk in the goods passes to you on delivery."
   },
   "terms.section3.heading": {
     "page": "terms",
-    "label": "Section 3 — heading",
+    "label": "Section 3, heading",
     "type": "text",
     "value": "Returns on Pre-Owned Items"
   },
   "terms.section3.body": {
     "page": "terms",
-    "label": "Section 3 — text",
+    "label": "Section 3, text",
     "type": "richtext",
     "value": "Many of our rackets are pre-owned and sold with their condition clearly described and photographed. Returns are accepted only where an item materially differs from its listed condition. Contact us within 48 hours of delivery to start a return."
   },
   "terms.section4.heading": {
     "page": "terms",
-    "label": "Section 4 — heading",
+    "label": "Section 4, heading",
     "type": "text",
     "value": "Court-Construction Quotes"
   },
   "terms.section4.body": {
     "page": "terms",
-    "label": "Section 4 — text",
+    "label": "Section 4, text",
     "type": "richtext",
     "value": "Quotes for court construction are estimates based on the information you provide and remain subject to a site survey. A quote does not constitute a binding contract; project scope, pricing, and timelines are confirmed in a separate written agreement."
   },
   "terms.section5.heading": {
     "page": "terms",
-    "label": "Section 5 — heading (optional — leave empty to hide)",
+    "label": "Section 5, heading (optional, leave empty to hide)",
     "type": "text",
     "value": ""
   },
   "terms.section5.body": {
     "page": "terms",
-    "label": "Section 5 — text (optional — leave empty to hide)",
+    "label": "Section 5, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
   },
   "terms.section6.heading": {
     "page": "terms",
-    "label": "Section 6 — heading (optional — leave empty to hide)",
+    "label": "Section 6, heading (optional, leave empty to hide)",
     "type": "text",
     "value": ""
   },
   "terms.section6.body": {
     "page": "terms",
-    "label": "Section 6 — text (optional — leave empty to hide)",
+    "label": "Section 6, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
   },
@@ -1515,7 +1515,7 @@
     "page": "privacy",
     "label": "Top badge line (type a single dash - to hide it)",
     "type": "text",
-    "value": "DRAFT — pending legal review"
+    "value": "DRAFT, pending legal review"
   },
   "privacy.header.title": {
     "page": "privacy",
@@ -1531,73 +1531,73 @@
   },
   "privacy.section1.heading": {
     "page": "privacy",
-    "label": "Section 1 — heading",
+    "label": "Section 1, heading",
     "type": "text",
     "value": "Data We Collect"
   },
   "privacy.section1.body": {
     "page": "privacy",
-    "label": "Section 1 — text",
+    "label": "Section 1, text",
     "type": "richtext",
     "value": "When you place an order we collect your name, contact details, and delivery address to fulfil it; payments are handled by Stripe and we never see your full card details. When you submit a court-construction inquiry, your details and project information are stored in our inquiries database (hosted on Supabase) so our team can follow up. If you choose to contact us via WhatsApp, the conversation continues on WhatsApp under its own terms and privacy policy."
   },
   "privacy.section2.heading": {
     "page": "privacy",
-    "label": "Section 2 — heading",
+    "label": "Section 2, heading",
     "type": "text",
     "value": "No Marketing Without Consent"
   },
   "privacy.section2.body": {
     "page": "privacy",
-    "label": "Section 2 — text",
+    "label": "Section 2, text",
     "type": "richtext",
-    "value": "We do not send marketing messages unless you explicitly opt in — for example by asking to join our community list. You can withdraw consent at any time and we will stop contacting you."
+    "value": "We do not send marketing messages unless you explicitly opt in, for example by asking to join our community list. You can withdraw consent at any time and we will stop contacting you."
   },
   "privacy.section3.heading": {
     "page": "privacy",
-    "label": "Section 3 — heading",
+    "label": "Section 3, heading",
     "type": "text",
     "value": "Your Data, Your Call"
   },
   "privacy.section3.body": {
     "page": "privacy",
-    "label": "Section 3 — text",
+    "label": "Section 3, text",
     "type": "richtext",
     "value": "You can ask us to access, correct, or delete the personal data we hold about you at any time. Send your request through any of the contact methods on our contact page and we will respond promptly."
   },
   "privacy.section4.heading": {
     "page": "privacy",
-    "label": "Section 4 — heading (optional — leave empty to hide)",
+    "label": "Section 4, heading (optional, leave empty to hide)",
     "type": "text",
     "value": ""
   },
   "privacy.section4.body": {
     "page": "privacy",
-    "label": "Section 4 — text (optional — leave empty to hide)",
+    "label": "Section 4, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
   },
   "privacy.section5.heading": {
     "page": "privacy",
-    "label": "Section 5 — heading (optional — leave empty to hide)",
+    "label": "Section 5, heading (optional, leave empty to hide)",
     "type": "text",
     "value": ""
   },
   "privacy.section5.body": {
     "page": "privacy",
-    "label": "Section 5 — text (optional — leave empty to hide)",
+    "label": "Section 5, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
   },
   "privacy.section6.heading": {
     "page": "privacy",
-    "label": "Section 6 — heading (optional — leave empty to hide)",
+    "label": "Section 6, heading (optional, leave empty to hide)",
     "type": "text",
     "value": ""
   },
   "privacy.section6.body": {
     "page": "privacy",
-    "label": "Section 6 — text (optional — leave empty to hide)",
+    "label": "Section 6, text (optional, leave empty to hide)",
     "type": "richtext",
     "value": ""
   }

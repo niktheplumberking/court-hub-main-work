@@ -35,7 +35,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     title: 'Home',
     path: '/',
     sections: [
-      { id: 'hero', title: 'Hero — opening screen', hint: 'The big night-courts screen: titles, intro line, buttons, background photo.', prefixes: ['hero'] },
+      { id: 'hero', title: 'Hero, opening screen', hint: 'The big night-courts screen: titles, intro line, buttons, background photo.', prefixes: ['hero'] },
       { id: 'numbers', title: 'Numbers strip', hint: '"Court Hub in numbers" and the four animated stats.', prefixes: ['numbers'] },
       { id: 'services', title: 'Our Services cards', hint: 'The three white cards: Shop, Court Construction, Tournaments.', prefixes: ['services'], anchor: 'services' },
       { id: 'top_sellers', title: 'Shop Top Sellers', hint: 'Headings around the product rail (products themselves come from the shop).', prefixes: ['top_sellers'] },
@@ -48,11 +48,11 @@ export const STUDIO_PAGES: StudioPage[] = [
     title: 'About Us',
     path: '/about',
     sections: [
-      { id: 'hero', title: 'Hero — opening screen', hint: 'Framed hero: titles, bottom copy, buttons, background photo.', prefixes: ['hero'] },
-      { id: 'story', title: 'Our Story', hint: '"Metallurgy meets sport science" — story text, photo, three stats.', prefixes: ['story'] },
+      { id: 'hero', title: 'Hero, opening screen', hint: 'Framed hero: titles, bottom copy, buttons, background photo.', prefixes: ['hero'] },
+      { id: 'story', title: 'Our Story', hint: '"Metallurgy meets sport science", story text, photo, three stats.', prefixes: ['story'] },
       { id: 'blueprint', title: 'Mission & Vision intro', hint: 'The headline block that introduces the four pillars.', prefixes: ['blueprint'] },
-      { id: 'topics', title: 'The four pillars', hint: 'Mission, Vision, Structural Acoustics, Climatic Shield — title, text and image for each.', prefixes: ['topic1', 'topic2', 'topic3', 'topic4'] },
-      { id: 'positioning', title: 'About Court Hub block', hint: '"Engineering the future of play" — paragraphs, two photos with badges.', prefixes: ['positioning'] },
+      { id: 'topics', title: 'The four pillars', hint: 'Mission, Vision, Structural Acoustics, Climatic Shield, title, text and image for each.', prefixes: ['topic1', 'topic2', 'topic3', 'topic4'] },
+      { id: 'positioning', title: 'About Court Hub block', hint: '"Engineering the future of play", paragraphs, two photos with badges.', prefixes: ['positioning'] },
       { id: 'cta', title: 'Ready-to-build banner', hint: 'The WhatsApp call-to-action banner near the bottom.', prefixes: ['cta'] },
       { id: 'bestsellers', title: 'Best sellers strip', hint: 'Labels on the product cards at the very bottom.', prefixes: ['bestsellers'] },
     ],
@@ -62,10 +62,10 @@ export const STUDIO_PAGES: StudioPage[] = [
     title: 'Contact Us',
     path: '/contact',
     sections: [
-      { id: 'hero', title: 'Hero — opening screen', hint: 'Framed hero: titles, bottom copy, background photo.', prefixes: ['hero'] },
+      { id: 'hero', title: 'Hero, opening screen', hint: 'Framed hero: titles, bottom copy, background photo.', prefixes: ['hero'] },
       { id: 'routing', title: 'Transit-desk intro', hint: '"Choose your transit desk" heading and description.', prefixes: ['routing'] },
       { id: 'routes', title: 'The three inquiry desks', hint: 'Court Construction / Pro Shop / Tournaments cards, incl. the pre-written WhatsApp messages.', prefixes: ['route1', 'route2', 'route3'] },
-      { id: 'dispatch', title: 'WhatsApp link generator', hint: 'The dark "Instant Link Generator" card — including the WhatsApp number it sends to.', prefixes: ['dispatch'] },
+      { id: 'dispatch', title: 'WhatsApp link generator', hint: 'The dark "Instant Link Generator" card, including the WhatsApp number it sends to.', prefixes: ['dispatch'] },
       { id: 'details', title: 'Contact info & hours', hint: 'Phone, address, email and the business-hours table.', prefixes: ['details', 'info', 'hours'] },
       { id: 'form', title: 'Get-in-touch form headings', hint: 'Titles around the classic contact form.', prefixes: ['form'] },
       { id: 'map', title: 'Map', hint: 'The Dubai map image.', prefixes: ['map'] },
@@ -76,9 +76,9 @@ export const STUDIO_PAGES: StudioPage[] = [
     title: 'Construct Your Court',
     path: '/construct-your-court',
     sections: [
-      { id: 'hero', title: 'Hero — opening screen', hint: 'Framed hero: titles, subtitle, buttons, background photo.', prefixes: ['hero'] },
+      { id: 'hero', title: 'Hero, opening screen', hint: 'Framed hero: titles, subtitle, buttons, background photo.', prefixes: ['hero'] },
       { id: 'court_types_intro', title: 'Four Ways To Build intro', hint: 'The heading and intro above the court-type cards.', prefixes: ['court_types'] },
-      { id: 'court_types', title: 'The four court models', hint: 'Panoramic, Classic, Super Pro, Indoor — name, tag and description for each.', prefixes: ['court_type1', 'court_type2', 'court_type3', 'court_type4'] },
+      { id: 'court_types', title: 'The four court models', hint: 'Panoramic, Classic, Super Pro, Indoor, name, tag and description for each.', prefixes: ['court_type1', 'court_type2', 'court_type3', 'court_type4'] },
       { id: 'build_form', title: 'Build animation & quote form', hint: 'Copy around the court-building animation and its WhatsApp quote form.', prefixes: ['build_form'], anchor: 'construction' },
     ],
   },
@@ -87,7 +87,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     title: 'Shop',
     path: '/shop',
     sections: [
-      { id: 'header', title: 'Collection header', hint: 'The eyebrow, big heading and intro line above the products. (Products, prices and photos update automatically from your Products list — only this wording is editable.)', prefixes: ['header'] },
+      { id: 'header', title: 'Collection header', hint: 'The eyebrow, big heading and intro line above the products. (Products, prices and photos update automatically from your Products list, only this wording is editable.)', prefixes: ['header'] },
     ],
   },
   {

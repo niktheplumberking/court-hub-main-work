@@ -59,7 +59,7 @@ export default async function AdminProducts() {
                 </td>
                 <td className="px-5 py-3 text-white/50 hidden md:table-cell">{p.categories?.name}</td>
                 <td className="px-5 py-3 text-white font-semibold">{formatAED(p.price_aed)}</td>
-                <td className="px-5 py-3 text-white/50 font-mono text-xs hidden md:table-cell">{p.is_unique ? (p.quantity > 0 ? '1 (unique)' : '—') : p.quantity}</td>
+                <td className="px-5 py-3 text-white/50 font-mono text-xs hidden md:table-cell">{p.is_unique ? (p.quantity > 0 ? '1 (unique)' : '0') : p.quantity}</td>
                 <td className="px-5 py-3">
                   <span className={`px-3 py-1 rounded-full text-[11px] font-semibold uppercase ${statusColors[p.status]}`}>{p.status}</span>
                 </td>
