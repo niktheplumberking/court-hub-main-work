@@ -2,6 +2,14 @@
 
 Client revision numbers are separate from the application package version.
 
+## 1.3 · 25 October 2026
+
+- Replace the eight 220 × 220 NOX catalogue photos with the client-approved, exact-model official 2026 transparent 1200 × 1200 PNGs. Preserve original bytes, upright framing, holes and straps; retain the shop’s pale-blue backgrounds and layout.
+- Keep prices, stock, product details and condition labels unchanged. Manufacturer photos are model references, including the item labelled Good.
+- Archive the approved files, source links and SHA-256 checksums in this revision. The release-only image updater saves every original image array before writing, checks for concurrent image changes, and provides a guarded restore command. Existing storage objects are retained.
+
+Rollback requires restoring the saved product image arrays as well as the source/build. See `docs/releases/v1.3.md`.
+
 ## 1.2 · 25 October 2026
 
 - Replace the former court-booking calls to action with About Us links, including desktop heroes, mobile navigation, and the About hero, in English and Arabic.
