@@ -2,6 +2,8 @@ import type Stripe from 'stripe';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getStripe } from '@/lib/stripe';
+import { enqueueOrderEmails } from '@/lib/email/outbox';
+import type { EmailOrder } from '@/lib/email/order-email';
 
 /**
  * Order lifecycle (see supabase/UPGRADE-CHECKOUT.sql):
@@ -107,6 +109,22 @@ export async function fulfillCheckoutSession(
     // Legacy path: only the call that actually created the order takes stock.
     const { error } = await db.rpc('take_stock', { p_items: items });
     if (error) console.error('[fulfill] legacy take_stock failed', session.id, error);
+  }
+
+  if (process.env.ORDER_EMAILS_ENABLED === 'true') {
+    const { data: order, error } = await db.from('orders').select('*').eq('stripe_session_id', session.id).single();
+    if (error || !order) throw new Error('Order email snapshot lookup failed');
+    if (order.status === 'paid' || order.status === 'fulfilled') {
+      const { data: photos, error: photoError } = await db.from('products').select('id, images').in('id', items.map((i) => i.id));
+      if (photoError) throw new Error('Order email product photo lookup failed');
+      await enqueueOrderEmails({
+        ...order,
+        items: (order.items as HoldItem[]).map((item) => ({ ...item, image: photos?.find((p) => p.id === item.id)?.images?.[0] ?? null })),
+        locale: session.metadata?.locale === 'ar' ? 'ar' : 'en',
+        review: result === 'late' || session.currency !== 'aed' || (holdId && session.amount_total !== expected),
+        test: !session.livemode,
+      } as EmailOrder);
+    }
   }
   return result;
 }

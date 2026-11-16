@@ -134,7 +134,7 @@ export async function POST(req: Request) {
         shipping_address_collection: { allowed_countries: ['AE'] },
         phone_number_collection: { enabled: true },
         client_reference_id: r.hold_id,
-        metadata: { hold_id: r.hold_id },
+        metadata: { hold_id: r.hold_id, locale: body.locale === 'ar' ? 'ar' : 'en' },
       },
       // A network retry can never open two sessions for one reservation.
       { idempotencyKey: `checkout-${r.hold_id}` }
