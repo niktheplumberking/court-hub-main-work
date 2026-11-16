@@ -2,7 +2,7 @@
 
 Client revision numbers are separate from the application package version.
 
-## 1.6 · 16 November 2026 (candidate)
+## 1.6 · 16 November 2026
 
 - Add reusable, branded paid-order notifications for the owner and thank-you confirmations for customers, including product photos, quantities, the website's order reference, totals, delivery details and support contacts. Customer copy follows the English/Arabic checkout language.
 - Connect to verified Stripe fulfillment with a private, persistent VPS outbox, immutable messages, per-recipient delivery receipts, safe retries and protection against duplicate callbacks. Keep earlier orders outside the activation cutoff. No database schema or stock/payment rules change.
