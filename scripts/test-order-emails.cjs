@@ -9,6 +9,7 @@ const { sendEmail, EmailSendError } = require('../.next/order-email-worker/resen
 const fixture = require('./order-email-fixture.cjs');
 
 (async () => {
+  await fs.mkdir(path.resolve('.qa'), { recursive: true });
   const directory = await fs.mkdtemp(path.resolve('.qa/email-tests-'));
   const env = { ORDER_EMAILS_ENABLED: 'true', ORDER_EMAILS_SINCE: '2026-11-16T00:00:00Z',
     ORDER_EMAIL_OUTBOX_DIR: directory, RESEND_API_KEY: 'fake-key-no-network',
